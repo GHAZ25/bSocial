@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="uniftec.bsocial.fragments.ProfileFragment"
+    android:clipChildren="false"
+    android:clickable="false"
+    android:clipToPadding="false">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@android:color/holo_blue_dark"
+        android:id="@+id/imageView5" />
+
+    <GridView
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"/>
+</FrameLayout>

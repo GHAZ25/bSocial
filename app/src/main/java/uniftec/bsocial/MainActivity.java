@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         setContentView(R.layout.activity_main);
+
+        startActivity(new Intent(MainActivity.this, NavigationDrawerActivity.class));
+
+        /*FacebookSdk.sdkInitialize(getApplicationContext());
 
         AppEventsLogger.activateApp(getApplication());
         callbackManager = CallbackManager.Factory.create();
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // App code
+                //startActivity(new Intent(MainActivity.this, NavigationDrawerActivity.class));
             }
 
             @Override
@@ -54,6 +56,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException exception) {
                 // App code
-            } });
+            } });*/
     }
 }
