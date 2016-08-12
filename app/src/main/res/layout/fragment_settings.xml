@@ -5,9 +5,20 @@
     tools:context="uniftec.bsocial.fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="CONFIGURAÇÕES" />
 
+    <CheckBox
+        android:text="Visível para outros usuários"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/visibility"
+        android:checked="true" />
+
+    <Button
+        android:text="Excluir minha conta"
+        android:layout_gravity="bottom|center"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:id="@+id/deleteAcc" />
 </FrameLayout>

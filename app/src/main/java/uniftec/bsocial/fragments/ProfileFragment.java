@@ -1,18 +1,42 @@
 package uniftec.bsocial.fragments;
 
 import android.content.Context;
+import android.content.pm.PackageInstaller;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.media.Image;
+import android.media.tv.TvInputService;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.ProfilePictureView;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import uniftec.bsocial.MainActivity;
 import uniftec.bsocial.R;
 
 /**
@@ -28,6 +52,7 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private View view;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,8 +94,37 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        getProfilePic();
+        getLikes();
+
+        return view;
+    }
+
+    public void getProfilePic() {
+
+        Profile profile = Profile.getCurrentProfile();
+        ProfilePictureView profilePictureView = (ProfilePictureView) view.findViewById(R.id.profilePic);
+        profilePictureView.setProfileId(profile.getId());
+    }
+
+    public void getLikes() {
+        Bundle params = new Bundle();
+        params.putString("offset","10");
+        new GraphRequest(AccessToken.getCurrentAccessToken(),
+                "/me?fields=likes.fields(id,name)",
+                params,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        JSONArray jsonArray = response.getJSONArray();
+
+                    }
+                }
+        ).executeAsync();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -110,5 +164,27 @@ public class ProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = 12;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 }
