@@ -1,14 +1,5 @@
 package uniftec.bsocial;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -20,9 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import uniftec.bsocial.fragments.ContactsFragment;
+import uniftec.bsocial.fragments.MessageFragment;
 import uniftec.bsocial.fragments.ProfileFragment;
 import uniftec.bsocial.fragments.SearchFragment;
 import uniftec.bsocial.fragments.SettingsFragment;
@@ -30,7 +21,7 @@ import uniftec.bsocial.fragments.SettingsFragment;
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ProfileFragment.OnFragmentInteractionListener,
                     SearchFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener,
-                    SettingsFragment.OnFragmentInteractionListener{
+                    SettingsFragment.OnFragmentInteractionListener, MessageFragment.OnFragmentInteractionListener {
 
     FragmentManager fragmentManager;
     ProfileFragment profileFragment;
@@ -60,6 +51,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        setTitle("bSocial");
 
        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

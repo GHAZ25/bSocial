@@ -1,42 +1,31 @@
 package uniftec.bsocial.fragments;
 
 import android.content.Context;
-import android.content.pm.PackageInstaller;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
-import android.media.Image;
-import android.media.tv.TvInputService;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.ProfilePictureView;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import uniftec.bsocial.MainActivity;
 import uniftec.bsocial.R;
 
 /**
@@ -99,6 +88,7 @@ public class ProfileFragment extends Fragment {
 
         getProfilePic();
         getLikes();
+        sendMsg();
 
         return view;
     }
@@ -132,6 +122,18 @@ public class ProfileFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void sendMsg() {
+        Button sendMsgBtn = (Button) view.findViewById(R.id.sendMsg);
+        sendMsgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getFragmentManager();
+                MessageFragment messageFragment = new MessageFragment();
+                messageFragment.show(fragmentManager, "Enviar mensagem");
+            }
+        });
     }
 
     @Override

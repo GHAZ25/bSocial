@@ -1,0 +1,42 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="uniftec.bsocial.fragments.MessageFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="10dp"
+        android:text="@string/hello_blank_fragment"
+        android:id="@+id/receiver" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:layout_gravity="center"
+        android:id="@+id/message"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="60dp"
+        android:maxLength="254"
+        android:maxLines="6" />
+
+    <Button
+        android:text="Enviar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center|bottom|right"
+        android:id="@+id/sendMsg" />
+
+    <Button
+        android:text="Cancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center|bottom|left"
+        android:id="@+id/cancel" />
+
+</FrameLayout>
