@@ -37,7 +37,7 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:layout_gravity="center"
-        android:id="@+id/message"
+        android:id="@+id/receiver"
         android:layout_marginBottom="36dp"
         android:maxLength="254"
         android:maxLines="6"

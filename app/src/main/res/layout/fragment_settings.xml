@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,13 +12,45 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:id="@+id/visibility"
+        android:id="@+id/checkBox2"
         android:checked="true" />
+
+    <CheckBox
+        android:text="Notificar ao encontrar contatos próximos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/visibility"
+        android:checked="true"
+        android:layout_below="@+id/checkBox2"
+        android:layout_alignLeft="@+id/checkBox2"
+        android:layout_alignStart="@+id/checkBox2" />
 
     <Button
         android:text="Excluir minha conta"
         android:layout_gravity="bottom|center"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:id="@+id/deleteAcc" />
-</FrameLayout>
+        android:id="@+id/deleteAcc"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="11dp" />
+
+    <ListView
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/textView10"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Preferências"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView10"
+        android:textStyle="normal|bold"
+        android:layout_below="@+id/visibility"
+        android:layout_alignRight="@+id/checkBox2"
+        android:layout_alignEnd="@+id/checkBox2"
+        android:layout_marginTop="11dp" />
+
+</RelativeLayout>
