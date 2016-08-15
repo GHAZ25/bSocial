@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,29 +8,84 @@
     android:clickable="false"
     android:clipToPadding="false">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <com.facebook.login.widget.ProfilePictureView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="20dp"
-        app:srcCompat="@android:color/holo_blue_dark"
-        android:background="@drawable/image_border"
-        android:padding="3dp"
-        android:id="@+id/profilePic" />
-
-    <GridView
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"/>
-
     <Button
         android:text="Enviar Mensagem"
         android:layout_gravity="bottom|center"
         android:layout_width="200dp"
         android:layout_height="50dp"
+        android:id="@+id/button5"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="14dp"
+        app:srcCompat="@android:color/holo_blue_dark"
+        android:background="@drawable/image_border"
+        android:padding="3dp"
+        android:id="@+id/profilePic"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Visualizar perfil"
+        android:layout_gravity="bottom|center"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:id="@+id/sendMsg"
-        android:visibility="visible" />
-</FrameLayout>
+        android:visibility="visible"
+        android:layout_above="@+id/button5"
+        android:layout_alignLeft="@+id/button5"
+        android:layout_alignStart="@+id/button5" />
+
+    <TextView
+        android:text="Nome do usuário"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profilePic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:id="@+id/textView2"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2"
+        android:id="@+id/textView3" />
+
+    <TextView
+        android:text="Gosto 1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:id="@+id/textView6" />
+
+    <TextView
+        android:text="Gosto 2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView6"
+        android:layout_alignLeft="@+id/textView6"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_marginTop="13dp"
+        android:id="@+id/textView7" />
+
+    <TextView
+        android:text="Gosto 3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/textView8"
+        android:layout_below="@+id/textView7"
+        android:layout_alignLeft="@+id/textView7"
+        android:layout_alignStart="@+id/textView7" />
+
+</RelativeLayout>

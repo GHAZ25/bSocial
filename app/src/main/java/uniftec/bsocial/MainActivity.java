@@ -14,7 +14,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 public class MainActivity extends AppCompatActivity {
-    public static CallbackManager callbackManager;
+    public static CallbackManager callbackManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
