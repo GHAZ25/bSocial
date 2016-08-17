@@ -1,5 +1,6 @@
 package uniftec.bsocial;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.facebook.login.LoginManager;
 
 import uniftec.bsocial.fragments.ContactsFragment;
 import uniftec.bsocial.fragments.MessageFragment;
@@ -116,6 +119,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
             settingsFragment = new SettingsFragment();
             fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, settingsFragment,
                     settingsFragment.getTag()).commit();
+        } else if (id == R.id.nav_logout) {
+            LoginManager.getInstance().logOut();
+            startActivity(new Intent(NavigationDrawerActivity.this, MainActivity.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

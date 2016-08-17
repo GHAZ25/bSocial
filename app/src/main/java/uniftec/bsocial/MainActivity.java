@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle("Bem-vindo!");
+
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
@@ -27,12 +29,24 @@ public class MainActivity extends AppCompatActivity {
         AppEventsLogger.activateApp(getApplication());
         callbackManager = CallbackManager.Factory.create();
 
+       /* if(AccessToken.getCurrentAccessToken() != null) {
+            if (AccessToken.getCurrentAccessToken().isExpired()){
+                Toast.makeText(getApplicationContext(), "Seu login expirou. Faça login novamente.", Toast.LENGTH_LONG).show();
+            } else {
+                startActivity(new Intent(MainActivity.this, NavigationDrawerActivity.class));
+                finish();
+            }
+        }*/
+
+
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("public_profile", "email", "user_likes");
+        loginButton.setReadPermissions("public_profile", "email", "user_likes, user_birthday");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
            @Override
            public void onSuccess(LoginResult loginResult) {
-               startActivity(new Intent(MainActivity.this, NavigationDrawerActivity.class));
+               //startActivity(new Intent(MainActivity.this, NavigationDrawerActivity.class));
+               startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+               finish();
            }
 
            @Override

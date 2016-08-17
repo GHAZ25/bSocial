@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -43,30 +42,25 @@
         android:maxLines="6"
         android:layout_above="@+id/cancel"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:hint="Mensagem" />
 
-    <ImageView
+    <com.facebook.login.widget.ProfilePictureView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginStart="25dp"
-        android:id="@+id/imageView4"
-        android:layout_alignRight="@+id/cancel"
-        android:layout_alignEnd="@+id/cancel" />
+        android:id="@+id/otherProfilePic"
+        android:layout_margin="20dp"/>
 
     <TextView
         android:text="Nome do usuário"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageView4"
-        android:layout_toEndOf="@+id/imageView4"
-        android:layout_marginLeft="29dp"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="62dp"
+        android:layout_toRightOf="@+id/otherProfilePic"
+        android:layout_toEndOf="@+id/otherProfilePic"
+        android:layout_marginTop="50dp"
         android:id="@+id/textView4" />
 
     <TextView

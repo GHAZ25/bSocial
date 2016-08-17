@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import uniftec.bsocial.R;
 
@@ -72,9 +71,6 @@ public class MessageFragment extends DialogFragment {
         view = inflater.inflate(R.layout.fragment_message, container, false);
 
         getDialog().setTitle("Enviar mensagem");
-
-        TextView receiver = (TextView) view.findViewById(R.id.receiver);
-        receiver.setText("Para: " + "Fulano");
 
         cancel();
 
