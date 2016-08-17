@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uniftec.bsocial.fragments.SignUpFragment">
+    tools:context="uniftec.bsocial.SignUpActivity">
 
     <!-- TODO: Update blank fragment layout -->
 
