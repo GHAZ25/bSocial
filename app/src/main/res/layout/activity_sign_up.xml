@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="uniftec.bsocial.fragments.SignUpFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/image_border"
+        android:padding="3dp"
+        android:id="@+id/profilePic"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/nameText"
+        android:hint="Nome"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/profilePic"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/emailText"
+        android:hint="E-mail"
+        android:layout_below="@+id/nameText"
+        android:layout_alignLeft="@+id/nameText"
+        android:layout_alignStart="@+id/nameText"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Sexo"
+        android:ems="10"
+        android:layout_marginTop="21dp"
+        android:id="@+id/genderText"
+        android:layout_below="@+id/ageText"
+        android:layout_alignLeft="@+id/ageText"
+        android:layout_alignStart="@+id/ageText"
+        android:enabled="false" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Idade: "
+        android:ems="10"
+        android:id="@+id/ageText"
+        android:layout_below="@+id/emailText"
+        android:layout_alignLeft="@+id/emailText"
+        android:layout_alignStart="@+id/emailText"
+        android:layout_marginTop="18dp"
+        android:enabled="false" />
+
+    <Button
+        android:text="Salvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSave"
+        android:background="@android:color/holo_green_light"
+        android:textColor="@android:color/white"
+        android:layout_above="@+id/btnCancel"
+        android:enabled="true" />
+
+    <Button
+        android:text="Cancelar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnCancel"
+        android:background="@android:color/holo_red_light"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:enabled="true" />
+
+</RelativeLayout>
