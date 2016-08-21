@@ -41,7 +41,6 @@ public class SignUpActivity extends AppCompatActivity {
     private JSONObject jsonObject;
     private String name;
     private String email;
-
     private TextView nameText;
     private TextView emailText;
 
@@ -49,8 +48,8 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle("Cadastro");
 
+        setTitle("bSocial");
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -69,6 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void registerView(JSONObject object) {
         setContentView(R.layout.activity_sign_up);
+        setTitle("Cadastro");
         setProfilePic(object);
         nameText = (TextView) findViewById(R.id.nameText);
         setName(object);
@@ -177,6 +177,7 @@ public class SignUpActivity extends AppCompatActivity {
                 switch (message) {
                     case "true":
                         startActivity(new Intent(SignUpActivity.this, NavigationDrawerActivity.class));
+                        finish();
                     break;
                     case "false":
                         registerView(jsonObject);
@@ -233,6 +234,7 @@ public class SignUpActivity extends AppCompatActivity {
                 switch (message) {
                     case "true":
                         startActivity(new Intent(SignUpActivity.this, NavigationDrawerActivity.class));
+                        finish();
                     default:
                         Toast.makeText(getApplicationContext(), "Ocorreu um erro ao efetuar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
                 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -29,14 +30,14 @@ public class MainActivity extends AppCompatActivity {
         AppEventsLogger.activateApp(getApplication());
         callbackManager = CallbackManager.Factory.create();
 
-       /* if(AccessToken.getCurrentAccessToken() != null) {
+        if(AccessToken.getCurrentAccessToken() != null) {
             if (AccessToken.getCurrentAccessToken().isExpired()){
                 Toast.makeText(getApplicationContext(), "Seu login expirou. Faça login novamente.", Toast.LENGTH_LONG).show();
             } else {
                 startActivity(new Intent(MainActivity.this, NavigationDrawerActivity.class));
                 finish();
             }
-        }*/
+        }
 
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
