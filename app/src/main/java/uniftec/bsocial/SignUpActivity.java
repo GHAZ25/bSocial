@@ -48,7 +48,6 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setTitle("bSocial");
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -235,6 +234,7 @@ public class SignUpActivity extends AppCompatActivity {
                     case "true":
                         startActivity(new Intent(SignUpActivity.this, NavigationDrawerActivity.class));
                         finish();
+                        break;
                     default:
                         Toast.makeText(getApplicationContext(), "Ocorreu um erro ao efetuar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
                 }
