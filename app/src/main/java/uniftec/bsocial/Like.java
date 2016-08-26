@@ -9,10 +9,8 @@ public class Like {
     private String name;
     private String pictureUrl;
 
-    public Like(String id, String name, String pictureUrl) {
-        this.id = id;
-        this.name = name;
-        this.pictureUrl = pictureUrl;
+    public Like() {
+
     }
 
     public void setId(String id) {

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.facebook.login.LoginManager;
 
 import uniftec.bsocial.fragments.ContactsFragment;
+import uniftec.bsocial.fragments.LikeChooserFragment;
 import uniftec.bsocial.fragments.MessageFragment;
 import uniftec.bsocial.fragments.ProfileFragment;
 import uniftec.bsocial.fragments.SearchFragment;
@@ -24,7 +25,7 @@ import uniftec.bsocial.fragments.SettingsFragment;
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ProfileFragment.OnFragmentInteractionListener,
                     SearchFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener,
-                    SettingsFragment.OnFragmentInteractionListener, MessageFragment.OnFragmentInteractionListener {
+                    SettingsFragment.OnFragmentInteractionListener, MessageFragment.OnFragmentInteractionListener, LikeChooserFragment.OnFragmentInteractionListener {
 
     FragmentManager fragmentManager;
     ProfileFragment profileFragment;

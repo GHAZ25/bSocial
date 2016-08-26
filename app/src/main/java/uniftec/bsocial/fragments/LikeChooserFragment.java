@@ -12,10 +12,12 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import uniftec.bsocial.Like;
 import uniftec.bsocial.R;
 
 /**
@@ -36,7 +38,7 @@ public class LikeChooserFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ArrayList<LikeChooserFragment> likes;
+    private ArrayList<Like> likes;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,10 +84,15 @@ public class LikeChooserFragment extends Fragment {
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         createLikeList(object);
 
+                        /*GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+                        if(nextRequest != null){
+                            nextRequest.setCallback(nextRequest.getCallback());
+                            nextRequest.executeAndWait();
+                        }*/
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "likes.fields(id,name,picture.type(large)).limit(9)");
+        parameters.putString("fields", "likes.fields(id,name,picture.type(large))");
         request.setParameters(parameters);
         request.executeAsync();
 
@@ -94,7 +101,25 @@ public class LikeChooserFragment extends Fragment {
     }
 
     private void createLikeList(JSONObject object) {
+        JSONObject jsonObject2 = object.optJSONObject("likes");
+        JSONArray jsonArray = jsonObject2.optJSONArray("data");
 
+        for (int i = 0; i<jsonArray.length(); i++) {
+            JSONObject jsonObject3 = jsonArray.optJSONObject(i);
+            String id = jsonObject3.optString("id");
+            String name = jsonObject3.optString("name");
+
+            jsonObject3 = jsonObject3.optJSONObject("picture");
+            jsonObject3 = jsonObject3.optJSONObject("data");
+            String pictureUrl = jsonObject2.optString("url");
+
+            Like like = new Like();
+            like.setId(id);
+            like.setName(name);
+            like.setPictureUrl(pictureUrl);
+
+            likes.add(like);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -119,6 +144,11 @@ public class LikeChooserFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+
+       /* SettingsFragment settingsFragment = new SettingsFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_like_chooser, settingsFragment,
+                settingsFragment.getTag()).commit();*/
     }
 
     /**
@@ -135,4 +165,5 @@ public class LikeChooserFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
