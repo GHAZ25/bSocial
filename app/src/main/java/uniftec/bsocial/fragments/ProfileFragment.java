@@ -45,7 +45,8 @@ public class ProfileFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private JSONObject jsonObject;
+    private JSONObject jsonObjectLikes;
+    private JSONObject jsonObjectInfo;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -91,8 +92,8 @@ public class ProfileFragment extends Fragment {
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        jsonObject = object;
-                        getLikes();
+                        jsonObjectLikes = object;
+                        getLikes(object);
                     }
                 });
         Bundle parameters = new Bundle();
@@ -100,20 +101,47 @@ public class ProfileFragment extends Fragment {
         request.setParameters(parameters);
         request.executeAsync();
 
+        GraphRequest request2 = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        jsonObjectInfo = object;
+                        setNameAgeLocation(object);
+                    }
+                });
+        Bundle parameters2 = new Bundle();
+        parameters2.putString("fields", "id,name,age_range.fields(min),hometown");
+        request2.setParameters(parameters2);
+        request2.executeAsync();
+
         getProfilePic();
         sendMsg();
 
         return view;
     }
 
+    private void setNameAgeLocation(JSONObject object) {
+
+        String name = object.optString("name");
+
+        JSONObject object1 = object.optJSONObject("age_range");
+        String age = object1.optString("min");
+
+        String nameAge = name + ", " + age;
+
+        TextView nameText = (TextView) getView().findViewById(R.id.nameAgeText);
+        nameText.setText(nameAge);
+
+        TextView hometown = (TextView) getView().findViewById(R.id.locationText);
+        object1 = object.optJSONObject("hometown");
+        hometown.setText(object1.optString("name"));
+    }
+
     public void getProfilePic() {
         Profile profile = Profile.getCurrentProfile();
         ProfilePictureView profilePictureView = (ProfilePictureView) view.findViewById(R.id.profilePic);
         profilePictureView.setProfileId(profile.getId());
-    }
-
-    public void getInfo() {
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -123,8 +151,8 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    public void getLikes() {
-        JSONObject jsonObject2 = jsonObject.optJSONObject("likes");
+    public void getLikes(JSONObject object) {
+        JSONObject jsonObject2 = object.optJSONObject("likes");
         JSONArray jsonArray = jsonObject2.optJSONArray("data");
 
         jsonObject2 = jsonArray.optJSONObject(0);
@@ -154,7 +182,7 @@ public class ProfileFragment extends Fragment {
         jsonObject2 = jsonArray.optJSONObject(3);
         jsonObject2 = jsonObject2.optJSONObject("picture");
         jsonObject2 = jsonObject2.optJSONObject("data");
-        TextView like4 = (TextView) getView().findViewById(R.id.like2);
+        TextView like4 = (TextView) getView().findViewById(R.id.like4);
         like4.setText(jsonArray.optJSONObject(3).optString("name"));
         ImageView like4pic = (ImageView) getView().findViewById(R.id.like4pic);
         Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like4pic);
@@ -179,7 +207,7 @@ public class ProfileFragment extends Fragment {
         jsonObject2 = jsonObject2.optJSONObject("picture");
         jsonObject2 = jsonObject2.optJSONObject("data");
         TextView like7 = (TextView) getView().findViewById(R.id.like7);
-        like7.setText(jsonArray.optJSONObject(1).optString("name"));
+        like7.setText(jsonArray.optJSONObject(6).optString("name"));
         ImageView like7pic = (ImageView) getView().findViewById(R.id.like7pic);
         Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like7pic);
 
