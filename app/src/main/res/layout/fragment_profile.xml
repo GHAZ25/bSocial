@@ -3,49 +3,387 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uniftec.bsocial.fragments.ProfileFragment"
-    android:clipChildren="false"
     android:clickable="false"
-    android:clipToPadding="false">
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    tools:context="uniftec.bsocial.fragments.ProfileFragment">
 
     <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/profilePic"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="top|center"
         android:layout_marginTop="14dp"
-        app:srcCompat="@android:color/holo_blue_dark"
         android:background="@drawable/image_border"
         android:padding="3dp"
-        android:id="@+id/profilePic"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        app:srcCompat="@android:color/holo_blue_dark" />
+
+    <TextView
+        android:id="@+id/profileNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profilePic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="Fulano de Tal, 21"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/locationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileNameText"
+        android:layout_centerHorizontal="true"
+        android:text="Caxias do Sul" />
 
     <Button
-        android:text="Enviar Mensagem"
-        android:layout_gravity="bottom|center"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
         android:id="@+id/sendMsg"
-        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="Caxias do Sul"
-        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom|center"
+        android:background="#3b5998"
+        android:text="Enviar Mensagem"
+        android:textColor="#fff" />
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/profileName"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/sendMsg"
+        android:layout_below="@+id/locationText"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/layout_border">
 
-    <TextView
-        android:text="Fulano de Tal, 21"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:id="@+id/profileName"
-        android:textSize="24sp"
-        android:layout_below="@+id/profilePic"
-        android:layout_centerHorizontal="true" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like1pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="3dp"
+                        android:background="@drawable/image_border_like"/>
+
+                    <TextView
+                        android:id="@+id/like1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like1pic"
+                        android:layout_toEndOf="@+id/like1pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like2pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp" />
+
+                    <TextView
+                        android:id="@+id/like2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like2pic"
+                        android:layout_toEndOf="@+id/like2pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like3pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp"/>
+
+                    <TextView
+                        android:id="@+id/like3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like3pic"
+                        android:layout_toEndOf="@+id/like3pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like4pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp"/>
+
+                    <TextView
+                        android:id="@+id/like4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like4pic"
+                        android:layout_toEndOf="@+id/like4pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like5pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp"/>
+
+                    <TextView
+                        android:id="@+id/like5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like5pic"
+                        android:layout_toEndOf="@+id/like5pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like6pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp"/>
+
+                    <TextView
+                        android:id="@+id/like6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like6pic"
+                        android:layout_toEndOf="@+id/like6pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like7pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp"/>
+
+                    <TextView
+                        android:id="@+id/like7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like7pic"
+                        android:layout_toEndOf="@+id/like7pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like8pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp"/>
+
+                    <TextView
+                        android:id="@+id/like8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like8pic"
+                        android:layout_toEndOf="@+id/like8pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/like9pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/image_border_like"
+                        android:padding="3dp" />
+
+                    <TextView
+                        android:id="@+id/like9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="3"
+                        android:textSize="16sp"
+                        android:text="bSocial"
+                        android:textAlignment="center"
+                        android:textColor="#3b5998"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/like9pic"
+                        android:layout_toEndOf="@+id/like9pic"
+                        android:layout_marginLeft="5dp"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
 
 </RelativeLayout>

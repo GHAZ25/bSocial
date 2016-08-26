@@ -9,15 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.widget.ProfilePictureView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import uniftec.bsocial.R;
 
@@ -41,6 +44,8 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private JSONObject jsonObject;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -81,35 +86,34 @@ public class ProfileFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        jsonObject = object;
+                        getLikes();
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "likes.fields(id,name,picture.type(large)).limit(9)");
+        request.setParameters(parameters);
+        request.executeAsync();
+
         getProfilePic();
-        getLikes();
         sendMsg();
 
         return view;
     }
 
     public void getProfilePic() {
-
         Profile profile = Profile.getCurrentProfile();
         ProfilePictureView profilePictureView = (ProfilePictureView) view.findViewById(R.id.profilePic);
         profilePictureView.setProfileId(profile.getId());
     }
 
-    public void getLikes() {
-        Bundle params = new Bundle();
-        params.putString("offset","10");
-        new GraphRequest(AccessToken.getCurrentAccessToken(),
-                "/me?fields=likes.fields(id,name)",
-                params,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse response) {
-                        JSONArray jsonArray = response.getJSONArray();
+    public void getInfo() {
 
-                    }
-                }
-        ).executeAsync();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -117,6 +121,84 @@ public class ProfileFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void getLikes() {
+        JSONObject jsonObject2 = jsonObject.optJSONObject("likes");
+        JSONArray jsonArray = jsonObject2.optJSONArray("data");
+
+        jsonObject2 = jsonArray.optJSONObject(0);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like1 = (TextView) getView().findViewById(R.id.like1);
+        like1.setText(jsonArray.optJSONObject(0).optString("name"));
+        ImageView like1pic = (ImageView) getView().findViewById(R.id.like1pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like1pic);
+
+        jsonObject2 = jsonArray.optJSONObject(1);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like2 = (TextView) getView().findViewById(R.id.like2);
+        like2.setText(jsonArray.optJSONObject(1).optString("name"));
+        ImageView like2pic = (ImageView) getView().findViewById(R.id.like2pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like2pic);
+
+        jsonObject2 = jsonArray.optJSONObject(2);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like3 = (TextView) getView().findViewById(R.id.like3);
+        like3.setText(jsonArray.optJSONObject(2).optString("name"));
+        ImageView like3pic = (ImageView) getView().findViewById(R.id.like3pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like3pic);
+
+        jsonObject2 = jsonArray.optJSONObject(3);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like4 = (TextView) getView().findViewById(R.id.like2);
+        like4.setText(jsonArray.optJSONObject(3).optString("name"));
+        ImageView like4pic = (ImageView) getView().findViewById(R.id.like4pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like4pic);
+
+        jsonObject2 = jsonArray.optJSONObject(4);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like5 = (TextView) getView().findViewById(R.id.like5);
+        like5.setText(jsonArray.optJSONObject(4).optString("name"));
+        ImageView like5pic = (ImageView) getView().findViewById(R.id.like5pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like5pic);
+
+        jsonObject2 = jsonArray.optJSONObject(5);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like6 = (TextView) getView().findViewById(R.id.like6);
+        like6.setText(jsonArray.optJSONObject(5).optString("name"));
+        ImageView like6pic = (ImageView) getView().findViewById(R.id.like6pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like6pic);
+
+        jsonObject2 = jsonArray.optJSONObject(6);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like7 = (TextView) getView().findViewById(R.id.like7);
+        like7.setText(jsonArray.optJSONObject(1).optString("name"));
+        ImageView like7pic = (ImageView) getView().findViewById(R.id.like7pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like7pic);
+
+        jsonObject2 = jsonArray.optJSONObject(7);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like8 = (TextView) getView().findViewById(R.id.like8);
+        like8.setText(jsonArray.optJSONObject(7).optString("name"));
+        ImageView like8pic = (ImageView) getView().findViewById(R.id.like8pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like8pic);
+
+        jsonObject2 = jsonArray.optJSONObject(8);
+        jsonObject2 = jsonObject2.optJSONObject("picture");
+        jsonObject2 = jsonObject2.optJSONObject("data");
+        TextView like9 = (TextView) getView().findViewById(R.id.like9);
+        like9.setText(jsonArray.optJSONObject(8).optString("name"));
+        ImageView like9pic = (ImageView) getView().findViewById(R.id.like9pic);
+        Picasso.with(getContext()).load(jsonObject2.optString("url")).into(like9pic);
+
     }
 
     public void sendMsg() {
