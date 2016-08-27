@@ -76,7 +76,7 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             public void onClick(View view) {
                 LikeChooserFragment likeChooserFragment = new LikeChooserFragment();
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.fragment_settings, likeChooserFragment,
+                fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, likeChooserFragment,
                         likeChooserFragment.getTag()).commit();
             }
         });
