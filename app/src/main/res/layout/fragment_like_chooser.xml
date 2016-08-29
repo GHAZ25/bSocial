@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uniftec.Vazio.fragments.LikeChooserFragment"
+    tools:context="uniftec.bsocial.fragments.LikeChooserFragment"
     android:id="@+id/fragment_like_chooser"
     android:orientation="vertical">
 
@@ -407,7 +407,14 @@
 
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
+    <Button
+        android:text="Salvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSaveLikes"
+        android:background="@android:color/holo_green_light"
+        android:textColor="@android:color/white"
+        android:enabled="true" />
 
 </LinearLayout>

@@ -154,7 +154,7 @@ public class SignUpActivity extends AppCompatActivity {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
-                request.setURI(new URI("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/consultar?id=" + jsonObject.optString("id")));
+                request.setURI(new URI("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/consult?id=" + jsonObject.optString("id")));
                 HttpResponse response = httpclient.execute(request);
                 InputStream content = response.getEntity().getContent();
                 Reader reader = new InputStreamReader(content);
@@ -203,7 +203,7 @@ public class SignUpActivity extends AppCompatActivity {
             HashMap retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/cadastrar");
+                HttpPost request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/register");
 
                 List<NameValuePair> values = new ArrayList<>(2);
                 values.add(new BasicNameValuePair("nome", name));
@@ -234,7 +234,7 @@ public class SignUpActivity extends AppCompatActivity {
                     case "true":
                         startActivity(new Intent(SignUpActivity.this, NavigationDrawerActivity.class));
                         finish();
-                        break;
+                    break;
                     default:
                         Toast.makeText(getApplicationContext(), "Ocorreu um erro ao efetuar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
                 }
