@@ -1,4 +1,4 @@
-package uniftec.bsocial;
+package uniftec.bsocial.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import uniftec.bsocial.R;
+import uniftec.bsocial.entities.Like;
 import uniftec.bsocial.fragments.LikeChooserFragment;
 
 /**
@@ -55,6 +57,7 @@ public class LikeAdapter extends BaseAdapter {
             holder.likePic = (ImageView) rowView.findViewById(R.id.likePic);
             holder.likeId.setText(result.get(i).getId());
             holder.likeName.setText(result.get(i).getName());
+            holder.likePic.setTag(result.get(i).getPictureUrl());
             Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.likePic);
 
         return rowView;

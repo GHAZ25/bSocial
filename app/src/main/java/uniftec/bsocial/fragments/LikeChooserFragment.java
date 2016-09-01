@@ -21,7 +21,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -37,13 +36,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import uniftec.bsocial.Like;
-import uniftec.bsocial.LikeAdapter;
 import uniftec.bsocial.R;
+import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.domain.Preference;
+import uniftec.bsocial.entities.Like;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,6 +67,7 @@ public class LikeChooserFragment extends Fragment {
     private JSONObject objectTemp;
 
     private ArrayList<Like> likes;
+    private ArrayList<Like> chosenLikes;
 
     private ProgressDialog load;
 
@@ -141,6 +140,8 @@ public class LikeChooserFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        chosenLikes = new ArrayList<Like>();
     }
 
     @Override
@@ -195,7 +196,7 @@ public class LikeChooserFragment extends Fragment {
             likes.add(like);
         }
 
-        likeSelected1Name = (TextView) getView().findViewById(R.id.likeSelected1Text);
+        /*likeSelected1Name = (TextView) getView().findViewById(R.id.likeSelected1Text);
         likeSelected1Id = (TextView) getView().findViewById(R.id.likeSelected1Id);
         likeSelected1Pic = (ImageView) getView().findViewById(R.id.likeSelected1Pic);
 
@@ -229,106 +230,49 @@ public class LikeChooserFragment extends Fragment {
 
         likeSelected9Name = (TextView) getView().findViewById(R.id.likeSelected9Text);
         likeSelected9Id = (TextView) getView().findViewById(R.id.likeSelected9Id);
-        likeSelected9Pic = (ImageView) getView().findViewById(R.id.likeSelected9Pic);
+        likeSelected9Pic = (ImageView) getView().findViewById(R.id.likeSelected9Pic);*/
 
 
         ListPreferences list = new ListPreferences();
         list.execute();
 
+        ListView likesChosenListView = (ListView) getView().findViewById(R.id.likesChosenListView);
+        final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(this, chosenLikes);
+        likesChosenListView.setAdapter(likesChosenListViewAdapter);
+
         ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
         likesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 ImageView likePic = (ImageView) view.findViewById(R.id.likePic);
                 TextView likeName = (TextView) view.findViewById(R.id.likeName);
                 TextView likeId = (TextView) view.findViewById(R.id.likeId);
 
-                int picId = 0;
-                int nameId = 0;
-                int idId = 0;
-                int x = 0;
+                Like like = new Like();
+                like.setId(likeId.getText().toString());
+                like.setName(likeName.getText().toString());
+                like.setPictureUrl(likePic.getTag().toString());
 
-                if ((likeSelected1Id.getText().equals(likeId.getText())) || (likeSelected2Id.getText().equals(likeId.getText()))
-                        || (likeSelected3Id.getText().equals(likeId.getText())) || (likeSelected7Id.getText().equals(likeId.getText()))
-                        || (likeSelected4Id.getText().equals(likeId.getText())) || (likeSelected8Id.getText().equals(likeId.getText()))
-                        || (likeSelected5Id.getText().equals(likeId.getText())) || (likeSelected9Id.getText().equals(likeId.getText()))
-                        || (likeSelected6Id.getText().equals(likeId.getText()))) {
-                    Toast toast = Toast.makeText(getContext(), "Você já adicionou essa preferência", Toast.LENGTH_SHORT);
-                    toast.show();
-                    x = 1;
+                boolean add = true;
+                for (Like like1: chosenLikes) {
+                    if (like1.getId().equals(like.getId()))
+                        add = false;
+                }
+
+                if (add) {
+                    chosenLikes.add(like);
                 } else {
-
-                    if (likeSelected1Name.getText().equals("Vazio")) {
-                        picId = R.id.likeSelected1Pic;
-                        nameId = R.id.likeSelected1Text;
-                        idId = R.id.likeSelected1Id;
-                    } else {
-                        if (likeSelected2Name.getText().equals("Vazio")) {
-                            picId = R.id.likeSelected2Pic;
-                            nameId = R.id.likeSelected2Text;
-                            idId = R.id.likeSelected2Id;
-                        } else {
-                            if (likeSelected3Name.getText().equals("Vazio")) {
-                                picId = R.id.likeSelected3Pic;
-                                nameId = R.id.likeSelected3Text;
-                                idId = R.id.likeSelected3Id;
-                            } else {
-                                if (likeSelected4Name.getText().equals("Vazio")) {
-                                    picId = R.id.likeSelected4Pic;
-                                    nameId = R.id.likeSelected4Text;
-                                    idId = R.id.likeSelected4Id;
-                                } else {
-                                    if (likeSelected5Name.getText().equals("Vazio")) {
-                                        picId = R.id.likeSelected5Pic;
-                                        nameId = R.id.likeSelected5Text;
-                                        idId = R.id.likeSelected5Id;
-                                    } else {
-                                        if (likeSelected6Name.getText().equals("Vazio")) {
-                                            picId = R.id.likeSelected6Pic;
-                                            nameId = R.id.likeSelected6Text;
-                                            idId = R.id.likeSelected6Id;
-                                        } else {
-                                            if (likeSelected7Name.getText().equals("Vazio")) {
-                                                picId = R.id.likeSelected7Pic;
-                                                nameId = R.id.likeSelected7Text;
-                                                idId = R.id.likeSelected7Id;
-                                            } else {
-                                                if (likeSelected8Name.getText().equals("Vazio")) {
-                                                    picId = R.id.likeSelected8Pic;
-                                                    nameId = R.id.likeSelected8Text;
-                                                    idId = R.id.likeSelected8Id;
-                                                } else {
-                                                    if (likeSelected9Name.getText().equals("Vazio")) {
-                                                        picId = R.id.likeSelected9Pic;
-                                                        nameId = R.id.likeSelected9Text;
-                                                        idId = R.id.likeSelected9Id;
-                                                    } else {
-                                                        x = 1;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                    Toast.makeText(getContext(), "Item já adicionado!", Toast.LENGTH_SHORT).show();
                 }
-                if (x == 0) {
-                    ImageView likeSelectedPic = (ImageView) getView().findViewById(picId);
-                    TextView likeSelectedName = (TextView) getView().findViewById(nameId);
-                    TextView likeSelectedId = (TextView) getView().findViewById(idId);
 
-                    likeSelectedPic.setImageDrawable(likePic.getDrawable());
-                    likeSelectedName.setText(likeName.getText());
-                    likeSelectedId.setText(likeId.getText());
-                }
+                likesChosenListViewAdapter.notifyDataSetChanged();
             }
         });
 
         save();
         likesListView.setAdapter(new LikeAdapter(this, likes));
+
     }
 
 
@@ -337,15 +281,6 @@ public class LikeChooserFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                id[0] = likeSelected1Id.getText().toString();
-                id[1] = likeSelected2Id.getText().toString();
-                id[2] = likeSelected3Id.getText().toString();
-                id[3] = likeSelected4Id.getText().toString();
-                id[4] = likeSelected5Id.getText().toString();
-                id[5] = likeSelected6Id.getText().toString();
-                id[6] = likeSelected7Id.getText().toString();
-                id[7] = likeSelected8Id.getText().toString();
-                id[8] = likeSelected9Id.getText().toString();
 
                 SavePreferences save = new SavePreferences();
                 save.execute();
@@ -374,11 +309,6 @@ public class LikeChooserFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-
-       /* SettingsFragment settingsFragment = new SettingsFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_like_chooser, settingsFragment,
-                settingsFragment.getTag()).commit();*/
     }
 
     /**
@@ -404,7 +334,6 @@ public class LikeChooserFragment extends Fragment {
 
         @Override
         protected String doInBackground(Void... params) {
-            HashMap retorno = null;
             try {
                 for (int i = 0; i < 9; i++) {
                     HttpClient httpclient = new DefaultHttpClient();
@@ -427,14 +356,11 @@ public class LikeChooserFragment extends Fragment {
                     InputStream content = response.getEntity().getContent();
                     Reader reader = new InputStreamReader(content);
 
-                    Gson gson = new Gson();
-                    retorno = gson.fromJson(reader, HashMap.class);
-
                     content.close();
                 }
 
                 return "true";
-            }catch (Exception e){
+            } catch (Exception e){
                 return e.getMessage();
             }
         }
@@ -447,7 +373,7 @@ public class LikeChooserFragment extends Fragment {
                         Toast.makeText(getView().getContext(), "Preferências alteradas com sucesso.", Toast.LENGTH_LONG).show();
                     break;
                     default:
-                        Toast.makeText(getView().getContext(), "Ocorreu um erro ao efetuar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getView().getContext(), message, Toast.LENGTH_LONG).show();
                 }
             }
             load.dismiss();
@@ -480,71 +406,6 @@ public class LikeChooserFragment extends Fragment {
                 retorno = gson.fromJson(reader, Preference[].class);
 
                 content.close();
-
-                /*for (int i = 0; i < retorno.length; i++) {
-                    contTemp = i;
-                    idTemp = retorno[i].getId();
-
-                    GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), retorno[i].getId() + "?fields=id,name,picture", new GraphRequest.Callback() {
-                        @Override
-                        public void onCompleted(GraphResponse graphResponse) {
-                            JSONObject object = graphResponse.getJSONObject();
-
-                            objectTemp = object.optJSONObject("picture");
-                            objectTemp = objectTemp.optJSONObject("data");
-
-                            switch (contTemp) {
-                                case 0:
-                                    likeSelected1Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected1Pic);
-                                    likeSelected1Id.setText(idTemp);
-                                break;
-                                case 1:
-                                    likeSelected2Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected2Pic);
-                                    likeSelected2Id.setText(idTemp);
-                                break;
-                                case 2:
-                                    likeSelected3Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected3Pic);
-                                    likeSelected3Id.setText(idTemp);
-                                break;
-                                case 3:
-                                    likeSelected4Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected4Pic);
-                                    likeSelected4Id.setText(idTemp);
-                                break;
-                                case 4:
-                                    likeSelected5Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected5Pic);
-                                    likeSelected5Id.setText(idTemp);
-                                break;
-                                case 5:
-                                    likeSelected6Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected6Pic);
-                                    likeSelected6Id.setText(idTemp);
-                                break;
-                                case 6:
-                                    likeSelected7Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected7Pic);
-                                    likeSelected7Id.setText(idTemp);
-                                break;
-                                case 7:
-                                    likeSelected8Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected8Pic);
-                                    likeSelected8Id.setText(idTemp);
-                                break;
-                                case 8:
-                                    likeSelected9Name.setText(object.optString("name"));
-                                    Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected9Pic);
-                                    likeSelected9Id.setText(idTemp);
-                                break;
-                            }
-                        }
-                    });
-
-                    request1.executeAsync();
-                } */
 
                 return "true";
             }catch (Exception e){
@@ -590,54 +451,6 @@ public class LikeChooserFragment extends Fragment {
 
                     objectTemp = object.optJSONObject("picture");
                     objectTemp = objectTemp.optJSONObject("data");
-
-                    switch (temp) {
-                        case 0:
-                            likeSelected1Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected1Pic);
-                            likeSelected1Id.setText(idTemp);
-                        break;
-                        case 1:
-                            likeSelected2Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected2Pic);
-                            likeSelected2Id.setText(idTemp);
-                        break;
-                        case 2:
-                            likeSelected3Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected3Pic);
-                            likeSelected3Id.setText(idTemp);
-                        break;
-                        case 3:
-                            likeSelected4Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected4Pic);
-                            likeSelected4Id.setText(idTemp);
-                        break;
-                        case 4:
-                            likeSelected5Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected5Pic);
-                            likeSelected5Id.setText(idTemp);
-                        break;
-                        case 5:
-                            likeSelected6Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected6Pic);
-                            likeSelected6Id.setText(idTemp);
-                        break;
-                        case 6:
-                            likeSelected7Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected7Pic);
-                            likeSelected7Id.setText(idTemp);
-                        break;
-                        case 7:
-                            likeSelected8Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected8Pic);
-                            likeSelected8Id.setText(idTemp);
-                        break;
-                        case 8:
-                            likeSelected9Name.setText(object.optString("name"));
-                            Picasso.with(getContext()).load(objectTemp.optString("url")).into(likeSelected9Pic);
-                            likeSelected9Id.setText(idTemp);
-                        break;
-                    }
                 }
             });
 

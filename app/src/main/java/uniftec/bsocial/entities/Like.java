@@ -1,4 +1,4 @@
-package uniftec.bsocial;
+package uniftec.bsocial.entities;
 
 /**
  * Created by mauri on 25/08/2016.
@@ -8,6 +8,7 @@ public class Like {
     private String id;
     private String name;
     private String pictureUrl;
+    private String category;
 
     public Like() {
 
@@ -35,5 +36,13 @@ public class Like {
 
     public String getPictureUrl() {
         return pictureUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
