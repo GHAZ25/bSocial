@@ -68,9 +68,9 @@ public class MessageFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_message, container, false);
+        getDialog().setTitle("Enviar Mensagem");
 
-        getDialog().setTitle("Enviar mensagem");
+        view = inflater.inflate(R.layout.fragment_message, container, false);
 
         cancel();
 
@@ -103,6 +103,16 @@ public class MessageFragment extends DialogFragment {
         mListener = null;
     }
 
+    public void cancel() {
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -116,16 +126,6 @@ public class MessageFragment extends DialogFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public void cancel() {
-        Button cancel = (Button) view.findViewById(R.id.cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
     }
 
 }

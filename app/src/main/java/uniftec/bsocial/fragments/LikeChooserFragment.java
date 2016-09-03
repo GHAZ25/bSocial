@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ import uniftec.bsocial.entities.Like;
  * Use the {@link LikeChooserFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LikeChooserFragment extends Fragment {
+public class LikeChooserFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,42 +75,6 @@ public class LikeChooserFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private String[] id = new String[9];
-
-    private TextView likeSelected1Name = null;
-    private TextView likeSelected1Id = null;
-    private ImageView likeSelected1Pic = null;
-
-    private TextView likeSelected2Name = null;
-    private TextView likeSelected2Id = null;
-    private ImageView likeSelected2Pic = null;
-
-    private TextView likeSelected3Name = null;
-    private TextView likeSelected3Id = null;
-    private ImageView likeSelected3Pic = null;
-
-    private TextView likeSelected4Name = null;
-    private TextView likeSelected4Id = null;
-    private ImageView likeSelected4Pic = null;
-
-    private TextView likeSelected5Name = null;
-    private TextView likeSelected5Id = null;
-    private ImageView likeSelected5Pic = null;
-
-    private TextView likeSelected6Name = null;
-    private TextView likeSelected6Id = null;
-    private ImageView likeSelected6Pic = null;
-
-    private TextView likeSelected7Name = null;
-    private TextView likeSelected7Id = null;
-    private ImageView likeSelected7Pic = null;
-
-    private TextView likeSelected8Name = null;
-    private TextView likeSelected8Id = null;
-    private ImageView likeSelected8Pic = null;
-
-    private TextView likeSelected9Name = null;
-    private TextView likeSelected9Id = null;
-    private ImageView likeSelected9Pic = null;
 
     public LikeChooserFragment() {
         // Required empty public constructor
@@ -147,6 +112,10 @@ public class LikeChooserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        getDialog().setTitle("Gostos Principais");
+
+        View view = inflater.inflate(R.layout.fragment_like_chooser, container, false);
+
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -170,7 +139,7 @@ public class LikeChooserFragment extends Fragment {
         request.executeAsync();
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_like_chooser, container, false);
+        return view;
     }
 
     private void createLikeList(JSONObject object) {
@@ -195,43 +164,6 @@ public class LikeChooserFragment extends Fragment {
 
             likes.add(like);
         }
-
-        /*likeSelected1Name = (TextView) getView().findViewById(R.id.likeSelected1Text);
-        likeSelected1Id = (TextView) getView().findViewById(R.id.likeSelected1Id);
-        likeSelected1Pic = (ImageView) getView().findViewById(R.id.likeSelected1Pic);
-
-        likeSelected2Name = (TextView) getView().findViewById(R.id.likeSelected2Text);
-        likeSelected2Id = (TextView) getView().findViewById(R.id.likeSelected2Id);
-        likeSelected2Pic = (ImageView) getView().findViewById(R.id.likeSelected2Pic);
-
-        likeSelected3Name = (TextView) getView().findViewById(R.id.likeSelected3Text);
-        likeSelected3Id = (TextView) getView().findViewById(R.id.likeSelected3Id);
-        likeSelected3Pic = (ImageView) getView().findViewById(R.id.likeSelected3Pic);
-
-        likeSelected4Name = (TextView) getView().findViewById(R.id.likeSelected4Text);
-        likeSelected4Id = (TextView) getView().findViewById(R.id.likeSelected4Id);
-        likeSelected4Pic = (ImageView) getView().findViewById(R.id.likeSelected4Pic);
-
-        likeSelected5Name = (TextView) getView().findViewById(R.id.likeSelected5Text);
-        likeSelected5Id = (TextView) getView().findViewById(R.id.likeSelected5Id);
-        likeSelected5Pic = (ImageView) getView().findViewById(R.id.likeSelected5Pic);
-
-        likeSelected6Name = (TextView) getView().findViewById(R.id.likeSelected6Text);
-        likeSelected6Id = (TextView) getView().findViewById(R.id.likeSelected6Id);
-        likeSelected6Pic = (ImageView) getView().findViewById(R.id.likeSelected6Pic);
-
-        likeSelected7Name = (TextView) getView().findViewById(R.id.likeSelected7Text);
-        likeSelected7Id = (TextView) getView().findViewById(R.id.likeSelected7Id);
-        likeSelected7Pic = (ImageView) getView().findViewById(R.id.likeSelected7Pic);
-
-        likeSelected8Name = (TextView) getView().findViewById(R.id.likeSelected8Text);
-        likeSelected8Id = (TextView) getView().findViewById(R.id.likeSelected8Id);
-        likeSelected8Pic = (ImageView) getView().findViewById(R.id.likeSelected8Pic);
-
-        likeSelected9Name = (TextView) getView().findViewById(R.id.likeSelected9Text);
-        likeSelected9Id = (TextView) getView().findViewById(R.id.likeSelected9Id);
-        likeSelected9Pic = (ImageView) getView().findViewById(R.id.likeSelected9Pic);*/
-
 
         ListPreferences list = new ListPreferences();
         list.execute();

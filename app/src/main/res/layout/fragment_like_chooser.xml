@@ -1,37 +1,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_like_chooser"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uniftec.bsocial.fragments.LikeChooserFragment"
-    android:id="@+id/fragment_like_chooser"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="uniftec.bsocial.fragments.LikeChooserFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ListView
+        android:id="@+id/likesListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/likesListView"
-        android:padding="3dp"
-        android:background="@drawable/layout_border">
+        android:background="@drawable/layout_border"
+        android:padding="1dp">
     </ListView>
 
     <ListView
+        android:id="@+id/likesChosenListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/likesChosenListView"
-        android:padding="3dp"
-        android:background="@drawable/layout_border">
+        android:background="@drawable/layout_border"
+        android:padding="1dp">
     </ListView>
 
     <Button
-        android:text="Salvar"
+        android:id="@+id/btnSaveLikes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSaveLikes"
         android:background="@android:color/holo_green_light"
-        android:textColor="@android:color/white"
-        android:enabled="true" />
+        android:enabled="true"
+        android:text="Salvar"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

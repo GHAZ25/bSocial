@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="uniftec.bsocial.fragments.CategoryChooserFragment">
+
+    <ListView
+        android:id="@+id/categoryChooserListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></ListView>
+
+    <Button
+        android:id="@+id/btnSaveCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/categoryChooserListView"
+        android:background="@android:color/holo_green_light"
+        android:enabled="true"
+        android:text="Salvar"
+        android:textColor="@android:color/white" />
+
+
+</LinearLayout>

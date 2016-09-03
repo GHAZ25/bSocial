@@ -118,8 +118,19 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             public void onClick(View view) {
                 LikeChooserFragment likeChooserFragment = new LikeChooserFragment();
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, likeChooserFragment,
-                likeChooserFragment.getTag()).commit();
+                likeChooserFragment.show(fragmentManager, "Gostos principais");
+//                fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, likeChooserFragment,
+//                likeChooserFragment.getTag()).commit();
+            }
+        });
+
+        Button editIgnoredCategories = (Button) v.findViewById(R.id.editIgnoredCategories);
+        editIgnoredCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CategoryChooserFragment categoryChooserFragment = new CategoryChooserFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                categoryChooserFragment.show(fragmentManager, "Ignorar categorias");
             }
         });
 
@@ -179,6 +190,11 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
         mListener = null;
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -192,11 +208,6 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     private class UpdatePreferences extends AsyncTask<Void, Void, String> {

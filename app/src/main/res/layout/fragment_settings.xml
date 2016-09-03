@@ -1,58 +1,70 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uniftec.bsocial.fragments.SettingsFragment"
-    android:id="@+id/fragment_settings">
+    tools:context="uniftec.bsocial.fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <CheckBox
-        android:text="Visível para outros usuários"
+        android:id="@+id/visibility"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:id="@+id/visibility"
-        android:checked="false" />
+        android:checked="false"
+        android:text="Visível para outros usuários" />
 
     <CheckBox
-        android:text="Notificar ao encontrar contatos próximos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/notify"
-        android:checked="false"
-        android:layout_below="@+id/visibility"
-        android:layout_alignLeft="@+id/visibility"
-        android:layout_alignStart="@+id/visibility" />
-
-    <Button
-        android:text="Salvar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/savePreference"
-        android:background="@android:color/holo_green_light"
-        android:textColor="@android:color/white"
-        android:layout_above="@+id/cancelPreference"
-        android:enabled="true" />
-
-    <Button
-        android:text="Cancelar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/cancelPreference"
-        android:background="@android:color/holo_red_light"
-        android:textColor="@android:color/white"
-        android:layout_alignParentBottom="true"
-        android:enabled="true" />
-
-    <Button
-        android:text="Editar gostos principais"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/visibility"
+        android:layout_alignStart="@+id/visibility"
+        android:layout_below="@+id/visibility"
+        android:checked="false"
+        android:text="Notificar ao encontrar contatos próximos" />
+
+    <Button
+        android:id="@+id/savePreference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cancelPreference"
+        android:background="@android:color/holo_green_light"
+        android:enabled="true"
+        android:text="Salvar"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/cancelPreference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/holo_red_light"
+        android:enabled="true"
+        android:text="Cancelar"
+        android:textColor="@android:color/white" />
+
+    <Button
         android:id="@+id/editPreferredLikes"
-        android:layout_marginTop="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/notify"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="@color/com_facebook_blue"
+        android:text="Editar gostos principais"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/editIgnoredCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editPreferredLikes"
+        android:layout_marginTop="15dp"
+        android:background="@color/com_facebook_blue"
+        android:text="Ignorar categorias"
+        android:textColor="#fff" />
 
 </RelativeLayout>
