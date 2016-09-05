@@ -10,8 +10,22 @@ public class Like {
     private String pictureUrl;
     private String category;
 
-    public Like() {
+    public Like(String id, String name, String pictureUrl, String category) {
+        super();
 
+        this.id = id;
+        this.name = name;
+        this.pictureUrl = pictureUrl;
+        this.category = category;
+    }
+
+    public Like(Like like) {
+        super();
+
+        id = like.getId();
+        name = like.getName();
+        pictureUrl = like.getPictureUrl();
+        category = like.getCategory();
     }
 
     public void setId(String id) {

@@ -31,8 +31,11 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.cache.PreferencesCache;
 import uniftec.bsocial.domain.User;
 
 /**
@@ -52,12 +55,10 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
     private ProgressDialog load;
 
     private Profile profile = null;
+    private PreferencesCache preferencesCache = null;
 
     private CheckBox chkOculto = null;
     private CheckBox chkNotifica = null;
-
-    private String oculto = "false";
-    private String notifica = "false";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -102,17 +103,18 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        preferencesCache = new PreferencesCache(getActivity());
         profile = Profile.getCurrentProfile();
 
-        chkOculto = (CheckBox) v.findViewById(R.id.visibility);
-        chkNotifica = (CheckBox) v.findViewById(R.id.notify);
+        chkOculto = (CheckBox) view.findViewById(R.id.visibility);
+        chkNotifica = (CheckBox) view.findViewById(R.id.notify);
 
-        ListPreferences preferences = new ListPreferences();
-        preferences.execute();
+        //ListPreferences preferences = new ListPreferences();
+        //preferences.execute();
 
-        Button editPreferredLikes = (Button) v.findViewById(R.id.editPreferredLikes);
+        Button editPreferredLikes = (Button) view.findViewById(R.id.editPreferredLikes);
         editPreferredLikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +126,7 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             }
         });
 
-        Button editIgnoredCategories = (Button) v.findViewById(R.id.editIgnoredCategories);
+        Button editIgnoredCategories = (Button) view.findViewById(R.id.editIgnoredCategories);
         editIgnoredCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,28 +136,27 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             }
         });
 
-        Button savePreference = (Button) v.findViewById(R.id.savePreference);
+        Button savePreference = (Button) view.findViewById(R.id.savePreference);
         savePreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (chkOculto.isChecked()) {
-                    oculto = "true";
+                    preferencesCache.getUser().setOculto(true);
                 } else {
-                    oculto = "false";
+                    preferencesCache.getUser().setOculto(false);
                 }
 
                 if (chkNotifica.isChecked()) {
-                    notifica = "true";
+                    preferencesCache.getUser().setNotifica(true);
                 } else {
-                    notifica = "false";
+                    preferencesCache.getUser().setNotifica(true);
                 }
 
-                UpdatePreferences update = new UpdatePreferences();
-                update.execute();
+                preferencesCache.update();
             }
         });
 
-        Button cancelPreference = (Button) v.findViewById(R.id.cancelPreference);
+        Button cancelPreference = (Button) view.findViewById(R.id.cancelPreference);
         cancelPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,7 +164,43 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             }
         });
 
-        return v;
+        if (preferencesCache.getUser() != null) {
+            if (preferencesCache.getUser().isOculto()) {
+                chkOculto.setChecked(true);
+            }
+
+            if (preferencesCache.getUser().isNotifica()) {
+                chkNotifica.setChecked(true);
+            }
+        } else {
+            final Timer timer = new Timer();
+            timer.schedule(new TimerTask(){
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable(){
+                        @Override
+                        public void run(){
+                            if (preferencesCache.getUser() != null) {
+                                if (preferencesCache.getUser().isOculto()) {
+                                    chkOculto.setChecked(true);
+                                }
+
+                                if (preferencesCache.getUser().isNotifica()) {
+                                    chkNotifica.setChecked(true);
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "É necessario estar conectado a internet para atualizar suas preferênias. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                            }
+
+                            timer.cancel();
+                            timer.purge();
+                        }
+                    });
+                }
+            }, 2000, 1000);
+        }
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -208,114 +245,5 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private class UpdatePreferences extends AsyncTask<Void, Void, String> {
-        @Override
-        protected void onPreExecute(){
-            load = ProgressDialog.show(getView().getContext(), "Aguarde", "Alterando preferências...");
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            HashMap retorno = null;
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost request = null;
-
-                List<NameValuePair> values = new ArrayList<>(2);
-
-                request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/update");
-
-                values.add(new BasicNameValuePair("oculto", oculto));
-                values.add(new BasicNameValuePair("notifica", notifica));
-                values.add(new BasicNameValuePair("id", profile.getId()));
-                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
-
-                HttpResponse response = httpclient.execute(request);
-                InputStream content = response.getEntity().getContent();
-                Reader reader = new InputStreamReader(content);
-
-                Gson gson = new Gson();
-                retorno = gson.fromJson(reader, HashMap.class);
-
-                content.close();
-
-                return "true";
-            }catch (Exception e){
-                return e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String message){
-            if (message != null) {
-                switch (message) {
-                    case "true":
-                        Toast.makeText(getView().getContext(), "Preferências alteradas com sucesso.", Toast.LENGTH_LONG).show();
-                    break;
-                    default:
-                        Toast.makeText(getView().getContext(), "Ocorreu um erro ao alterar as preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
-                }
-            }
-            load.dismiss();
-        }
-    }
-
-    private class ListPreferences extends AsyncTask<Void, Void, String> {
-        @Override
-        protected void onPreExecute(){ }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            User retorno = null;
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost request = null;
-
-                List<NameValuePair> values = new ArrayList<>(2);
-
-                request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/preference");
-                values.add(new BasicNameValuePair("id", profile.getId()));
-                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
-
-                HttpResponse response = httpclient.execute(request);
-                InputStream content = response.getEntity().getContent();
-                Reader reader = new InputStreamReader(content);
-
-                Gson gson = new Gson();
-                retorno = gson.fromJson(reader, User.class);
-
-                content.close();
-
-                if (retorno.isOculto()) {
-                    oculto = "true";
-                }
-
-                if (retorno.isNotifica()) {
-                    notifica = "true";
-                }
-                return "true";
-            }catch (Exception e){
-                return e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String message){
-            if (message != null) {
-                if(!message.equals("true")) {
-                    Toast.makeText(getView().getContext(), "Ocorreu um erro ao carregar suas preferências.", Toast.LENGTH_LONG).show();
-                } else {
-                    if (oculto.equals("true")) {
-                        chkOculto.setChecked(true);
-                    }
-
-                    if (notifica.equals("true")) {
-                        chkNotifica.setChecked(true);
-                    }
-                }
-            }
-        }
     }
 }

@@ -8,6 +8,16 @@ public class User {
     private boolean oculto;
     private boolean notifica;
 
+    public User(String nome, String email, String idFacebook, boolean oculto, boolean notifica) {
+        super();
+
+        this.nome = nome;
+        this.email = email;
+        this.idFacebook = idFacebook;
+        this.oculto = oculto;
+        this.notifica = notifica;
+    }
+
     public String getNome() {
         return nome;
     }

@@ -17,11 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.Profile;
-import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -30,7 +26,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -41,6 +36,8 @@ import java.util.List;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.LikeAdapter;
+import uniftec.bsocial.cache.LikesChosenCache;
+import uniftec.bsocial.cache.LikesCache;
 import uniftec.bsocial.domain.Preference;
 import uniftec.bsocial.entities.Like;
 
@@ -58,7 +55,10 @@ public class LikeChooserFragment extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    Preference[] retorno = null;
+    private LikesCache likesCache = null;
+    private LikesChosenCache likesChosenCache = null;
+
+    private ArrayList<Preference> preferencesTemp = null;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -106,6 +106,8 @@ public class LikeChooserFragment extends DialogFragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        likesCache = new LikesCache(getActivity());
+        likesChosenCache = new LikesChosenCache(getActivity());
         chosenLikes = new ArrayList<Like>();
     }
 
@@ -116,34 +118,98 @@ public class LikeChooserFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_like_chooser, container, false);
 
-        GraphRequest request = GraphRequest.newMeRequest(
+        /*GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         createLikeList(object);
 
-                        /*GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
-                        if(nextRequest != null){
-                            nextRequest.setCallback(nextRequest.getCallback());
-                            nextRequest.executeAndWait();
-                        }*/
+                        //GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+                        //if(nextRequest != null){
+                            //nextRequest.setCallback(nextRequest.getCallback());
+                            //nextRequest.executeAndWait();
+                        //}
                     }
                 });
-
-        profile = Profile.getCurrentProfile();
 
         Bundle parameters = new Bundle();
         parameters.putString("fields", "likes.fields(id,name,picture.type(large))");
         request.setParameters(parameters);
-        request.executeAsync();
+        request.executeAsync();*/
+
+        profile = Profile.getCurrentProfile();
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                createLikeList();
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
     }
 
-    private void createLikeList(JSONObject object) {
-        likes = new ArrayList<>();
+    /* @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        createLikeList();
+    } */
+
+    private void createLikeList(/*JSONObject object*/) {
+        likes = likesCache.listLikes();
+        preferencesTemp = new ArrayList<Preference>(likesChosenCache.listPreferences());
+
+        Integer cont = null;
+        Boolean found = null;
+        boolean update = false;
+
+        ListView likesChosenListView = (ListView) getView().findViewById(R.id.likesChosenListView);
+        final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(this, chosenLikes);
+        likesChosenListView.setAdapter(likesChosenListViewAdapter);
+
+        while (preferencesTemp.size() > 0) {
+            cont = 0;
+            found = false;
+
+            while (cont < likes.size()) {
+                if (preferencesTemp.get(0).getId().equals(likes.get(cont).getId())) {
+                    chosenLikes.add(new Like(likes.get(cont)));
+                    found = true;
+
+                    preferencesTemp.remove(0);
+
+                    cont = likes.size();
+                } else {
+                    cont++;
+                }
+            }
+
+            cont = 0;
+
+            while (!found) {
+                update = true;
+
+                if (likesChosenCache.listPreferences().get(cont).getId().equals(preferencesTemp.get(0).getId())) {
+                    likesChosenCache.listPreferences().remove(cont);
+                    preferencesTemp.remove(0);
+
+                    found = true;
+                } else {
+                    cont++;
+                }
+            }
+        }
+
+        preferencesTemp.clear();
+
+        if (update) {
+            likesChosenCache.update();
+        }
+        likesChosenListViewAdapter.notifyDataSetChanged();
+        /* likes = new ArrayList<>();
 
         JSONObject jsonObject2 = object.optJSONObject("likes");
         JSONArray jsonArray = jsonObject2.optJSONArray("data");
@@ -163,14 +229,10 @@ public class LikeChooserFragment extends DialogFragment {
             like.setPictureUrl(pictureUrl);
 
             likes.add(like);
-        }
+        } */
 
-        ListPreferences list = new ListPreferences();
-        list.execute();
-
-        ListView likesChosenListView = (ListView) getView().findViewById(R.id.likesChosenListView);
-        final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(this, chosenLikes);
-        likesChosenListView.setAdapter(likesChosenListViewAdapter);
+        //ListPreferences list = new ListPreferences();
+        //list.execute();
 
         ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
         likesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -181,10 +243,10 @@ public class LikeChooserFragment extends DialogFragment {
                 TextView likeName = (TextView) view.findViewById(R.id.likeName);
                 TextView likeId = (TextView) view.findViewById(R.id.likeId);
 
-                Like like = new Like();
-                like.setId(likeId.getText().toString());
+                Like like = new Like(likeId.getText().toString(), likeName.getText().toString(), likePic.getTag().toString(), null);
+                /* like.setId(likeId.getText().toString());
                 like.setName(likeName.getText().toString());
-                like.setPictureUrl(likePic.getTag().toString());
+                like.setPictureUrl(likePic.getTag().toString()); */
 
                 boolean add = true;
                 for (Like like1: chosenLikes) {
@@ -194,8 +256,31 @@ public class LikeChooserFragment extends DialogFragment {
 
                 if (add) {
                     chosenLikes.add(like);
+                    likesChosenCache.listPreferences().add(new Preference(like.getId()));
                 } else {
                     Toast.makeText(getContext(), "Item já adicionado!", Toast.LENGTH_SHORT).show();
+                }
+
+                likesChosenListViewAdapter.notifyDataSetChanged();
+            }
+        });
+
+        likesChosenListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int cont = 0;
+
+                while (cont < chosenLikes.size()) {
+                    TextView likeId = (TextView) view.findViewById(R.id.likeId);
+
+                    if (chosenLikes.get(cont).getId().toString().equals(likeId.getText().toString())) {
+                        chosenLikes.remove(cont);
+                        likesChosenCache.listPreferences().remove(cont);
+
+                        cont = chosenLikes.size();
+                    } else {
+                        cont++;
+                    }
                 }
 
                 likesChosenListViewAdapter.notifyDataSetChanged();
@@ -207,15 +292,12 @@ public class LikeChooserFragment extends DialogFragment {
 
     }
 
-
     private void save() {
         Button btnSave = (Button) getView().findViewById(R.id.btnSaveLikes);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                SavePreferences save = new SavePreferences();
-                save.execute();
+                likesChosenCache.update();
             }
         });
     }
@@ -258,7 +340,7 @@ public class LikeChooserFragment extends DialogFragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class SavePreferences extends AsyncTask<Void, Void, String> {
+    /* private class SavePreferences extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(getView().getContext(), "Aguarde", "Alterando preferências...");
@@ -310,9 +392,9 @@ public class LikeChooserFragment extends DialogFragment {
             }
             load.dismiss();
         }
-    }
+    } */
 
-    private class ListPreferences extends AsyncTask<Void, Void, String> {
+    /* private class ListPreferences extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(getView().getContext(), "Aguarde", "Buscando preferências...");
@@ -335,7 +417,7 @@ public class LikeChooserFragment extends DialogFragment {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, Preference[].class);
+                preferencesTemp = gson.fromJson(reader, Preference[].class);
 
                 content.close();
 
@@ -352,7 +434,7 @@ public class LikeChooserFragment extends DialogFragment {
                     case "true":
                         load.dismiss();
 
-                        if (retorno.length > 0) {
+                        if (preferencesTemp.length > 0) {
                             LoadPreference preference = new LoadPreference();
                             preference.execute(0);
                         }
@@ -363,9 +445,9 @@ public class LikeChooserFragment extends DialogFragment {
                 }
             }
         }
-    }
+    } */
 
-    private class LoadPreference extends AsyncTask<Integer, Void, Integer> {
+    /* private class LoadPreference extends AsyncTask<Integer, Void, Integer> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(getView().getContext(), "Aguarde", "Carregando...");
@@ -374,9 +456,9 @@ public class LikeChooserFragment extends DialogFragment {
         @Override
         protected Integer doInBackground(Integer... params) {
             final int temp = params[0];
-            final String idTemp = retorno[params[0]].getId();
+            final String idTemp = preferencesTemp[params[0]].getId();
 
-            GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), retorno[params[0]].getId() + "?fields=id,name,picture", new GraphRequest.Callback() {
+            GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), preferencesTemp[params[0]].getId() + "?fields=id,name,picture", new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse graphResponse) {
                     JSONObject object = graphResponse.getJSONObject();
@@ -396,7 +478,7 @@ public class LikeChooserFragment extends DialogFragment {
             if (message != null) {
                 load.dismiss();
 
-                if (message < (retorno.length - 1)) {
+                if (message < (preferencesTemp.length - 1)) {
                     LoadPreference preference = new LoadPreference();
                     preference.execute((message + 1));
                 }
@@ -405,5 +487,5 @@ public class LikeChooserFragment extends DialogFragment {
                 Toast.makeText(getView().getContext(), "Ocorreu um erro ao carreagar as preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
         }
-    }
+    } */
 }

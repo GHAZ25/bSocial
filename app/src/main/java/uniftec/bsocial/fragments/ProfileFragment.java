@@ -1,6 +1,7 @@
 package uniftec.bsocial.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.cache.LikesChosenCache;
+import uniftec.bsocial.cache.LikesCache;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,10 +39,15 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private View view;
+    private LikesCache likesCache = null;
+    private LikesChosenCache likesChosenCache = null;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    public static final String profile = "Profile";
+    SharedPreferences sharedpreferences;
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,12 +83,61 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        likesCache = new LikesCache(getActivity());
+        likesCache.update();
+
+        likesChosenCache = new LikesChosenCache(getActivity());
+        /* String d1 = "01/01/2000";
+        String d2 = "01/02/1999";
+
+        try {
+            Date date1 = format.parse(d1);
+            Date date2 = format.parse(d2);
+
+            if (date1.after(date2)) {
+                Toast.makeText(getActivity(), "Atualiza",Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), "Não atualiza",Toast.LENGTH_LONG).show();
+            }
+        } catch (ParseException e) {
+            Toast.makeText(getActivity(), e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        sharedpreferences = getActivity().getSharedPreferences(profile, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        //editor.putString(Name, "Nome 2");
+        //editor.putString(Phone, "Fone 2");
+        //editor.putString(Email, "Mail 2");
+
+        if ((sharedpreferences.getAll().size() == 0) || (!sharedpreferences.getString("atualizacao", "").equals("erro"))) {
+
+        }
+
+        editor.commit(); */
+
+        /* SharedPreferences.Editor editor = getActivity().getSharedPreferences("MyPrefsFile", 0).edit();
+        editor.putString("name", "Elena");
+        editor.putInt("idName", 12);
+        editor.commit();
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("MyPrefsFile", 0);
+        String restoredText = prefs.getString("text", null);
+
+        if (restoredText != null) {
+            String name = prefs.getString("name", "No name defined");//"No name defined" is the default value.
+            int idName = prefs.getInt("idName", 0); //0 is the default value.
+            Toast.makeText(getContext(), name, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getContext(), "Arquivo inexistente", Toast.LENGTH_LONG).show();
+        } */
+
         getActivity().setTitle("Perfil");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         /*GraphRequest request = GraphRequest.newMeRequest(
@@ -113,7 +170,6 @@ public class ProfileFragment extends Fragment {
 
         getProfilePic();
         sendMsg();
-
         return view;
     }
 
