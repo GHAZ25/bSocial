@@ -1,48 +1,57 @@
 package uniftec.bsocial.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.google.gson.Gson;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.adapters.SearchAdapter;
+import uniftec.bsocial.domain.User;
+import uniftec.bsocial.entities.UserEntity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SearchFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    private ProgressDialog load = null;
+    private Profile profile = null;
+
+    private SearchAdapter usersListViewAdapter = null;
+    private ArrayList<UserEntity> users = null;
+
     private OnFragmentInteractionListener mListener;
 
-    public SearchFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
@@ -60,17 +69,26 @@ public class SearchFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        profile = Profile.getCurrentProfile();
+
+        users = new ArrayList<>();
+        ListUsers listUsers = new ListUsers();
+        listUsers.execute();
+
         getActivity().setTitle("Busca");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        ListView usersListView = (ListView) view.findViewById(R.id.usersListView);
+        usersListViewAdapter = new SearchAdapter(this, users);
+        usersListView.setAdapter(usersListViewAdapter);
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -83,8 +101,7 @@ public class SearchFragment extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -94,18 +111,74 @@ public class SearchFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class ListUsers extends AsyncTask<Void, Void, User[]> {
+        @Override
+        protected void onPreExecute(){
+            load = ProgressDialog.show(getActivity(), "Aguarde", "Buscando preferências...");
+        }
+
+        @Override
+        protected User[] doInBackground(Void... params) {
+            User[] retorno = null;
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
+
+                List<NameValuePair> values = new ArrayList<>(2);
+
+                request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/list");
+                values.add(new BasicNameValuePair("id", profile.getId()));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, User[].class);
+
+                content.close();
+            } catch (Exception e) { }
+
+            return retorno;
+        }
+
+        @Override
+        protected void onPostExecute(User[] retorno) {
+            if (retorno != null) {
+                for (int i = 0; i < retorno.length; i++) {
+                    GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), retorno[i].getIdFacebook() + "?fields=id,name,picture", new GraphRequest.Callback() {
+                        @Override
+                        public void onCompleted(GraphResponse response) {
+                            JSONObject object = response.getJSONObject();
+
+                            UserEntity user = new UserEntity();
+                            user.setId(object.optString("id"));
+                            user.setName(object.optString("name"));
+
+                            object = object.optJSONObject("picture");
+                            object = object.optJSONObject("data");
+
+                            user.setPictureUrl(object.optString("url"));
+
+                            users.add(user);
+
+                            usersListViewAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    request1.executeAsync();
+                }
+
+            } else {
+                Toast.makeText(getActivity(), "Ocorreu um erro ao listar os usuários. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+            }
+
+            load.dismiss();
+        }
     }
 }

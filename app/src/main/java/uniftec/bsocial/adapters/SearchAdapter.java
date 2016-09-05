@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import uniftec.bsocial.R;
-import uniftec.bsocial.entities.User;
+import uniftec.bsocial.entities.UserEntity;
 import uniftec.bsocial.fragments.SearchFragment;
 
 /**
@@ -21,12 +21,12 @@ import uniftec.bsocial.fragments.SearchFragment;
  */
 
 public class SearchAdapter extends BaseAdapter {
-    ArrayList<User> result;
+    ArrayList<UserEntity> result;
     Context context;
     private static LayoutInflater inflater;
 
-    public SearchAdapter(SearchFragment searchFragment, ArrayList<User> users) {
-        result = users;
+    public SearchAdapter(SearchFragment searchFragment, ArrayList<UserEntity> userEntities) {
+        result = userEntities;
         context = searchFragment.getContext();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

@@ -4,13 +4,13 @@ package uniftec.bsocial.entities;
  * Created by mauri on 25/08/2016.
  */
 
-public class Like {
+public class LikeEntity {
     private String id;
     private String name;
     private String pictureUrl;
     private String category;
 
-    public Like(String id, String name, String pictureUrl, String category) {
+    public LikeEntity(String id, String name, String pictureUrl, String category) {
         super();
 
         this.id = id;
@@ -19,13 +19,13 @@ public class Like {
         this.category = category;
     }
 
-    public Like(Like like) {
+    public LikeEntity(LikeEntity likeEntity) {
         super();
 
-        id = like.getId();
-        name = like.getName();
-        pictureUrl = like.getPictureUrl();
-        category = like.getCategory();
+        id = likeEntity.getId();
+        name = likeEntity.getName();
+        pictureUrl = likeEntity.getPictureUrl();
+        category = likeEntity.getCategory();
     }
 
     public void setId(String id) {

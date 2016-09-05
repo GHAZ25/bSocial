@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import uniftec.bsocial.entities.Like;
+import uniftec.bsocial.entities.LikeEntity;
 
 public class LikesCache {
     private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -108,16 +108,16 @@ public class LikesCache {
         request.executeAsync();
     }
 
-    public ArrayList<Like> listLikes() {
-        ArrayList<Like> likes = new ArrayList<>();
+    public ArrayList<LikeEntity> listLikes() {
+        ArrayList<LikeEntity> likeEntities = new ArrayList<>();
 
         for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-            Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
+            LikeEntity likeEntity = new LikeEntity(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
 
-            likes.add(like);
+            likeEntities.add(likeEntity);
         }
 
-        return likes;
+        return likeEntities;
     }
 
     private class LoadPreference extends AsyncTask<Void, Void, String> {

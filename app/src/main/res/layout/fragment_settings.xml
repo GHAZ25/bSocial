@@ -14,7 +14,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:checked="false"
-        android:text="Visível para outros usuários" />
+        android:text="Oculto para outros usuários" />
 
     <CheckBox
         android:id="@+id/notify"

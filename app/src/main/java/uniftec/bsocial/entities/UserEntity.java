@@ -6,15 +6,15 @@ import java.util.ArrayList;
  * Created by mauri on 25/08/2016.
  */
 
-public class User {
+public class UserEntity {
     private String id;
     private String name;
     private String pictureUrl;
     private String age;
     private String hometown;
-    private ArrayList<Like> likes;
+    private ArrayList<LikeEntity> likeEntities;
 
-    public User() {
+    public UserEntity() {
 
     }
 
@@ -58,11 +58,11 @@ public class User {
         this.hometown = hometown;
     }
 
-    public void setLikes (ArrayList<Like> likes) {
-        this.likes = likes;
+    public void setLikeEntities(ArrayList<LikeEntity> likeEntities) {
+        this.likeEntities = likeEntities;
     }
 
-    public ArrayList<Like> getLikes() {
-        return likes;
+    public ArrayList<LikeEntity> getLikeEntities() {
+        return likeEntities;
     }
 }
