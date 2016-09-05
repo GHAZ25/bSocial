@@ -151,7 +151,8 @@ public class SearchFragment extends Fragment {
         protected void onPostExecute(User[] retorno) {
             if (retorno != null) {
                 for (int i = 0; i < retorno.length; i++) {
-                    GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), retorno[i].getIdFacebook() + "?fields=id,name,picture", new GraphRequest.Callback() {
+                    GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(),
+                            retorno[i].getIdFacebook() + "?fields=id,name,picture", new GraphRequest.Callback() {
                         @Override
                         public void onCompleted(GraphResponse response) {
                             JSONObject object = response.getJSONObject();

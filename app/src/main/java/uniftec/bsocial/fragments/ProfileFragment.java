@@ -19,9 +19,13 @@ import com.facebook.login.widget.ProfilePictureView;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import uniftec.bsocial.R;
-import uniftec.bsocial.cache.LikesChosenCache;
 import uniftec.bsocial.cache.LikesCache;
+import uniftec.bsocial.cache.LikesChosenCache;
 
 public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -80,7 +84,8 @@ public class ProfileFragment extends Fragment {
                 });
 
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,age_range.fields(min),hometown");
+        parameters.putString("fields", "id,name,birthday,hometown");
+        parameters.putString("locale", "pt_BR");
         request.setParameters(parameters);
         request.executeAsync();
 
@@ -92,8 +97,21 @@ public class ProfileFragment extends Fragment {
     private void setNameAgeLocation() {
         String name = jsonObject.optString("name");
 
-        JSONObject object = jsonObject.optJSONObject("age_range");
-        String age = object.optString("min");
+        String age = jsonObject.optString("birthday");
+
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        int d = 4, m = 10, y = 1994;
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(format.parse(age));
+            d = calendar.get(Calendar.DAY_OF_MONTH);
+            m = calendar.get(Calendar.MONTH);
+            y = calendar.get(Calendar.YEAR);
+        } catch (Exception e) {
+
+        }
+
+        age = String.valueOf(getAge(y, m, d));
 
         String nameAge = name + ", " + age;
 
@@ -101,7 +119,7 @@ public class ProfileFragment extends Fragment {
         nameText.setText(nameAge);
 
         TextView hometown = (TextView) getView().findViewById(R.id.locationText);
-        object = jsonObject.optJSONObject("hometown");
+        JSONObject object = jsonObject.optJSONObject("hometown");
         hometown.setText(object.optString("name"));
     }
 
@@ -140,7 +158,29 @@ public class ProfileFragment extends Fragment {
         mListener = null;
     }
 
+    public Integer getAge(int _year, int _month, int _day) {
+
+        GregorianCalendar cal = new GregorianCalendar();
+        int y, m, d;
+        Integer a;
+
+        y = cal.get(Calendar.YEAR);
+        m = cal.get(Calendar.MONTH);
+        d = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(_year, _month, _day);
+        a = y - cal.get(Calendar.YEAR);
+        if ((m < cal.get(Calendar.MONTH))
+                || ((m == cal.get(Calendar.MONTH)) && (d < cal
+                .get(Calendar.DAY_OF_MONTH)))) {
+            --a;
+        }
+        if (a < 0)
+            throw new IllegalArgumentException("Age < 0");
+        return a;
+    }
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+
 }

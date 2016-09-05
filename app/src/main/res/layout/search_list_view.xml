@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,30 +13,30 @@
             android:id="@+id/userPic"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:padding="3dp"
-            android:background="@drawable/image_border_like"/>
+            android:background="@drawable/image_border_like"
+            android:padding="3dp" />
 
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/userPic"
+            android:layout_toRightOf="@+id/userPic"
             android:shadowColor="#fff"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="3"
-            android:textSize="16sp"
             android:text="bSocial"
             android:textAlignment="center"
             android:textColor="#3b5998"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/likePic"
-            android:layout_toEndOf="@+id/likePic"
-            android:layout_marginLeft="5dp"/>
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/userId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/userId"
             android:visibility="gone"/>
     </RelativeLayout>
 
