@@ -22,9 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import uniftec.bsocial.domain.Preference;
 
 public class LikesChosenCache {
     private FragmentActivity activity = null;
@@ -32,7 +31,7 @@ public class LikesChosenCache {
     private SharedPreferences sharedpreferences = null;
     private Profile profile = null;
     private String file = null;
-    private ArrayList<Preference> preferences = null;
+    private ArrayList<String> preferences = null;
 
     public LikesChosenCache(FragmentActivity activity) {
         super();
@@ -43,36 +42,38 @@ public class LikesChosenCache {
         file = "chosenLikes" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
         preferences = new ArrayList<>();
+    }
 
+    public ArrayList<String> listPreferences() {
+        return preferences;
+    }
+
+    public void initialize() {
         if (sharedpreferences.getAll().size() == 0) {
             ListPreferences listPreferences = new ListPreferences();
             listPreferences.execute();
         } else {
             for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-                Preference preference = new Preference(sharedpreferences.getString("id" + i, ""));
-
-                preferences.add(preference);
+                preferences.add(sharedpreferences.getString("preference" + i, ""));
             }
         }
     }
-
-    public ArrayList<Preference> listPreferences() {
-        return preferences;
-    }
-
     public void update() {
         UpdatePreferences updatePreferences = new UpdatePreferences();
         updatePreferences.execute();
     }
 
-    private class UpdatePreferences extends AsyncTask<Integer, Void, String> {
+    private class UpdatePreferences extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(activity, "Aguarde", "Alterando preferências...");
         }
 
         @Override
-        protected String doInBackground(Integer... params) {
+        protected String doInBackground(Void... params) {
+            HashMap retorno = null;
+            String mensagem = "true";
+
             try {
                 for (int i = 0; i < 9; i++) {
                     HttpClient httpclient = new DefaultHttpClient();
@@ -81,10 +82,10 @@ public class LikesChosenCache {
                     List<NameValuePair> values = new ArrayList<>(2);
 
                     if (i > (preferences.size() - 1)) {
-                        request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/remove");
+                        request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/remove");
                     } else {
-                        request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/update");
-                        values.add(new BasicNameValuePair("id_preferencia", preferences.get(i).getId()));
+                        request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/update");
+                        values.add(new BasicNameValuePair("id_gosto", preferences.get(i)));
                     }
 
                     values.add(new BasicNameValuePair("ordem", Integer.toString(i)));
@@ -95,10 +96,17 @@ public class LikesChosenCache {
                     InputStream content = response.getEntity().getContent();
                     Reader reader = new InputStreamReader(content);
 
+                    Gson gson = new Gson();
+                    retorno = gson.fromJson(reader, HashMap.class);
+
+                    if (!retorno.get("message").toString().equals("true")) {
+                        mensagem = retorno.get("message").toString();
+                    }
+
                     content.close();
                 }
 
-                return "true";
+                return mensagem;
             } catch (Exception e){
                 return e.getMessage();
             }
@@ -115,7 +123,7 @@ public class LikesChosenCache {
                         editor.clear();
 
                         for (int i = 0; i < preferences.size(); i++) {
-                            editor.putString("id" + i, preferences.get(i).getId());
+                            editor.putString("preference" + i, preferences.get(i));
                         }
 
                         editor.putInt("size", preferences.size());
@@ -129,22 +137,22 @@ public class LikesChosenCache {
         }
     }
 
-    private class ListPreferences extends AsyncTask<Void, Void, Preference[]> {
+    private class ListPreferences extends AsyncTask<Void, Void, HashMap[]> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(activity, "Aguarde", "Buscando preferências...");
         }
 
         @Override
-        protected Preference[] doInBackground(Void... params) {
-            Preference[] retorno = null;
+        protected HashMap[] doInBackground(Void... params) {
+            HashMap[] retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost request = null;
 
                 List<NameValuePair> values = new ArrayList<>(2);
 
-                request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/list");
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/list");
                 values.add(new BasicNameValuePair("id_facebook", profile.getId()));
                 request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
@@ -153,7 +161,7 @@ public class LikesChosenCache {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, Preference[].class);
+                retorno = gson.fromJson(reader, HashMap[].class);
 
                 content.close();
             } catch (Exception e) { }
@@ -162,7 +170,7 @@ public class LikesChosenCache {
         }
 
         @Override
-        protected void onPostExecute(Preference[] retorno) {
+        protected void onPostExecute(HashMap[] retorno) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.clear();
 
@@ -170,8 +178,8 @@ public class LikesChosenCache {
                 int cont = 0;
 
                 for (int i = 0; i < retorno.length; i++) {
-                    editor.putString("id" + i, retorno[i].getId());
-                    preferences.add(retorno[i]);
+                    editor.putString("preference" + i, retorno[i].get("id").toString());
+                    preferences.add(retorno[i].get("id").toString());
 
                     cont++;
                 }

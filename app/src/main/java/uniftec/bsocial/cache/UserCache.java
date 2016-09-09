@@ -27,7 +27,7 @@ import java.util.List;
 
 import uniftec.bsocial.domain.User;
 
-public class PreferencesCache {
+public class UserCache {
     private FragmentActivity activity = null;
     private ProgressDialog load = null;
     private SharedPreferences sharedpreferences = null;
@@ -35,7 +35,7 @@ public class PreferencesCache {
     private String file = null;
     private User user = null;
 
-    public PreferencesCache(FragmentActivity activity) {
+    public UserCache(FragmentActivity activity) {
         super();
 
         this.activity = activity;
@@ -43,7 +43,16 @@ public class PreferencesCache {
         profile = Profile.getCurrentProfile();
         file = "settings" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
+    }
 
+    public UserCache(String id, Context context) {
+        super();
+
+        file = "settings" + id;
+        sharedpreferences = context.getSharedPreferences(file, Context.MODE_PRIVATE);
+    }
+
+    public void initialize() {
         if (sharedpreferences.getAll().size() == 0) {
             ListPreferences listPreferences = new ListPreferences();
             listPreferences.execute();
@@ -52,8 +61,16 @@ public class PreferencesCache {
                     sharedpreferences.getString("email", ""),
                     sharedpreferences.getString("id", ""),
                     sharedpreferences.getBoolean("oculto", false),
-                    sharedpreferences.getBoolean("notifica", false));
+                    sharedpreferences.getBoolean("notifica", false),
+                    Double.parseDouble(sharedpreferences.getString("latitude", "0")),
+                    Double.parseDouble(sharedpreferences.getString("longitude", "0")));
         }
+    }
+
+    public void saveUser(User user) {
+        this.user = user;
+
+        updateSettings();
     }
 
     public void update() {
@@ -74,6 +91,8 @@ public class PreferencesCache {
         editor.putString("id", user.getIdFacebook());
         editor.putBoolean("oculto", user.isOculto());
         editor.putBoolean("notifica", user.isNotifica());
+        editor.putString("latitude", Double.toString(user.getLatitude()));
+        editor.putString("longitude", Double.toString(user.getLongitude()));
 
         editor.commit();
     }
@@ -91,7 +110,7 @@ public class PreferencesCache {
 
                 List<NameValuePair> values = new ArrayList<>(2);
 
-                request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/preference");
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/preference");
                 values.add(new BasicNameValuePair("id", profile.getId()));
                 request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
@@ -137,7 +156,7 @@ public class PreferencesCache {
 
                 List<NameValuePair> values = new ArrayList<>(2);
 
-                request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/update");
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/update");
 
                 String oculto = "false";
                 String notifica = "false";

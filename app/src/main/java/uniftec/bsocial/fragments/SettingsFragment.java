@@ -18,7 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import uniftec.bsocial.R;
-import uniftec.bsocial.cache.PreferencesCache;
+import uniftec.bsocial.cache.UserCache;
 
 public class SettingsFragment extends Fragment implements LikeChooserFragment.OnFragmentInteractionListener {
     private static final String ARG_PARAM1 = "param1";
@@ -26,9 +26,8 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
     private String mParam1;
     private String mParam2;
 
-
     private Profile profile = null;
-    private PreferencesCache preferencesCache = null;
+    private UserCache userCache = null;
 
     private CheckBox chkOculto = null;
     private CheckBox chkNotifica = null;
@@ -59,7 +58,8 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        preferencesCache = new PreferencesCache(getActivity());
+        userCache = new UserCache(getActivity());
+        userCache.initialize();
         profile = Profile.getCurrentProfile();
 
         chkOculto = (CheckBox) view.findViewById(R.id.visibility);
@@ -90,18 +90,18 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             @Override
             public void onClick(View view) {
                 if (chkOculto.isChecked()) {
-                    preferencesCache.getUser().setOculto(true);
+                    userCache.getUser().setOculto(true);
                 } else {
-                    preferencesCache.getUser().setOculto(false);
+                    userCache.getUser().setOculto(false);
                 }
 
                 if (chkNotifica.isChecked()) {
-                    preferencesCache.getUser().setNotifica(true);
+                    userCache.getUser().setNotifica(true);
                 } else {
-                    preferencesCache.getUser().setNotifica(false);
+                    userCache.getUser().setNotifica(false);
                 }
 
-                preferencesCache.update();
+                userCache.update();
             }
         });
 
@@ -113,12 +113,12 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             }
         });
 
-        if (preferencesCache.getUser() != null) {
-            if (preferencesCache.getUser().isOculto()) {
+        if (userCache.getUser() != null) {
+            if (userCache.getUser().isOculto()) {
                 chkOculto.setChecked(true);
             }
 
-            if (preferencesCache.getUser().isNotifica()) {
+            if (userCache.getUser().isNotifica()) {
                 chkNotifica.setChecked(true);
             }
         } else {
@@ -129,12 +129,12 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
                     getActivity().runOnUiThread(new Runnable(){
                         @Override
                         public void run(){
-                            if (preferencesCache.getUser() != null) {
-                                if (preferencesCache.getUser().isOculto()) {
+                            if (userCache.getUser() != null) {
+                                if (userCache.getUser().isOculto()) {
                                     chkOculto.setChecked(true);
                                 }
 
-                                if (preferencesCache.getUser().isNotifica()) {
+                                if (userCache.getUser().isNotifica()) {
                                     chkNotifica.setChecked(true);
                                 }
                             } else {

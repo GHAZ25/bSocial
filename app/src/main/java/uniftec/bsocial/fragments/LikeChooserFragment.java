@@ -20,7 +20,6 @@ import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.cache.LikesChosenCache;
 import uniftec.bsocial.cache.LikesCache;
-import uniftec.bsocial.domain.Preference;
 import uniftec.bsocial.entities.LikeEntity;
 
 public class LikeChooserFragment extends DialogFragment {
@@ -32,7 +31,7 @@ public class LikeChooserFragment extends DialogFragment {
     private LikesCache likesCache = null;
     private LikesChosenCache likesChosenCache = null;
 
-    private ArrayList<Preference> preferencesTemp = null;
+    private ArrayList<String> preferencesTemp = null;
 
     private ArrayList<LikeEntity> likeEntities;
     private ArrayList<LikeEntity> chosenLikeEntities;
@@ -58,7 +57,11 @@ public class LikeChooserFragment extends DialogFragment {
         }
 
         likesCache = new LikesCache(getActivity());
+        likesCache.initialize();
+
         likesChosenCache = new LikesChosenCache(getActivity());
+        likesChosenCache.initialize();
+
         chosenLikeEntities = new ArrayList<LikeEntity>();
     }
 
@@ -100,7 +103,7 @@ public class LikeChooserFragment extends DialogFragment {
 
     private void createLikeList() {
         likeEntities = likesCache.listLikes();
-        preferencesTemp = new ArrayList<Preference>(likesChosenCache.listPreferences());
+        preferencesTemp = new ArrayList<String>(likesChosenCache.listPreferences());
 
         Integer cont = null;
         Boolean found = null;
@@ -115,7 +118,7 @@ public class LikeChooserFragment extends DialogFragment {
             found = false;
 
             while (cont < likeEntities.size()) {
-                if (preferencesTemp.get(0).getId().equals(likeEntities.get(cont).getId())) {
+                if (preferencesTemp.get(0).equals(likeEntities.get(cont).getId().toString())) {
                     chosenLikeEntities.add(new LikeEntity(likeEntities.get(cont)));
                     found = true;
 
@@ -132,7 +135,7 @@ public class LikeChooserFragment extends DialogFragment {
             while (!found) {
                 update = true;
 
-                if (likesChosenCache.listPreferences().get(cont).getId().equals(preferencesTemp.get(0).getId())) {
+                if (likesChosenCache.listPreferences().get(cont).equals(preferencesTemp.get(0))) {
                     likesChosenCache.listPreferences().remove(cont);
                     preferencesTemp.remove(0);
 
@@ -170,7 +173,7 @@ public class LikeChooserFragment extends DialogFragment {
 
                 if (add) {
                     chosenLikeEntities.add(likeEntity);
-                    likesChosenCache.listPreferences().add(new Preference(likeEntity.getId()));
+                    likesChosenCache.listPreferences().add(likeEntity.getId());
                 } else {
                     Toast.makeText(getContext(), "Item já adicionado!", Toast.LENGTH_SHORT).show();
                 }

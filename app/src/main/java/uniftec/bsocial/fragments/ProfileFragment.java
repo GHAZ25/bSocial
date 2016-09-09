@@ -64,13 +64,13 @@ public class ProfileFragment extends Fragment {
         likesCache.update();
 
         likesChosenCache = new LikesChosenCache(getActivity());
+        likesChosenCache.initialize();
 
         getActivity().setTitle("Perfil");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         GraphRequest request = GraphRequest.newMeRequest(

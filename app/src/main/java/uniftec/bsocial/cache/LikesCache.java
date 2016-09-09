@@ -12,15 +12,28 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.google.gson.Gson;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import uniftec.bsocial.entities.LikeEntity;
 
@@ -33,6 +46,8 @@ public class LikesCache {
     private Profile profile = null;
     private String file = null;
     private Date today = null;
+    private JSONObject obj = null;
+    private ArrayList<LikeEntity> likeEntities = null;
 
     public LikesCache(FragmentActivity activity) {
         super();
@@ -43,6 +58,20 @@ public class LikesCache {
         today = new Date();
         file = "preferences" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
+        likeEntities = new ArrayList<>();
+    }
+
+    public void initialize() {
+        if (sharedpreferences.getAll().size() == 0) {
+            LoadPreference loadPreference = new LoadPreference();
+            loadPreference.execute();
+        } else {
+            for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
+                LikeEntity likeEntity = new LikeEntity(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
+
+                likeEntities.add(likeEntity);
+            }
+        }
     }
 
     public void update() {
@@ -70,55 +99,22 @@ public class LikesCache {
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        JSONObject jsonObject2 = object.optJSONObject("likes");
-                        JSONArray jsonArray = jsonObject2.optJSONArray("data");
+                        obj = object;
 
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.clear();
-
-                        int cont = 0;
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject3 = jsonArray.optJSONObject(i);
-                            String id = jsonObject3.optString("id");
-                            String name = jsonObject3.optString("name");
-
-                            jsonObject3 = jsonObject3.optJSONObject("picture");
-                            jsonObject3 = jsonObject3.optJSONObject("data");
-                            String pictureUrl = jsonObject3.optString("url");
-
-                            editor.putString("id" + i, id);
-                            editor.putString("name" + i, name);
-                            editor.putString("picture" + i, pictureUrl);
-
-                            cont++;
-                        }
-
-                        editor.putString("update", dateFormat.format(today).toString());
-                        editor.putInt("size", cont);
-                        editor.commit();
+                        UpdateLikes updateLikes = new UpdateLikes();
+                        updateLikes.execute();
                     }
                 });
 
-
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "likes.fields(id,name,picture.type(large))");
+        parameters.putString("fields", "likes.fields(id,name,picture.type(large),category)");
+        parameters.putString("locale", "pt_br");
         request.setParameters(parameters);
 
         request.executeAsync();
     }
 
-    public ArrayList<LikeEntity> listLikes() {
-        ArrayList<LikeEntity> likeEntities = new ArrayList<>();
-
-        for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-            LikeEntity likeEntity = new LikeEntity(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
-
-            likeEntities.add(likeEntity);
-        }
-
-        return likeEntities;
-    }
+    public ArrayList<LikeEntity> listLikes() { return likeEntities; }
 
     private class LoadPreference extends AsyncTask<Void, Void, String> {
         @Override
@@ -144,6 +140,80 @@ public class LikesCache {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(activity, "Preferências atualizadas com sucesso.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private class UpdateLikes extends AsyncTask<Void, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            load = ProgressDialog.show(activity, "Aguarde", "Atualizando likes...");
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            HashMap retorno = null;
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
+
+                List<NameValuePair> values = new ArrayList<>(2);
+
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/like/insert");
+                values.add(new BasicNameValuePair("json", obj.toString()));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, HashMap.class);
+
+                content.close();
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return retorno.get("message").toString();
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+            load.dismiss();
+
+            if (message.equals("true")) {
+
+                JSONObject likes = obj.optJSONObject("likes");
+                JSONArray jsonArray = likes.optJSONArray("data");
+
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.clear();
+
+                int cont = 0;
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.optJSONObject(i);
+                    String id = jsonObject.optString("id");
+                    String name = jsonObject.optString("name");
+                    String category = jsonObject.optString("category");
+
+                    jsonObject = jsonObject.optJSONObject("picture");
+                    jsonObject = jsonObject.optJSONObject("data");
+                    String pictureUrl = jsonObject.optString("url");
+
+                    editor.putString("id" + i, id);
+                    editor.putString("name" + i, name);
+                    editor.putString("picture" + i, pictureUrl);
+                    editor.putString("category" + i, category);
+
+                    cont++;
+                }
+
+                editor.putString("update", dateFormat.format(today).toString());
+                editor.putInt("size", cont);
+                editor.commit();
+            } else {
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }
         }
     }

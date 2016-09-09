@@ -1,7 +1,11 @@
 package uniftec.bsocial;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,14 +39,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import uniftec.bsocial.cache.UserCache;
+import uniftec.bsocial.domain.User;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private ProgressDialog load;
     private JSONObject jsonObject;
-    private String name;
-    private String email;
     private TextView nameText;
     private TextView emailText;
+    private Location location;
+    private UserCache userCache;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -112,11 +119,44 @@ public class SignUpActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                name = nameText.getText().toString();
+                /*name = nameText.getText().toString();
                 email = emailText.getText().toString();
 
                 UserRegister register = new UserRegister();
-                register.execute();
+                register.execute();*/
+
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                try {
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                    if (location == null) {
+                        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
+
+                            @Override
+                            public void onStatusChanged(String arg0, int arg1, Bundle arg2) { }
+
+                            @Override
+                            public void onProviderEnabled(String arg0) { }
+
+                            @Override
+                            public void onProviderDisabled(String arg0) { }
+
+                            @Override
+                            public void onLocationChanged(Location loc) {
+                                location = loc;
+                            }
+                        }, null);
+                    }
+
+                    User user = new User(nameText.getText().toString(), emailText.getText().toString(), jsonObject.optString("id"), false, false, location.getLatitude(), location.getLongitude());
+                    userCache.saveUser(user);
+
+                    UserRegister register = new UserRegister();
+                    register.execute();
+                } catch (SecurityException e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -154,7 +194,7 @@ public class SignUpActivity extends AppCompatActivity {
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
-                request.setURI(new URI("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/consult?id=" + jsonObject.optString("id")));
+                request.setURI(new URI("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/consult?id=" + jsonObject.optString("id")));
                 HttpResponse response = httpclient.execute(request);
                 InputStream content = response.getEntity().getContent();
                 Reader reader = new InputStreamReader(content);
@@ -180,6 +220,8 @@ public class SignUpActivity extends AppCompatActivity {
                     break;
                     case "false":
                         registerView(jsonObject);
+
+                        userCache = new UserCache(jsonObject.optString("id"), getApplicationContext());
                     break;
                     default:
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
@@ -203,12 +245,14 @@ public class SignUpActivity extends AppCompatActivity {
             HashMap retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/register");
+                HttpPost request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/register");
 
                 List<NameValuePair> values = new ArrayList<>(2);
-                values.add(new BasicNameValuePair("nome", name));
-                values.add(new BasicNameValuePair("email", email));
-                values.add(new BasicNameValuePair("id", jsonObject.optString("id")));
+                values.add(new BasicNameValuePair("nome", userCache.getUser().getNome()));
+                values.add(new BasicNameValuePair("email", userCache.getUser().getEmail()));
+                values.add(new BasicNameValuePair("id", userCache.getUser().getIdFacebook()));
+                values.add(new BasicNameValuePair("latitude", Double.toString(userCache.getUser().getLatitude())));
+                values.add(new BasicNameValuePair("longitude", Double.toString(userCache.getUser().getLongitude())));
                 request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
                 //request.setURI(new URI("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/cadastrar?nome=" + name + "&email=" + email + "&id=" + jsonObject.optString("id")));
