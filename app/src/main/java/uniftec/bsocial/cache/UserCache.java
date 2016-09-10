@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import uniftec.bsocial.domain.User;
+import uniftec.bsocial.entities.User;
 
 public class UserCache {
     private FragmentActivity activity = null;

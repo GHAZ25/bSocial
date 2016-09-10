@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import uniftec.bsocial.entities.LikeEntity;
+import uniftec.bsocial.entities.Like;
 
 public class LikesCache {
     private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -47,7 +47,7 @@ public class LikesCache {
     private String file = null;
     private Date today = null;
     private JSONObject obj = null;
-    private ArrayList<LikeEntity> likeEntities = null;
+    private ArrayList<Like> likeEntities = null;
 
     public LikesCache(FragmentActivity activity) {
         super();
@@ -67,9 +67,9 @@ public class LikesCache {
             loadPreference.execute();
         } else {
             for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-                LikeEntity likeEntity = new LikeEntity(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
+                Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
 
-                likeEntities.add(likeEntity);
+                likeEntities.add(like);
             }
         }
     }
@@ -85,6 +85,12 @@ public class LikesCache {
 
                 if (!dateFormat.format(today).toString().equals(dateFormat.format(update).toString())) {
                     loadPreference.execute();
+                } else {
+                    for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
+                        Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
+
+                        likeEntities.add(like);
+                    }
                 }
             } catch (ParseException e) {
                 Toast.makeText(activity, "Ocorreu um erro ao verificar a ultima atualização.", Toast.LENGTH_LONG).show();
@@ -114,7 +120,7 @@ public class LikesCache {
         request.executeAsync();
     }
 
-    public ArrayList<LikeEntity> listLikes() { return likeEntities; }
+    public ArrayList<Like> listLikes() { return likeEntities; }
 
     private class LoadPreference extends AsyncTask<Void, Void, String> {
         @Override

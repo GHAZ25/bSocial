@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import uniftec.bsocial.cache.UserCache;
-import uniftec.bsocial.domain.User;
+import uniftec.bsocial.entities.User;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -128,26 +128,22 @@ public class SignUpActivity extends AppCompatActivity {
                 LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
                 try {
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
+
+                        @Override
+                        public void onStatusChanged(String arg0, int arg1, Bundle arg2) { }
+
+                        @Override
+                        public void onProviderEnabled(String arg0) { }
+
+                        @Override
+                        public void onProviderDisabled(String arg0) { }
+
+                        @Override
+                        public void onLocationChanged(Location location) { }
+                    }, null);
+
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                    if (location == null) {
-                        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
-
-                            @Override
-                            public void onStatusChanged(String arg0, int arg1, Bundle arg2) { }
-
-                            @Override
-                            public void onProviderEnabled(String arg0) { }
-
-                            @Override
-                            public void onProviderDisabled(String arg0) { }
-
-                            @Override
-                            public void onLocationChanged(Location loc) {
-                                location = loc;
-                            }
-                        }, null);
-                    }
 
                     User user = new User(nameText.getText().toString(), emailText.getText().toString(), jsonObject.optString("id"), false, false, location.getLatitude(), location.getLongitude());
                     userCache.saveUser(user);

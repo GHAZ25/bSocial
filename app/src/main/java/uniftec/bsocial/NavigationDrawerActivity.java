@@ -1,6 +1,10 @@
 package uniftec.bsocial;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,9 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
+import uniftec.bsocial.cache.UserCache;
 import uniftec.bsocial.fragments.CategoryChooserFragment;
 import uniftec.bsocial.fragments.ContactsFragment;
 import uniftec.bsocial.fragments.LikeChooserFragment;
@@ -29,11 +36,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         SettingsFragment.OnFragmentInteractionListener, MessageFragment.OnFragmentInteractionListener,
         LikeChooserFragment.OnFragmentInteractionListener, CategoryChooserFragment.OnFragmentInteractionListener {
 
-    FragmentManager fragmentManager;
-    ProfileFragment profileFragment;
-    SearchFragment searchFragment;
-    ContactsFragment contactsFragment;
-    SettingsFragment settingsFragment;
+    private FragmentManager fragmentManager;
+    private ProfileFragment profileFragment;
+    private SearchFragment searchFragment;
+    private ContactsFragment contactsFragment;
+    private SettingsFragment settingsFragment;
+    private Location location = null;
+    private Profile profile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +51,40 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        try {
+            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
+
+                @Override
+                public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+                    Toast.makeText(getApplicationContext(), "Change status: " + arg0, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onProviderEnabled(String arg0) {
+                    Toast.makeText(getApplicationContext(), "Enable " + arg0, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onProviderDisabled(String arg0) {
+                    Toast.makeText(getApplicationContext(), "Disable " + arg0, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onLocationChanged(Location location) {
+                    Toast.makeText(getApplicationContext(), "Latitude: " + Double.toString(location.getLatitude()) + "\nLongitude: " + Double.toString(location.getLongitude()), Toast.LENGTH_LONG).show();
+                }
+            }, null);
+
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        } catch (SecurityException e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        profile = Profile.getCurrentProfile();
+        UserCache userCache = new UserCache(profile.getId(), getApplicationContext());
+        userCache.initialize();
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

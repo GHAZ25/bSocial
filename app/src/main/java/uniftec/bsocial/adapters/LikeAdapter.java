@@ -13,21 +13,22 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import uniftec.bsocial.R;
-import uniftec.bsocial.entities.LikeEntity;
+import uniftec.bsocial.entities.Like;
 import uniftec.bsocial.fragments.LikeChooserFragment;
+import uniftec.bsocial.fragments.ProfileFragment;
 
 /**
  * Created by mauri on 26/08/2016.
  */
 
 public class LikeAdapter extends BaseAdapter {
-    ArrayList<LikeEntity> result;
+    ArrayList<Like> result;
     Context context;
     private static LayoutInflater inflater;
 
-    public LikeAdapter(LikeChooserFragment likeChooserFragment, ArrayList<LikeEntity> likeEntities) {
+    public LikeAdapter(Context context, ArrayList<Like> likeEntities) {
         result = likeEntities;
-        context = likeChooserFragment.getContext();
+        this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 

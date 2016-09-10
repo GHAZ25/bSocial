@@ -1,4 +1,4 @@
-package uniftec.bsocial.domain;
+package uniftec.bsocial.entities;
 
 public class User {
 

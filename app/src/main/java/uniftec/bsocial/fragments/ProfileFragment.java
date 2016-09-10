@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -24,8 +25,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.cache.LikesCache;
 import uniftec.bsocial.cache.LikesChosenCache;
+import uniftec.bsocial.cache.UserCache;
 
 public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -37,6 +40,7 @@ public class ProfileFragment extends Fragment {
     private View view;
     private LikesCache likesCache = null;
     private LikesChosenCache likesChosenCache = null;
+    private UserCache userCache = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,6 +70,9 @@ public class ProfileFragment extends Fragment {
         likesChosenCache = new LikesChosenCache(getActivity());
         likesChosenCache.initialize();
 
+        userCache = new UserCache(getActivity());
+        userCache.initialize();
+
         getActivity().setTitle("Perfil");
     }
 
@@ -73,15 +80,14 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        GraphRequest request = GraphRequest.newMeRequest(
-                AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        jsonObject = object;
-                        setNameAgeLocation();
-                    }
-                });
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+            new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+                    jsonObject = object;
+                    setNameAgeLocation();
+                }
+            });
 
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,birthday,hometown");
@@ -91,7 +97,20 @@ public class ProfileFragment extends Fragment {
 
         getProfilePic();
         sendMsg();
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                createLikeList();
+            }
+        });
+
         return view;
+    }
+
+    private void createLikeList() {
+        ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
+        likesListView.setAdapter(new LikeAdapter(getContext(), likesCache.listLikes()));
     }
 
     private void setNameAgeLocation() {

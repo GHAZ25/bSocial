@@ -20,7 +20,7 @@ import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.cache.LikesChosenCache;
 import uniftec.bsocial.cache.LikesCache;
-import uniftec.bsocial.entities.LikeEntity;
+import uniftec.bsocial.entities.Like;
 
 public class LikeChooserFragment extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
@@ -33,8 +33,8 @@ public class LikeChooserFragment extends DialogFragment {
 
     private ArrayList<String> preferencesTemp = null;
 
-    private ArrayList<LikeEntity> likeEntities;
-    private ArrayList<LikeEntity> chosenLikeEntities;
+    private ArrayList<Like> likeEntities;
+    private ArrayList<Like> chosenLikeEntities;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,7 +62,7 @@ public class LikeChooserFragment extends DialogFragment {
         likesChosenCache = new LikesChosenCache(getActivity());
         likesChosenCache.initialize();
 
-        chosenLikeEntities = new ArrayList<LikeEntity>();
+        chosenLikeEntities = new ArrayList<Like>();
     }
 
     @Override
@@ -109,8 +109,11 @@ public class LikeChooserFragment extends DialogFragment {
         Boolean found = null;
         boolean update = false;
 
+        ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
         ListView likesChosenListView = (ListView) getView().findViewById(R.id.likesChosenListView);
-        final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(this, chosenLikeEntities);
+
+        likesListView.setAdapter(new LikeAdapter(getContext(), likeEntities));
+        final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(getContext(), chosenLikeEntities);
         likesChosenListView.setAdapter(likesChosenListViewAdapter);
 
         while (preferencesTemp.size() > 0) {
@@ -119,7 +122,7 @@ public class LikeChooserFragment extends DialogFragment {
 
             while (cont < likeEntities.size()) {
                 if (preferencesTemp.get(0).equals(likeEntities.get(cont).getId().toString())) {
-                    chosenLikeEntities.add(new LikeEntity(likeEntities.get(cont)));
+                    chosenLikeEntities.add(new Like(likeEntities.get(cont)));
                     found = true;
 
                     preferencesTemp.remove(0);
@@ -154,31 +157,33 @@ public class LikeChooserFragment extends DialogFragment {
 
         likesChosenListViewAdapter.notifyDataSetChanged();
 
-        ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
         likesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (chosenLikeEntities.size() < 9) {
+                    ImageView likePic = (ImageView) view.findViewById(R.id.likePic);
+                    TextView likeName = (TextView) view.findViewById(R.id.likeName);
+                    TextView likeId = (TextView) view.findViewById(R.id.likeId);
 
-                ImageView likePic = (ImageView) view.findViewById(R.id.likePic);
-                TextView likeName = (TextView) view.findViewById(R.id.likeName);
-                TextView likeId = (TextView) view.findViewById(R.id.likeId);
+                    Like like = new Like(likeId.getText().toString(), likeName.getText().toString(), likePic.getTag().toString(), null);
 
-                LikeEntity likeEntity = new LikeEntity(likeId.getText().toString(), likeName.getText().toString(), likePic.getTag().toString(), null);
+                    boolean add = true;
+                    for (Like chosenLike : chosenLikeEntities) {
+                        if (chosenLike.getId().equals(like.getId()))
+                            add = false;
+                    }
 
-                boolean add = true;
-                for (LikeEntity likeEntity1 : chosenLikeEntities) {
-                    if (likeEntity1.getId().equals(likeEntity.getId()))
-                        add = false;
-                }
+                    if (add) {
+                        chosenLikeEntities.add(like);
+                        likesChosenCache.listPreferences().add(like.getId());
+                    } else {
+                        Toast.makeText(getContext(), "Item já adicionado!", Toast.LENGTH_SHORT).show();
+                    }
 
-                if (add) {
-                    chosenLikeEntities.add(likeEntity);
-                    likesChosenCache.listPreferences().add(likeEntity.getId());
+                    likesChosenListViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "Item já adicionado!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Você pode escolher no máximo 9 preferências.", Toast.LENGTH_SHORT).show();
                 }
-
-                likesChosenListViewAdapter.notifyDataSetChanged();
             }
         });
 
@@ -205,8 +210,6 @@ public class LikeChooserFragment extends DialogFragment {
         });
 
         save();
-        likesListView.setAdapter(new LikeAdapter(this, likeEntities));
-
     }
 
     private void save() {

@@ -35,8 +35,8 @@ import java.util.List;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.SearchAdapter;
-import uniftec.bsocial.domain.User;
-import uniftec.bsocial.entities.UserEntity;
+import uniftec.bsocial.entities.User;
+import uniftec.bsocial.entities.UserSearch;
 
 public class SearchFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -48,7 +48,7 @@ public class SearchFragment extends Fragment {
     private Profile profile = null;
 
     private SearchAdapter usersListViewAdapter = null;
-    private ArrayList<UserEntity> users = null;
+    private ArrayList<UserSearch> users = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -83,7 +83,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         ListView usersListView = (ListView) view.findViewById(R.id.usersListView);
-        usersListViewAdapter = new SearchAdapter(this, users);
+        usersListViewAdapter = new SearchAdapter(getContext(), users);
         usersListView.setAdapter(usersListViewAdapter);
 
         return view;
@@ -118,7 +118,7 @@ public class SearchFragment extends Fragment {
     private class ListUsers extends AsyncTask<Void, Void, User[]> {
         @Override
         protected void onPreExecute(){
-            load = ProgressDialog.show(getActivity(), "Aguarde", "Buscando preferências...");
+            load = ProgressDialog.show(getActivity(), "Aguarde", "Buscando usuários...");
         }
 
         @Override
@@ -130,7 +130,7 @@ public class SearchFragment extends Fragment {
 
                 List<NameValuePair> values = new ArrayList<>(2);
 
-                request = new HttpPost("http://ec2-54-213-36-149.us-west-2.compute.amazonaws.com:8080/ws/rest/user/list");
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/list");
                 values.add(new BasicNameValuePair("id", profile.getId()));
                 request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
@@ -151,15 +151,19 @@ public class SearchFragment extends Fragment {
         protected void onPostExecute(User[] retorno) {
             if (retorno != null) {
                 for (int i = 0; i < retorno.length; i++) {
+                    final UserSearch user = new UserSearch();
+                    user.setId(retorno[i].getIdFacebook());
+                    user.setName(retorno[i].getNome());
+
                     GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(),
                             retorno[i].getIdFacebook() + "?fields=id,name,picture", new GraphRequest.Callback() {
                         @Override
                         public void onCompleted(GraphResponse response) {
                             JSONObject object = response.getJSONObject();
 
-                            UserEntity user = new UserEntity();
-                            user.setId(object.optString("id"));
-                            user.setName(object.optString("name"));
+                            //UserSearch user = new UserSearch();
+                            //user.setId(object.optString("id"));
+                            //user.setName(object.optString("name"));
 
                             object = object.optJSONObject("picture");
                             object = object.optJSONObject("data");
