@@ -27,8 +27,8 @@
         android:layout_below="@+id/profilePic"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:textSize="24sp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/locationText"
@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/nameAgeText"
         android:layout_centerHorizontal="true"
-        android:textSize="16sp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/sendMsg"
@@ -48,18 +48,19 @@
         android:layout_gravity="bottom|center"
         android:background="#3b5998"
         android:text="Enviar Mensagem"
-        android:textColor="#fff" />
+        android:textColor="#fff"
+        android:visibility="gone" />
 
     <ListView
+        android:id="@+id/likesListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/likesListView"
-        android:padding="3dp"
-        android:layout_below="@+id/locationText"
         android:layout_above="@+id/sendMsg"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/locationText"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/layout_border">
+        android:layout_marginTop="20dp"
+        android:background="@drawable/layout_border"
+        android:padding="3dp">
     </ListView>
 
 </RelativeLayout>
