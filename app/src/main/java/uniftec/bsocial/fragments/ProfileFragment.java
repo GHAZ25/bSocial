@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -26,6 +27,7 @@ import java.util.GregorianCalendar;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.LikeAdapter;
+import uniftec.bsocial.cache.CategoriesCache;
 import uniftec.bsocial.cache.LikesCache;
 import uniftec.bsocial.cache.LikesChosenCache;
 import uniftec.bsocial.cache.UserCache;
@@ -40,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private View view;
     private LikesCache likesCache = null;
     private LikesChosenCache likesChosenCache = null;
+    private CategoriesCache categoriesCache = null;
     private UserCache userCache = null;
 
     private OnFragmentInteractionListener mListener;
@@ -69,6 +72,9 @@ public class ProfileFragment extends Fragment {
 
         likesChosenCache = new LikesChosenCache(getActivity());
         likesChosenCache.initialize();
+
+        categoriesCache = new CategoriesCache(getActivity());
+        categoriesCache.initialize();
 
         userCache = new UserCache(getActivity());
         userCache.initialize();

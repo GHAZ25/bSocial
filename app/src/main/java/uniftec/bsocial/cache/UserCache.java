@@ -263,8 +263,6 @@ public class UserCache {
         protected void onPostExecute(String message) {
             if (message.equals("true")) {
                 updateSettings();
-
-                Toast.makeText(context, "Latitude: " + sharedpreferences.getString("latitude", "-") + "\nLongitude: " + sharedpreferences.getString("longitude", "-"), Toast.LENGTH_LONG).show();
             }
         }
     }

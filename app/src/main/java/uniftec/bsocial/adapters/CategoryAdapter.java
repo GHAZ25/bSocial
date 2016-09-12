@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,21 +15,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.entities.Category;
 import uniftec.bsocial.entities.Like;
-import uniftec.bsocial.fragments.LikeChooserFragment;
-import uniftec.bsocial.fragments.ProfileFragment;
 
-/**
- * Created by mauri on 26/08/2016.
- */
-
-public class LikeAdapter extends BaseAdapter {
-    ArrayList<Like> result;
+public class CategoryAdapter extends BaseAdapter {
+    ArrayList<Category> result;
     Context context;
     private static LayoutInflater inflater;
 
-    public LikeAdapter(Context context, ArrayList<Like> likes) {
-        result = likes;
+    public CategoryAdapter(Context context, ArrayList<Category> categories) {
+        result = categories;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -43,23 +40,18 @@ public class LikeAdapter extends BaseAdapter {
     }
 
     public class Holder {
-        ImageView likePic;
-        TextView likeName;
-        TextView likeId;
+        CheckedTextView likeName;
     }
 
     @Override
     public View getView(final int i, View view, final ViewGroup viewGroup) {
         Holder holder = new Holder();
+
         View rowView;
-            rowView = inflater.inflate(R.layout.likes_list_view, null);
-            holder.likeId = (TextView) rowView.findViewById(R.id.likeId);
-            holder.likeName = (TextView) rowView.findViewById(R.id.likeName);
-            holder.likePic = (ImageView) rowView.findViewById(R.id.likePic);
-            holder.likeId.setText(result.get(i).getId());
-            holder.likeName.setText(result.get(i).getName());
-            holder.likePic.setTag(result.get(i).getPictureUrl());
-            Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.likePic);
+        rowView = inflater.inflate(R.layout.categories_list_view, null);
+        holder.likeName = (CheckedTextView) rowView.findViewById(R.id.categoryIgnore);
+        holder.likeName.setText(result.get(i).getNome());
+        holder.likeName.setChecked(result.get(i).isSelecionada());
 
         return rowView;
     }

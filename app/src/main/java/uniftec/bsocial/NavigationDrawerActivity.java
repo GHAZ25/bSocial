@@ -22,6 +22,7 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,7 +46,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private SearchFragment searchFragment;
     private ContactsFragment contactsFragment;
     private SettingsFragment settingsFragment;
-    private Location location = null;
+    private DecimalFormat decimalFormat = null;
     private Profile profile = null;
     private UserCache userCache = null;
     private Double latitude = null;
@@ -59,48 +60,59 @@ public class NavigationDrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        switch (Locale.getDefault().getLanguage()) {
+            case "en":
+                decimalFormat = new DecimalFormat("##0.00000000");
+            break;
+            case "pt":
+                decimalFormat = new DecimalFormat("##0,00000000");
+            break;
+        }
+
         profile = Profile.getCurrentProfile();
         userCache = new UserCache(profile.getId(), getApplicationContext());
         userCache.initialize();
 
-        int delay = 1000;   // delay de 1 seg.
-        int interval = 60000;  // intervalo de 60 seg.
-        Timer timer = new Timer();
+        int delay = 1000;
+        int interval = 60000;
 
-        timer.scheduleAtFixedRate(new TimerTask() {
+        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onStatusChanged(String arg0, int arg1, Bundle arg2) { }
+
+            @Override
+            public void onProviderEnabled(String arg0) { }
+
+            @Override
+            public void onProviderDisabled(String arg0) { }
+
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude = Double.parseDouble(decimalFormat.format(location.getLatitude() - userCache.getUser().getLatitude()));
+                longitude = Double.parseDouble(decimalFormat.format(location.getLongitude() - userCache.getUser().getLongitude()));
+
+                if ((latitude > 0.00000000) || (latitude < -0.00000000) || (longitude > 0.00000000) || (longitude < -0.00000000)) {
+                    userCache.getUser().setLatitude(location.getLatitude());
+                    userCache.getUser().setLongitude(location.getLongitude());
+
+                    userCache.updateLocation();
+                    Toast.makeText(getApplicationContext(), "Mudou o local...", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Ainda no mesmo local...", Toast.LENGTH_LONG).show();
+                }}
+        };
+
+        Timer gpsStart = new Timer();
+        Timer gpsStop = new Timer();
+
+        gpsStart.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
                         try {
-                            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
-                                @Override
-                                public void onStatusChanged(String arg0, int arg1, Bundle arg2) { }
-
-                                @Override
-                                public void onProviderEnabled(String arg0) { }
-
-                                @Override
-                                public void onProviderDisabled(String arg0) { }
-
-                                @Override
-                                public void onLocationChanged(Location location) {
-                                    DecimalFormat df = new DecimalFormat("##0,00000000");
-                                    latitude = Double.parseDouble(df.format(location.getLatitude() - userCache.getUser().getLatitude()));
-                                    longitude = Double.parseDouble(df.format(location.getLongitude() - userCache.getUser().getLongitude()));
-
-                                    if ((latitude > 0.00000000) || (latitude < -0.00000000) || (longitude > 0.00000000) || (longitude < -0.00000000)) {
-                                        userCache.getUser().setLatitude(location.getLatitude());
-                                        userCache.getUser().setLongitude(location.getLongitude());
-
-                                        userCache.updateLocation();
-                                        Toast.makeText(getApplicationContext(), "Mudou o local...", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "Ainda no mesmo local...", Toast.LENGTH_LONG).show();
-                                    }}
-                            }, null);
+                            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER ,locationListener , null);
                         } catch (SecurityException e) {
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -108,6 +120,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 });
             }
         }, delay, interval);
+
+
+        gpsStop.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                try {
+                    locationManager.removeUpdates(locationListener);
+                } catch (SecurityException e) { }
+            }
+        }, (delay + 5000), interval);
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +146,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         setTitle("bSocial");
 
-       NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         profileFragment = new ProfileFragment();
         fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, profileFragment,

@@ -171,10 +171,10 @@ public class LikesChosenCache {
 
         @Override
         protected void onPostExecute(HashMap[] retorno) {
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.clear();
-
             if (retorno != null) {
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.clear();
+
                 int cont = 0;
 
                 for (int i = 0; i < retorno.length; i++) {
@@ -187,11 +187,12 @@ public class LikesChosenCache {
                 editor.putInt("size", cont);
 
                 Toast.makeText(activity, "Gostos atualizados com sucesso.", Toast.LENGTH_LONG).show();
+
+                editor.commit();
             } else {
                 Toast.makeText(activity, "Ocorreu um erro ao listar suas preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
 
-            editor.commit();
             load.dismiss();
         }
     }
