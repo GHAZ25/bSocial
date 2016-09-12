@@ -21,6 +21,10 @@ import android.widget.Toast;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
+import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import uniftec.bsocial.cache.UserCache;
 import uniftec.bsocial.fragments.CategoryChooserFragment;
 import uniftec.bsocial.fragments.ContactsFragment;
@@ -43,6 +47,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private SettingsFragment settingsFragment;
     private Location location = null;
     private Profile profile = null;
+    private UserCache userCache = null;
+    private Double latitude = null;
+    private Double longitude = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,40 +58,56 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        try {
-            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
-
-                @Override
-                public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-                    Toast.makeText(getApplicationContext(), "Change status: " + arg0, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onProviderEnabled(String arg0) {
-                    Toast.makeText(getApplicationContext(), "Enable " + arg0, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onProviderDisabled(String arg0) {
-                    Toast.makeText(getApplicationContext(), "Disable " + arg0, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onLocationChanged(Location location) {
-                    Toast.makeText(getApplicationContext(), "Latitude: " + Double.toString(location.getLatitude()) + "\nLongitude: " + Double.toString(location.getLongitude()), Toast.LENGTH_LONG).show();
-                }
-            }, null);
-
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        } catch (SecurityException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
 
         profile = Profile.getCurrentProfile();
-        UserCache userCache = new UserCache(profile.getId(), getApplicationContext());
+        userCache = new UserCache(profile.getId(), getApplicationContext());
         userCache.initialize();
+
+        int delay = 1000;   // delay de 1 seg.
+        int interval = 60000;  // intervalo de 60 seg.
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                        try {
+                            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
+                                @Override
+                                public void onStatusChanged(String arg0, int arg1, Bundle arg2) { }
+
+                                @Override
+                                public void onProviderEnabled(String arg0) { }
+
+                                @Override
+                                public void onProviderDisabled(String arg0) { }
+
+                                @Override
+                                public void onLocationChanged(Location location) {
+                                    DecimalFormat df = new DecimalFormat("##0,00000000");
+                                    latitude = Double.parseDouble(df.format(location.getLatitude() - userCache.getUser().getLatitude()));
+                                    longitude = Double.parseDouble(df.format(location.getLongitude() - userCache.getUser().getLongitude()));
+
+                                    if ((latitude > 0.00000000) || (latitude < -0.00000000) || (longitude > 0.00000000) || (longitude < -0.00000000)) {
+                                        userCache.getUser().setLatitude(location.getLatitude());
+                                        userCache.getUser().setLongitude(location.getLongitude());
+
+                                        userCache.updateLocation();
+                                        Toast.makeText(getApplicationContext(), "Mudou o local...", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Ainda no mesmo local...", Toast.LENGTH_LONG).show();
+                                    }}
+                            }, null);
+                        } catch (SecurityException e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        }, delay, interval);
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

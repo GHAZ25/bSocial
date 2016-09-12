@@ -138,8 +138,13 @@ public class ProfileFragment extends Fragment {
         nameText.setText(nameAge);
 
         TextView hometown = (TextView) getView().findViewById(R.id.locationText);
-        JSONObject object = jsonObject.optJSONObject("hometown");
-        hometown.setText(object.optString("name"));
+
+        if (jsonObject.optJSONObject("hometown") != null) {
+            JSONObject object = jsonObject.optJSONObject("hometown");
+            hometown.setText(object.optString("name"));
+        } else {
+            hometown.setText("-");
+        }
     }
 
     public void getProfilePic() {

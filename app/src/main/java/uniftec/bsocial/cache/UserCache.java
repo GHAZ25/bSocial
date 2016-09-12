@@ -29,9 +29,11 @@ import uniftec.bsocial.entities.User;
 
 public class UserCache {
     private FragmentActivity activity = null;
+    private Context context = null;
     private ProgressDialog load = null;
     private SharedPreferences sharedpreferences = null;
     private Profile profile = null;
+    private String id = null;
     private String file = null;
     private User user = null;
 
@@ -48,6 +50,9 @@ public class UserCache {
     public UserCache(String id, Context context) {
         super();
 
+        this.context = context;
+
+        this.id = id;
         file = "settings" + id;
         sharedpreferences = context.getSharedPreferences(file, Context.MODE_PRIVATE);
     }
@@ -82,6 +87,11 @@ public class UserCache {
         return user;
     }
 
+    public void updateLocation() {
+        UpdateLocation updateLocation = new UpdateLocation();
+        updateLocation.execute();
+    }
+
     private void updateSettings() {
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
@@ -111,7 +121,11 @@ public class UserCache {
                 List<NameValuePair> values = new ArrayList<>(2);
 
                 request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/preference");
-                values.add(new BasicNameValuePair("id", profile.getId()));
+                if (id == null) {
+                    values.add(new BasicNameValuePair("id", profile.getId()));
+                } else {
+                    values.add(new BasicNameValuePair("id", id));
+                }
                 request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
                 HttpResponse response = httpclient.execute(request);
@@ -136,7 +150,11 @@ public class UserCache {
 
                 updateSettings();
             } else {
-                Toast.makeText(activity, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
+                if (id == null) {
+                    Toast.makeText(activity, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
@@ -203,6 +221,51 @@ public class UserCache {
                 }
             }
             load.dismiss();
+        }
+    }
+
+    private class UpdateLocation extends AsyncTask<Void, Void, String> {
+        @Override
+        protected void onPreExecute(){ }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            HashMap retorno = null;
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
+
+                List<NameValuePair> values = new ArrayList<>(2);
+
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/location");
+
+                values.add(new BasicNameValuePair("latitude", Double.toString(user.getLatitude())));
+                values.add(new BasicNameValuePair("longitude", Double.toString(user.getLongitude())));
+                values.add(new BasicNameValuePair("id", id));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, HashMap.class);
+
+                content.close();
+
+                return retorno.get("message").toString();
+            } catch (Exception e){
+                return e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+            if (message.equals("true")) {
+                updateSettings();
+
+                Toast.makeText(context, "Latitude: " + sharedpreferences.getString("latitude", "-") + "\nLongitude: " + sharedpreferences.getString("longitude", "-"), Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
