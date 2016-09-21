@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,11 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import uniftec.bsocial.GCMClientManager;
+import uniftec.bsocial.PushNotificationService;
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.cache.CategoriesCache;
@@ -44,6 +49,10 @@ public class ProfileFragment extends Fragment {
     private LikesChosenCache likesChosenCache = null;
     private CategoriesCache categoriesCache = null;
     private UserCache userCache = null;
+    private GCMClientManager gcmClientManager = null;
+    private Timer timer = null;
+    private LikeAdapter likeAdapter = null;
+    private PushNotificationService pushNotificationService = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,17 +76,23 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        likesCache = new LikesCache(getActivity());
-        likesCache.update();
+        gcmClientManager = new GCMClientManager(getActivity());
 
-        likesChosenCache = new LikesChosenCache(getActivity());
-        likesChosenCache.initialize();
+        gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
 
-        categoriesCache = new CategoriesCache(getActivity());
-        categoriesCache.initialize();
+                Log.d("Registration id",registrationId);
+                //send this registrationId to your server
+            }
+            @Override
+            public void onFailure(String ex) {
+                super.onFailure(ex);
+            }
+        });
 
-        userCache = new UserCache(getActivity());
-        userCache.initialize();
+        pushNotificationService = new PushNotificationService();
+        //pushNotificationService.onCreate();
 
         getActivity().setTitle("Perfil");
     }
@@ -101,6 +116,20 @@ public class ProfileFragment extends Fragment {
         request.setParameters(parameters);
         request.executeAsync();
 
+        timer = new Timer();
+
+        likesCache = new LikesCache(getActivity());
+        likesCache.verify();
+
+        likesChosenCache = new LikesChosenCache(getActivity());
+        likesChosenCache.initialize();
+
+        categoriesCache = new CategoriesCache(getActivity());
+        categoriesCache.verify();
+
+        userCache = new UserCache(getActivity());
+        userCache.initialize();
+
         getProfilePic();
         sendMsg();
 
@@ -108,6 +137,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void run() {
                 createLikeList();
+                testList();
             }
         });
 
@@ -116,7 +146,25 @@ public class ProfileFragment extends Fragment {
 
     private void createLikeList() {
         ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
-        likesListView.setAdapter(new LikeAdapter(getContext(), likesCache.listLikes()));
+        likeAdapter = new LikeAdapter(getContext(), likesCache.listLikes());
+        likesListView.setAdapter(likeAdapter);
+    }
+
+    private void testList() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (likesCache.listLikes().size() != 0) {
+                            timer.cancel();
+                            likeAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        }, 0, 2000);
     }
 
     private void setNameAgeLocation() {

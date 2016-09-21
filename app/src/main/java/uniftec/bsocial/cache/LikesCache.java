@@ -74,7 +74,7 @@ public class LikesCache {
         }
     }
 
-    public void update() {
+    public void verify() {
         LoadPreference loadPreference = new LoadPreference();
 
         if (sharedpreferences.getAll().size() == 0) {
@@ -189,8 +189,8 @@ public class LikesCache {
 
             if (message.equals("true")) {
 
-                JSONObject likes = obj.optJSONObject("likes");
-                JSONArray jsonArray = likes.optJSONArray("data");
+                JSONObject list = obj.optJSONObject("likes");
+                JSONArray jsonArray = list.optJSONArray("data");
 
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.clear();
@@ -206,6 +206,9 @@ public class LikesCache {
                     jsonObject = jsonObject.optJSONObject("picture");
                     jsonObject = jsonObject.optJSONObject("data");
                     String pictureUrl = jsonObject.optString("url");
+
+                    Like like = new Like(id, name, pictureUrl, category);
+                    likes.add(like);
 
                     editor.putString("id" + i, id);
                     editor.putString("name" + i, name);

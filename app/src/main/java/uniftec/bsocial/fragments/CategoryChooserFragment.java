@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import uniftec.bsocial.R;
@@ -68,6 +69,14 @@ public class CategoryChooserFragment extends DialogFragment {
                     categoriesCache.listCategories().get(i).setSelecionada(true);
                 }
                 categoriesListViewAdapter.notifyDataSetChanged();
+            }
+        });
+
+        Button btnSave = (Button) view.findViewById(R.id.btnSaveCategories);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                categoriesCache.update();
             }
         });
 
