@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "372784676912",
+    "project_id": "bsocial-143315"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372784676912:android:0e44c47f7ba24721",
+        "android_client_info": {
+          "package_name": "uniftec.bsocial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNZdt93BG5ovvf-cEQjAJBXYdvBCLQ6As"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
