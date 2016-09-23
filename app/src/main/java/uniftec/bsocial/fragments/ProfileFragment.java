@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -164,7 +163,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
             }
-        }, 0, 2000);
+        }, 0, 4000);
     }
 
     private void setNameAgeLocation() {

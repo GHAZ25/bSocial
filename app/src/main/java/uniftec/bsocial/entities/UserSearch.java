@@ -1,45 +1,48 @@
 package uniftec.bsocial.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by mauri on 25/08/2016.
  */
 
-public class UserSearch {
+public class UserSearch implements Serializable {
     private String id;
     private String name;
     private String pictureUrl;
     private String age;
     private String hometown;
     private ArrayList<Like> likeEntities;
+    private Double latitude;
+    private Double longitude;
 
     public UserSearch() {
 
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPictureUrl() {
         return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public String getAge() {
@@ -58,11 +61,28 @@ public class UserSearch {
         this.hometown = hometown;
     }
 
+    public ArrayList<Like> getLikeEntities() {
+        return likeEntities;
+    }
+
     public void setLikeEntities(ArrayList<Like> likeEntities) {
         this.likeEntities = likeEntities;
     }
 
-    public ArrayList<Like> getLikeEntities() {
-        return likeEntities;
+    public Double getLatitude() {
+        return latitude;
     }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
 }

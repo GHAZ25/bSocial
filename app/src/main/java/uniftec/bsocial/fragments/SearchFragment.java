@@ -2,6 +2,7 @@ package uniftec.bsocial.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import uniftec.bsocial.OtherProfileActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.SearchAdapter;
 import uniftec.bsocial.entities.User;
@@ -82,9 +85,19 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        ListView usersListView = (ListView) view.findViewById(R.id.usersListView);
+        final ListView usersListView = (ListView) view.findViewById(R.id.usersListView);
         usersListViewAdapter = new SearchAdapter(getContext(), users);
         usersListView.setAdapter(usersListViewAdapter);
+
+        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                UserSearch user = (UserSearch) adapterView.getAdapter().getItem(i);
+                Intent intent = new Intent(getActivity(), OtherProfileActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

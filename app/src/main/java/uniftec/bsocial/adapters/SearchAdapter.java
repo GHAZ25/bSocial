@@ -14,16 +14,15 @@ import java.util.ArrayList;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.entities.UserSearch;
-import uniftec.bsocial.fragments.SearchFragment;
 
 /**
  * Created by mauri on 26/08/2016.
  */
 
 public class SearchAdapter extends BaseAdapter {
+    private static LayoutInflater inflater;
     ArrayList<UserSearch> result;
     Context context;
-    private static LayoutInflater inflater;
 
     public SearchAdapter(Context context, ArrayList<UserSearch> userEntities) {
         result = userEntities;
@@ -33,18 +32,12 @@ public class SearchAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return i;
+        return result.get(i);
     }
 
     @Override
     public long getItemId(int i) {
         return i;
-    }
-
-    public class Holder {
-        ImageView userPic;
-        TextView userName;
-        TextView userId;
     }
 
     @Override
@@ -66,5 +59,11 @@ public class SearchAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return result.size();
+    }
+
+    public class Holder {
+        ImageView userPic;
+        TextView userName;
+        TextView userId;
     }
 }
