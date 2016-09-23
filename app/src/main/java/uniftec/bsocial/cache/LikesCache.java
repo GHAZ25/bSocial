@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -167,6 +168,7 @@ public class LikesCache {
 
                 request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/like/insert");
                 values.add(new BasicNameValuePair("json", obj.toString()));
+                values.add(new BasicNameValuePair("id_facebook", profile.getId()));
                 request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
                 HttpResponse response = httpclient.execute(request);
