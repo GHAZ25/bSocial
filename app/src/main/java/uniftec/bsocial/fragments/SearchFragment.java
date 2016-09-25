@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,15 +129,15 @@ public class SearchFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class ListUsers extends AsyncTask<Void, Void, User[]> {
+    private class ListUsers extends AsyncTask<Void, Void, UserSearch[]> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(getActivity(), "Aguarde", "Buscando usuários...");
         }
 
         @Override
-        protected User[] doInBackground(Void... params) {
-            User[] retorno = null;
+        protected UserSearch[] doInBackground(Void... params) {
+            UserSearch[] retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost request = null;
@@ -152,7 +153,7 @@ public class SearchFragment extends Fragment {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, User[].class);
+                retorno = gson.fromJson(reader, UserSearch[].class);
 
                 content.close();
             } catch (Exception e) { }
@@ -161,15 +162,17 @@ public class SearchFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(User[] retorno) {
+        protected void onPostExecute(UserSearch[] retorno) {
             if (retorno != null) {
                 for (int i = 0; i < retorno.length; i++) {
-                    final UserSearch user = new UserSearch();
-                    user.setId(retorno[i].getIdFacebook());
+                    final UserSearch user = new UserSearch(retorno[i]);
+                    /*user.setId(retorno[i].getIdFacebook());
                     user.setName(retorno[i].getNome());
+                    user.setLatitude(retorno[i].getLatitude());
+                    user.setLongitude(retorno[i].getLongitude()); */
 
                     GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(),
-                            retorno[i].getIdFacebook() + "?fields=id,name,picture", new GraphRequest.Callback() {
+                            retorno[i].getId() + "?fields=id,name,picture", new GraphRequest.Callback() {
                         @Override
                         public void onCompleted(GraphResponse response) {
                             JSONObject object = response.getJSONObject();

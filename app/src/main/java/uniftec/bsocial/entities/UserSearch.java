@@ -13,12 +13,20 @@ public class UserSearch implements Serializable {
     private String pictureUrl;
     private String age;
     private String hometown;
-    private ArrayList<Like> likeEntities;
     private Double latitude;
     private Double longitude;
+    private float compatibilidade;
 
-    public UserSearch() {
-
+    public UserSearch(UserSearch userSearch) {
+        super();
+        id = userSearch.getId();
+        name = userSearch.getName();
+        pictureUrl = userSearch.getPictureUrl();
+        age = userSearch.getAge();
+        hometown = userSearch.getHometown();
+        latitude = userSearch.getLatitude();
+        longitude = userSearch.getLongitude();
+        compatibilidade = userSearch.getCompatibilidade();
     }
 
     public String getId() {
@@ -61,14 +69,6 @@ public class UserSearch implements Serializable {
         this.hometown = hometown;
     }
 
-    public ArrayList<Like> getLikeEntities() {
-        return likeEntities;
-    }
-
-    public void setLikeEntities(ArrayList<Like> likeEntities) {
-        this.likeEntities = likeEntities;
-    }
-
     public Double getLatitude() {
         return latitude;
     }
@@ -85,4 +85,11 @@ public class UserSearch implements Serializable {
         this.longitude = longitude;
     }
 
+    public float getCompatibilidade () {
+        return compatibilidade;
+    }
+
+    public void setCompatibilidade(float compatibilidade) {
+        this.compatibilidade = compatibilidade;
+    }
 }
