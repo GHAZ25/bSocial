@@ -13,6 +13,7 @@ public class UserSearch implements Serializable {
     private String pictureUrl;
     private String age;
     private String hometown;
+    private ArrayList<Like> likes;
     private Double latitude;
     private Double longitude;
     private float compatibilidade;
@@ -24,6 +25,7 @@ public class UserSearch implements Serializable {
         pictureUrl = userSearch.getPictureUrl();
         age = userSearch.getAge();
         hometown = userSearch.getHometown();
+        likes = userSearch.getLikes();
         latitude = userSearch.getLatitude();
         longitude = userSearch.getLongitude();
         compatibilidade = userSearch.getCompatibilidade();
@@ -67,6 +69,14 @@ public class UserSearch implements Serializable {
 
     public void setHometown(String hometown) {
         this.hometown = hometown;
+    }
+
+    public ArrayList<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(ArrayList<Like> likes) {
+        this.likes = likes;
     }
 
     public Double getLatitude() {

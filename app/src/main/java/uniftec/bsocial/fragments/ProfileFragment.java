@@ -39,10 +39,11 @@ import uniftec.bsocial.cache.UserCache;
 public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private static final String[] INITIAL_PERMS = {
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+    };
     private String mParam1;
     private String mParam2;
-
     private View view;
     private LikesCache likesCache = null;
     private LikesChosenCache likesChosenCache = null;
@@ -74,6 +75,8 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        requestPermissions(INITIAL_PERMS, 1337);
 
         gcmClientManager = new GCMClientManager(getActivity());
 
