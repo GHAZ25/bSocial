@@ -5,12 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.widget.ProfilePictureView;
-
-import org.json.JSONObject;
 
 import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.entities.UserSearch;
@@ -27,20 +22,9 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         user = (UserSearch) getIntent().getSerializableExtra("user");
 
-        GraphRequest request = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(),
-                user.getId() + "?fields=hometown", new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse response) {
-                        JSONObject object = response.getJSONObject();
-                        object = object.optJSONObject("likes");
-
-                        //TODO descomentar
-                        //createLikeList();
-                        loadUser();
-                    }
-                });
-
-        request.executeAsync();
+        //TODO descomentar
+        //createLikeList();
+        loadUser();
     }
 
     private void loadUser() {
