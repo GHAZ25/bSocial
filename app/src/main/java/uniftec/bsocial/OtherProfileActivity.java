@@ -8,12 +8,15 @@ import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
 
 import uniftec.bsocial.adapters.LikeAdapter;
+import uniftec.bsocial.cache.LikesCache;
 import uniftec.bsocial.entities.UserSearch;
 
 public class OtherProfileActivity extends AppCompatActivity {
 
     private UserSearch user;
     private LikeAdapter likeAdapter;
+    private LikesCache likesCache = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +25,6 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         user = (UserSearch) getIntent().getSerializableExtra("user");
 
-        //TODO descomentar
         //createLikeList();
         loadUser();
     }

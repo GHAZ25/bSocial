@@ -7,7 +7,6 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context="uniftec.bsocial.fragments.ProfileFragment">
-
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/profilePic"
         android:layout_width="150dp"
@@ -26,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profilePic"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:textAlignment="center"
         android:textSize="24sp" />
 
@@ -39,28 +38,22 @@
         android:textAlignment="center"
         android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/sendMsg"
-        android:layout_width="match_parent"
+    <com.dd.ShadowLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom|center"
-        android:background="#3b5998"
-        android:text="Enviar Mensagem"
-        android:textColor="#fff"
-        android:visibility="gone" />
-
-    <ListView
-        android:id="@+id/likesListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/sendMsg"
         android:layout_below="@+id/locationText"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/layout_border"
-        android:padding="3dp">
-    </ListView>
+        android:layout_marginBottom="5dp"
+        app:sl_dx="4dp"
+        app:sl_dy="4dp"
+        app:sl_shadowColor="#AA000000"
+        app:sl_shadowRadius="8dp">
 
+        <ListView
+            android:id="@+id/likesListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/layout_border"
+            android:padding="3dp"></ListView>
+    </com.dd.ShadowLayout>
 </RelativeLayout>

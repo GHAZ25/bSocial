@@ -4,12 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -133,7 +131,6 @@ public class ProfileFragment extends Fragment {
         userCache.initialize();
 
         getProfilePic();
-        sendMsg();
 
         view.post(new Runnable() {
             @Override
@@ -207,18 +204,6 @@ public class ProfileFragment extends Fragment {
         Profile profile = Profile.getCurrentProfile();
         ProfilePictureView profilePictureView = (ProfilePictureView) view.findViewById(R.id.profilePic);
         profilePictureView.setProfileId(profile.getId());
-    }
-
-    public void sendMsg() {
-        Button sendMsgBtn = (Button) view.findViewById(R.id.sendMsg);
-        sendMsgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = getFragmentManager();
-                MessageFragment messageFragment = new MessageFragment();
-                messageFragment.show(fragmentManager, "Enviar mensagem");
-            }
-        });
     }
 
     @Override
