@@ -8,23 +8,33 @@
     android:clipToPadding="false"
     tools:context=".OtherProfileActivity">
 
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/profilePic"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <com.dd.ShadowLayout
+        android:id="@+id/profile_pic_sl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top|center"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/image_border"
-        android:padding="3dp"
-        app:srcCompat="@android:color/holo_blue_dark" />
+        app:sl_dx="3dp"
+        app:sl_dy="3dp"
+        app:sl_shadowColor="#AA000000"
+        app:sl_shadowRadius="6dp">
+
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/profilePic"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/image_border"
+            android:padding="3dp"
+            app:srcCompat="@android:color/holo_blue_dark" />
+
+    </com.dd.ShadowLayout>
 
     <TextView
         android:id="@+id/nameAgeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profilePic"
+        android:layout_below="@+id/profile_pic_sl"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:textAlignment="center"

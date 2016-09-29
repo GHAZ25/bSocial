@@ -1,6 +1,5 @@
 package uniftec.bsocial.cache;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -42,7 +41,6 @@ public class LikesCache {
     private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private FragmentActivity activity = null;
-    private Activity activityTest = null;
     private ProgressDialog load = null;
     private SharedPreferences sharedpreferences = null;
     private Profile profile = null;

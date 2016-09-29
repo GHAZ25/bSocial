@@ -31,6 +31,7 @@ import uniftec.bsocial.fragments.CategoryChooserFragment;
 import uniftec.bsocial.fragments.ContactsFragment;
 import uniftec.bsocial.fragments.LikeChooserFragment;
 import uniftec.bsocial.fragments.MessageFragment;
+import uniftec.bsocial.fragments.NotificationsFragment;
 import uniftec.bsocial.fragments.ProfileFragment;
 import uniftec.bsocial.fragments.SearchFragment;
 import uniftec.bsocial.fragments.SettingsFragment;
@@ -38,6 +39,7 @@ import uniftec.bsocial.fragments.SettingsFragment;
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ProfileFragment.OnFragmentInteractionListener,
                     SearchFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener,
+        NotificationsFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, MessageFragment.OnFragmentInteractionListener,
         LikeChooserFragment.OnFragmentInteractionListener, CategoryChooserFragment.OnFragmentInteractionListener {
 
@@ -45,6 +47,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private ProfileFragment profileFragment;
     private SearchFragment searchFragment;
     private ContactsFragment contactsFragment;
+    private NotificationsFragment notificationsFragment;
     private SettingsFragment settingsFragment;
     private DecimalFormat decimalFormat = null;
     private Profile profile = null;
@@ -179,9 +182,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -204,6 +207,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
             contactsFragment= new ContactsFragment();
             fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, contactsFragment,
                     contactsFragment.getTag()).commit();
+        } else if (id == R.id.nav_notifications) {
+            notificationsFragment = new NotificationsFragment();
+            fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, notificationsFragment,
+                    notificationsFragment.getTag()).commit();
         } else if (id == R.id.nav_settings) {
             settingsFragment = new SettingsFragment();
             fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, settingsFragment,

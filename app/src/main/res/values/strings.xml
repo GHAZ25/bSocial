@@ -8,7 +8,22 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="copyright">Copyright © 2016 bSocial. Todos os direitos reservados.</string>
+
+    <string name="nav_menu_notifications">Notificações</string>
+    <string name="nav_menu_profile">Perfil</string>]
+    <string name="nav_menu_search">Busca</string>
+    <string name="nav_menu_contacts">Contatos</string>
+    <string name="nav_menu_settings">Configurações</string>
+    <string name="nav_menu_exit">Sair</string>
+
+    <string name="settings_check_hide">Oculto para outros usuários</string>
+    <string name="settings_check_notifications">Notificar ao encontrar contatos próximos</string>
+    <string name="settings_btn_edit_likes">Editar gostos principais</string>
+    <string name="settings_btn_edit_categories">Ignorar categorias</string>
+
+    <string name="btn_save">Salvar</string>
+    <string name="btn_cancel">Cancelar</string>
 </resources>
