@@ -1,10 +1,12 @@
 package uniftec.bsocial.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by mauri on 25/08/2016.
  */
 
-public class Like {
+public class Like implements Serializable {
     private String id;
     private String name;
     private String pictureUrl;

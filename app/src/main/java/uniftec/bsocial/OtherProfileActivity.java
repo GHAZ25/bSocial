@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,7 +32,8 @@ public class OtherProfileActivity extends AppCompatActivity {
         userCache = new UserCache(this);
         userCache.initialize();
 
-        //createLikeList();
+
+        createLikeList();
         loadUser();
 
     }
@@ -75,6 +77,7 @@ public class OtherProfileActivity extends AppCompatActivity {
 
     private void createLikeList() {
         ListView likesListView = (ListView) findViewById(R.id.likesListView);
+        Log.i("Errooooooooooooooooou: ", Integer.toString(user.getLikes().length));
         likeAdapter = new LikeAdapter(getApplicationContext(), user.getLikes());
         likesListView.setAdapter(likeAdapter);
     }

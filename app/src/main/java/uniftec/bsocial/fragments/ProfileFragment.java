@@ -156,7 +156,7 @@ public class ProfileFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (likesCache.listLikes().size() != 0) {
+                        if (likesCache.listLikes().length != 0) {
                             timer.cancel();
                             likeAdapter.notifyDataSetChanged();
                         }

@@ -47,7 +47,7 @@ public class LikesCache {
     private String file = null;
     private Date today = null;
     private JSONObject obj = null;
-    private ArrayList<Like> likes = null;
+    private Like[] likes = null;
 
     public LikesCache(FragmentActivity activity) {
         super();
@@ -58,7 +58,7 @@ public class LikesCache {
         today = new Date();
         file = "preferences" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
-        likes = new ArrayList<>();
+        likes = new Like[sharedpreferences.getInt("size", 0)];
     }
 
     public void initialize() {
@@ -69,7 +69,7 @@ public class LikesCache {
             for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
                 Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
 
-                likes.add(like);
+                likes[i] = like;
             }
         }
     }
@@ -89,7 +89,7 @@ public class LikesCache {
                     for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
                         Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
 
-                        likes.add(like);
+                        likes[i] = like;
                     }
                 }
             } catch (ParseException e) {
@@ -120,7 +120,7 @@ public class LikesCache {
         request.executeAsync();
     }
 
-    public ArrayList<Like> listLikes() { return likes; }
+    public Like[] listLikes() { return likes; }
 
     private class LoadPreference extends AsyncTask<Void, Void, String> {
         @Override
@@ -209,7 +209,7 @@ public class LikesCache {
                     String pictureUrl = jsonObject.optString("url");
 
                     Like like = new Like(id, name, pictureUrl, category);
-                    likes.add(like);
+                    likes[cont] = like;
 
                     editor.putString("id" + i, id);
                     editor.putString("name" + i, name);

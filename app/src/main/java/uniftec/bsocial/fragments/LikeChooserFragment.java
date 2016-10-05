@@ -33,7 +33,7 @@ public class LikeChooserFragment extends DialogFragment {
 
     private ArrayList<String> preferencesTemp = null;
 
-    private ArrayList<Like> likeEntities;
+    private Like[] likeEntities;
     private ArrayList<Like> chosenLikeEntities;
 
     private OnFragmentInteractionListener mListener;
@@ -120,14 +120,14 @@ public class LikeChooserFragment extends DialogFragment {
             cont = 0;
             found = false;
 
-            while (cont < likeEntities.size()) {
-                if (preferencesTemp.get(0).equals(likeEntities.get(cont).getId().toString())) {
-                    chosenLikeEntities.add(new Like(likeEntities.get(cont)));
+            while (cont < likeEntities.length) {
+                if (preferencesTemp.get(0).equals(likeEntities[cont].getId().toString())) {
+                    chosenLikeEntities.add(new Like(likeEntities[cont]));
                     found = true;
 
                     preferencesTemp.remove(0);
 
-                    cont = likeEntities.size();
+                    cont = likeEntities.length;
                 } else {
                     cont++;
                 }

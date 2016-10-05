@@ -22,12 +22,23 @@ import uniftec.bsocial.fragments.ProfileFragment;
  */
 
 public class LikeAdapter extends BaseAdapter {
-    ArrayList<Like> result;
+    Like[] result;
     Context context;
     private static LayoutInflater inflater;
 
-    public LikeAdapter(Context context, ArrayList<Like> likes) {
+    public LikeAdapter(Context context, Like[] likes) {
         result = likes;
+        this.context = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public LikeAdapter(Context context, ArrayList<Like> likes) {
+        result = new Like[likes.size()];
+
+        for (int i = 0; i < likes.size(); i++) {
+            result[i] = new Like(likes.get(i));
+        }
+
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -56,16 +67,16 @@ public class LikeAdapter extends BaseAdapter {
             holder.likeId = (TextView) rowView.findViewById(R.id.likeId);
             holder.likeName = (TextView) rowView.findViewById(R.id.likeName);
             holder.likePic = (ImageView) rowView.findViewById(R.id.likePic);
-            holder.likeId.setText(result.get(i).getId());
-            holder.likeName.setText(result.get(i).getName());
-            holder.likePic.setTag(result.get(i).getPictureUrl());
-            Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.likePic);
+            holder.likeId.setText(result[i].getId());
+            holder.likeName.setText(result[i].getName());
+            holder.likePic.setTag(result[i].getPictureUrl());
+            Picasso.with(context).load(result[i].getPictureUrl()).into(holder.likePic);
 
         return rowView;
     }
 
     @Override
     public int getCount() {
-        return result.size();
+        return result.length;
     }
 }

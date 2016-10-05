@@ -13,7 +13,7 @@ public class UserSearch implements Serializable {
     private String pictureUrl;
     private String age;
     private String hometown;
-    private ArrayList<Like> likes;
+    private Like[] likes;
     private Double latitude;
     private Double longitude;
     private float compatibilidade;
@@ -71,11 +71,11 @@ public class UserSearch implements Serializable {
         this.hometown = hometown;
     }
 
-    public ArrayList<Like> getLikes() {
+    public Like[] getLikes() {
         return likes;
     }
 
-    public void setLikes(ArrayList<Like> likes) {
+    public void setLikes(Like[] likes) {
         this.likes = likes;
     }
 
