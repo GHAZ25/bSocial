@@ -20,7 +20,8 @@ import uniftec.bsocial.R;
  * Use the {@link MessageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MessageFragment extends DialogFragment {
+public class MessageFragment extends DialogFragment implements View.OnClickListener {
+    public static final String USER_ID = "USER_ID";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,6 +31,9 @@ public class MessageFragment extends DialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String userId;
+    private Button sendBtn;
+    private Button inviteBtn;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,12 +74,38 @@ public class MessageFragment extends DialogFragment {
 
         getDialog().setTitle("Enviar Mensagem");
 
-        view = inflater.inflate(R.layout.fragment_message, container, false);
+        userId = getArguments().getString(USER_ID);
 
-        cancel();
+        sendBtn = (Button) container.findViewById(R.id.message_send);
+        sendBtn.setOnClickListener(this);
+
+        inviteBtn = (Button) container.findViewById(R.id.message_invite);
+        inviteBtn.setOnClickListener(this);
+
+        view = inflater.inflate(R.layout.fragment_message, container, false);
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.message_send:
+                send();
+                break;
+            case R.id.message_invite:
+                invite();
+                break;
+        }
+    }
+
+    private void send() {
+
+    }
+
+    private void invite() {
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -101,16 +131,6 @@ public class MessageFragment extends DialogFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    public void cancel() {
-        Button cancel = (Button) view.findViewById(R.id.cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
     }
 
     /**

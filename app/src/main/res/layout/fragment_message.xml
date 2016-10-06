@@ -2,75 +2,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context="uniftec.bsocial.fragments.MessageFragment">
 
     <Button
-        android:text="Cancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center|bottom|left"
-        android:id="@+id/cancel"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="62dp"
-        android:layout_marginStart="62dp"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:text="Enviar"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center|bottom|right"
-        android:id="@+id/sendMsg"
-        android:layout_alignBaseline="@+id/cancel"
-        android:layout_alignBottom="@+id/cancel"
-        android:layout_toRightOf="@+id/cancel"
-        android:layout_toEndOf="@+id/cancel"
-        android:layout_marginLeft="69dp"
-        android:layout_marginStart="69dp" />
-
-    <EditText
+        android:id="@+id/message_invite"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:layout_gravity="center"
-        android:id="@+id/receiver"
-        android:layout_marginBottom="36dp"
-        android:maxLength="254"
-        android:maxLines="6"
-        android:layout_above="@+id/cancel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Mensagem" />
-
-    <com.facebook.login.widget.ProfilePictureView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/otherProfilePic"
-        android:layout_margin="20dp"/>
-
-    <TextView
-        android:text="Nome do usuário"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/otherProfilePic"
-        android:layout_toEndOf="@+id/otherProfilePic"
-        android:layout_marginTop="50dp"
-        android:id="@+id/textView4" />
+        android:background="@color/colorAccent"
+        android:text="@string/message_invite"
+        android:textColor="@color/colorWhite" />
 
-    <TextView
-        android:text="Cidade"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/message_msg"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:id="@+id/textView5"
-        android:layout_below="@+id/textView4"
-        android:layout_alignLeft="@+id/textView4"
-        android:layout_alignStart="@+id/textView4" />
+        android:layout_below="@id/message_invite"
+        android:gravity="top"
+        android:hint="@string/message_msg_hint" />
+
+    <Button
+        android:id="@+id/message_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:text="@string/btn_send"
+        android:textColor="@color/colorWhite" />
 
 </RelativeLayout>

@@ -6,4 +6,5 @@
     <color name="colorHighPct">#14CD96</color>
     <color name="colorMediumPct">#FC4E03</color>
     <color name="colorLowPct">#EA0000</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

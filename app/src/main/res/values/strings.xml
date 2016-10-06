@@ -24,6 +24,10 @@
     <string name="settings_btn_edit_likes">Editar gostos principais</string>
     <string name="settings_btn_edit_categories">Ignorar categorias</string>
 
+    <string name="message_msg_hint">Digite sua mensagem</string>
+    <string name="message_invite">Adicionar contato</string>
+
     <string name="btn_save">Salvar</string>
     <string name="btn_cancel">Cancelar</string>
+    <string name="btn_send">Enviar</string>
 </resources>

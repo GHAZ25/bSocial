@@ -3,9 +3,12 @@ package uniftec.bsocial;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,12 +18,14 @@ import com.facebook.login.widget.ProfilePictureView;
 import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.cache.UserCache;
 import uniftec.bsocial.entities.UserSearch;
+import uniftec.bsocial.fragments.MessageFragment;
 
-public class OtherProfileActivity extends AppCompatActivity {
+public class OtherProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private UserSearch user;
     private LikeAdapter likeAdapter;
     private UserCache userCache = null;
+    private Button sendMsgBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +38,38 @@ public class OtherProfileActivity extends AppCompatActivity {
         userCache.initialize();
 
 
+        sendMsgBtn = (Button) findViewById(R.id.sendMsg);
+        sendMsgBtn.setOnClickListener(this);
+
         createLikeList();
         loadUser();
 
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment frag = manager.findFragmentByTag("enviar_mensagem");
+        if (frag != null) {
+            manager.beginTransaction().remove(frag).commit();
+        }
+
+        switch (view.getId()) {
+            case R.id.sendMsg:
+                sendMsg(manager);
+                break;
+        }
+    }
+
+    private void sendMsg(FragmentManager manager) {
+        MessageFragment messageFragment = new MessageFragment();
+
+        Bundle args = new Bundle();
+        args.putString(MessageFragment.USER_ID, user.getId());
+        messageFragment.setArguments(args);
+
+        messageFragment.show(manager, "enviar_mensagem");
     }
 
     private void loadUser() {
