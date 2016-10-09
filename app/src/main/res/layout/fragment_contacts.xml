@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     tools:context="uniftec.bsocial.fragments.ContactsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ListView
+        android:id="@+id/contacts_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layout_border"
+        android:padding="3dp" />
 
 </RelativeLayout>
