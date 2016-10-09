@@ -17,6 +17,7 @@ public class UserSearch implements Serializable {
     private Double latitude;
     private Double longitude;
     private float compatibilidade;
+    private String gcm;
 
     public UserSearch(UserSearch userSearch) {
         super();
@@ -101,5 +102,13 @@ public class UserSearch implements Serializable {
 
     public void setCompatibilidade(float compatibilidade) {
         this.compatibilidade = compatibilidade;
+    }
+
+    public String getGcm() {
+        return gcm;
+    }
+
+    public void setGcm(String gcm) {
+        this.gcm = gcm;
     }
 }

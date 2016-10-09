@@ -37,9 +37,11 @@ import uniftec.bsocial.cache.UserCache;
 public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
     private static final String[] INITIAL_PERMS = {
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+        android.Manifest.permission.ACCESS_FINE_LOCATION
     };
+
     private String mParam1;
     private String mParam2;
     private View view;
@@ -76,23 +78,8 @@ public class ProfileFragment extends Fragment {
 
         requestPermissions(INITIAL_PERMS, 1337);
 
-        gcmClientManager = new GCMClientManager(getActivity());
-
-        gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-
-                Log.d("Registration id",registrationId);
-                //send this registrationId to your server
-            }
-            @Override
-            public void onFailure(String ex) {
-                super.onFailure(ex);
-            }
-        });
-
         pushNotificationService = new PushNotificationService();
-        //pushNotificationService.onCreate();
+        pushNotificationService.onCreate();
 
         getActivity().setTitle("Perfil");
     }
@@ -129,6 +116,18 @@ public class ProfileFragment extends Fragment {
 
         userCache = new UserCache(getActivity());
         userCache.initialize();
+
+        gcmClientManager = new GCMClientManager(getActivity());
+        gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                userCache.updateGCM(registrationId);
+            }
+            @Override
+            public void onFailure(String ex) {
+                super.onFailure(ex);
+            }
+        });
 
         getProfilePic();
 

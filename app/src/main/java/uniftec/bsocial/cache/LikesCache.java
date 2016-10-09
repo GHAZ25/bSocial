@@ -58,10 +58,11 @@ public class LikesCache {
         today = new Date();
         file = "preferences" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
-        likes = new Like[sharedpreferences.getInt("size", 0)];
     }
 
     public void initialize() {
+        likes = new Like[sharedpreferences.getInt("size", 0)];
+
         if (sharedpreferences.getAll().size() == 0) {
             LoadPreference loadPreference = new LoadPreference();
             loadPreference.execute();
@@ -75,6 +76,7 @@ public class LikesCache {
     }
 
     public void verify() {
+        likes = new Like[0];
         LoadPreference loadPreference = new LoadPreference();
 
         if (sharedpreferences.getAll().size() == 0) {
@@ -86,6 +88,8 @@ public class LikesCache {
                 if (!dateFormat.format(today).toString().equals(dateFormat.format(update).toString())) {
                     loadPreference.execute();
                 } else {
+                    likes = new Like[sharedpreferences.getInt("size", 0)];
+
                     for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
                         Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
 
@@ -197,6 +201,7 @@ public class LikesCache {
                 editor.clear();
 
                 int cont = 0;
+                likes = new Like[jsonArray.length()];
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.optJSONObject(i);

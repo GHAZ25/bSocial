@@ -92,6 +92,11 @@ public class UserCache {
         updateLocation.execute();
     }
 
+    public void updateGCM(String gcm) {
+        UpdateGCM updateGCM = new UpdateGCM();
+        updateGCM.execute(gcm);
+    }
+
     private void updateSettings() {
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
@@ -265,5 +270,43 @@ public class UserCache {
                 updateSettings();
             }
         }
+    }
+
+    private class UpdateGCM extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){ }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap retorno = null;
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
+
+                List<NameValuePair> values = new ArrayList<>(2);
+
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/user/gcm");
+
+                values.add(new BasicNameValuePair("id", profile.getId()));
+                values.add(new BasicNameValuePair("gcm", params[0]));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, HashMap.class);
+
+                content.close();
+
+                return retorno.get("message").toString();
+            } catch (Exception e){
+                return e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String message) { }
     }
 }

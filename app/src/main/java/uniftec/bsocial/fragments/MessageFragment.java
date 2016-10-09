@@ -76,13 +76,13 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
 
         userId = getArguments().getString(USER_ID);
 
-        sendBtn = (Button) container.findViewById(R.id.message_send);
+        view = inflater.inflate(R.layout.fragment_message, container, false);
+
+        sendBtn = (Button) view.findViewById(R.id.message_send);
         sendBtn.setOnClickListener(this);
 
-        inviteBtn = (Button) container.findViewById(R.id.message_invite);
+        inviteBtn = (Button) view.findViewById(R.id.message_invite);
         inviteBtn.setOnClickListener(this);
-
-        view = inflater.inflate(R.layout.fragment_message, container, false);
 
         // Inflate the layout for this fragment
         return view;

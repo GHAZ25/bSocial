@@ -20,7 +20,7 @@ import uniftec.bsocial.cache.UserCache;
 import uniftec.bsocial.entities.UserSearch;
 import uniftec.bsocial.fragments.MessageFragment;
 
-public class OtherProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class OtherProfileActivity extends AppCompatActivity implements View.OnClickListener, MessageFragment.OnFragmentInteractionListener {
 
     private UserSearch user;
     private LikeAdapter likeAdapter;
@@ -111,7 +111,6 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
 
     private void createLikeList() {
         ListView likesListView = (ListView) findViewById(R.id.likesListView);
-        Log.i("Errooooooooooooooooou: ", Integer.toString(user.getLikes().length));
         likeAdapter = new LikeAdapter(getApplicationContext(), user.getLikes());
         likesListView.setAdapter(likeAdapter);
     }
@@ -120,4 +119,6 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
     public void onBackPressed() {
         finish();
     }
+
+    public void onFragmentInteraction(Uri uri) { }
 }
