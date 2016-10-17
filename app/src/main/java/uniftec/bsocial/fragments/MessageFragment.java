@@ -5,12 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.cache.NotificationCache;
+import uniftec.bsocial.cache.UserCache;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +38,10 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private String userId;
     private Button sendBtn;
     private Button inviteBtn;
+    private EditText texto = null;
 
+    private NotificationCache notificationCache = null;
+    private UserCache userCache = null;
     private OnFragmentInteractionListener mListener;
 
     public MessageFragment() {
@@ -69,12 +76,17 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getDialog().setTitle("Enviar Mensagem");
 
         userId = getArguments().getString(USER_ID);
+
+        notificationCache = new NotificationCache(getActivity());
+        notificationCache.initialize();
+
+        userCache = new UserCache(getActivity());
+        userCache.initialize();
 
         view = inflater.inflate(R.layout.fragment_message, container, false);
 
@@ -101,7 +113,8 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     }
 
     private void send() {
-
+        texto = (EditText) view.findViewById(R.id.message_msg);
+        notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
     }
 
     private void invite() {

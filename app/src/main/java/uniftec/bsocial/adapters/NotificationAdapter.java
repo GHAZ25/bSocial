@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.entities.Notification;
 import uniftec.bsocial.entities.UserSearch;
 
 /**
@@ -21,10 +22,10 @@ import uniftec.bsocial.entities.UserSearch;
 
 public class NotificationAdapter extends BaseAdapter {
     private static LayoutInflater inflater;
-    ArrayList<UserSearch> result;
+    ArrayList<Notification> result;
     Context context;
 
-    public NotificationAdapter(Context context, ArrayList<UserSearch> userEntities) {
+    public NotificationAdapter(Context context, ArrayList<Notification> userEntities) {
         result = userEntities;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -45,13 +46,12 @@ public class NotificationAdapter extends BaseAdapter {
         Holder holder = new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.notification_list_view, null);
-        holder.userId = (TextView) rowView.findViewById(R.id.userId);
-        holder.userName = (TextView) rowView.findViewById(R.id.userName);
-        holder.userPic = (ImageView) rowView.findViewById(R.id.userPic);
-        holder.userId.setText(result.get(i).getId());
-        holder.userName.setText(result.get(i).getName());
-        holder.userPic.setTag(result.get(i).getPictureUrl());
-        Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.userPic);
+        holder.notificationId = (TextView) rowView.findViewById(R.id.notification_id);
+        holder.notificationText = (TextView) rowView.findViewById(R.id.notification_message);
+        holder.notificationIcon = (ImageView) rowView.findViewById(R.id.notification_icon);
+        holder.notificationId.setText(result.get(i).getId());
+        holder.notificationText.setText(result.get(i).getMessage());
+        Picasso.with(context).load(R.mipmap.ic_contacts);
 
         return rowView;
     }
@@ -62,8 +62,8 @@ public class NotificationAdapter extends BaseAdapter {
     }
 
     public class Holder {
-        ImageView userPic;
-        TextView userName;
-        TextView userId;
+        ImageView notificationIcon;
+        TextView notificationText;
+        TextView notificationId;
     }
 }

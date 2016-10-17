@@ -10,7 +10,7 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/userPic"
+            android:id="@+id/notification_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/image_border_like"
@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:layout_toEndOf="@+id/userPic"
-            android:layout_toRightOf="@+id/userPic"
+            android:layout_toEndOf="@+id/notification_icon"
+            android:layout_toRightOf="@+id/notification_icon"
             android:shadowColor="#3b5998"
             android:shadowDx="1"
             android:shadowDy="1"
@@ -34,13 +34,14 @@
             android:textSize="16sp" />
 
         <ImageButton
+            android:id="@+id/notification_delete"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:background="@mipmap/ic_delete" />
 
         <TextView
-            android:id="@+id/userId"
+            android:id="@+id/notification_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />

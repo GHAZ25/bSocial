@@ -7,8 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.adapters.NotificationAdapter;
+import uniftec.bsocial.entities.Notification;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +64,7 @@ public class NotificationsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -67,8 +73,22 @@ public class NotificationsFragment extends Fragment {
 
         getActivity().setTitle("Notificações");
 
+        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+
+        ArrayList<Notification> notifs = new ArrayList<>();
+        Notification notif1 = new Notification("1", "Guilherme enviou uma mensagem", "msg");
+        Notification notif2 = new Notification("2", "Guilherme enviou uma mensagem", "msg");
+        Notification notif3 = new Notification("3", "Guilherme enviou uma mensagem", "msg");
+        notifs.add(notif1);
+        notifs.add(notif2);
+        notifs.add(notif3);
+
+        ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
+        NotificationAdapter notificationsListViewAdapter = new NotificationAdapter(getContext(), notifs);
+        notificationsListView.setAdapter(notificationsListViewAdapter);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

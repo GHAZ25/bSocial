@@ -19,7 +19,7 @@ public class PushNotificationService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
         //createNotification(mTitle, push_msg);
-        Log.d("Mensagem: ", message);
+        //Log.i("Mensagem: ", message);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
@@ -49,7 +49,7 @@ public class PushNotificationService extends GcmListenerService {
 
         // The subtext, which appears under the text on newer devices.
         // This will show-up in the devices with Android 4.2 and above only
-        builder.setSubText("Tap to view documentation about notifications.");
+        builder.setSubText("Clique aqui para mais informações.");
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 

@@ -110,10 +110,8 @@ public class CategoriesCache {
 
         json += "] }";
 
-        if (cont > 0) {
-            UpdateCategories updateCategories = new UpdateCategories();
-            updateCategories.execute(json);
-        }
+        UpdateCategories updateCategories = new UpdateCategories();
+        updateCategories.execute(json);
     }
 
     public ArrayList<Category> listCategories() { return categories; }
