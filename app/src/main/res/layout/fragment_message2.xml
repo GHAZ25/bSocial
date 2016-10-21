@@ -1,34 +1,24 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
     tools:context="uniftec.bsocial.fragments.Message2Fragment">
 
-    <Button
-        android:id="@+id/message_invite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorAccent"
-        android:text="@string/message_invite"
-        android:textColor="@color/colorWhite" />
-
     <EditText
         android:id="@+id/message_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/message_invite"
-        android:gravity="top"
-        android:hint="@string/message_msg_hint" />
+        android:layout_alignParentTop="true"
+        android:gravity="top" />
 
     <Button
-        android:id="@+id/message_send"
+        android:id="@+id/message_respond"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
-        android:text="@string/btn_send"
+        android:text="@string/btn_respond"
         android:textColor="@color/colorWhite" />
 
-</FrameLayout>
+</RelativeLayout>

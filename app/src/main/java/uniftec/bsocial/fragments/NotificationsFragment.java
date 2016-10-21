@@ -1,19 +1,17 @@
 package uniftec.bsocial.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import uniftec.bsocial.R;
-import uniftec.bsocial.adapters.NotificationAdapter;
-import uniftec.bsocial.entities.Notification;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,20 +73,50 @@ public class NotificationsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
-        ArrayList<Notification> notifs = new ArrayList<>();
-        Notification notif1 = new Notification("1", "Guilherme enviou uma mensagem", "msg");
-        Notification notif2 = new Notification("2", "Guilherme enviou uma mensagem", "msg");
-        Notification notif3 = new Notification("3", "Guilherme enviou uma mensagem", "msg");
-        notifs.add(notif1);
-        notifs.add(notif2);
-        notifs.add(notif3);
-
-        ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
-        NotificationAdapter notificationsListViewAdapter = new NotificationAdapter(getContext(), notifs);
-        notificationsListView.setAdapter(notificationsListViewAdapter);
+//        ArrayList<Notification> notifs = new ArrayList<>();
+//        Notification notif1 = new Notification("1", "Guilherme enviou uma mensagem", "msg");
+//        Notification notif2 = new Notification("2", "Guilherme enviou uma mensagem", "msg");
+//        Notification notif3 = new Notification("3", "Guilherme enviou uma mensagem", "msg");
+//        notifs.add(notif1);
+//        notifs.add(notif2);
+//        notifs.add(notif3);
+//
+//        ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
+//        NotificationAdapter notificationsListViewAdapter = new NotificationAdapter(getContext(), notifs);
+//        notificationsListView.setAdapter(notificationsListViewAdapter);
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void respond() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Solicitação de contato")
+                .setMessage("Deseja registrá-lo como um contato?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setIcon(R.mipmap.ic_contacts)
+                .show();
+    }
+
+    private void sendMsg(FragmentManager manager) {
+        Message2Fragment message2Fragment = new Message2Fragment();
+
+        //Bundle args = new Bundle();
+        //args.putString(Message2Fragment.USER_ID, user.getId());
+        //message2Fragment.setArguments(args);
+
+        message2Fragment.show(manager, "enviar_mensagem");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

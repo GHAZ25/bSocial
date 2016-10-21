@@ -3,7 +3,9 @@ package uniftec.bsocial.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,9 @@ import uniftec.bsocial.R;
  * Use the {@link Message2Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Message2Fragment extends Fragment {
+public class Message2Fragment extends DialogFragment {
+    public static final String USER_ID = "USER_ID";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,7 +52,6 @@ public class Message2Fragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -66,6 +69,16 @@ public class Message2Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_message2, container, false);
+    }
+
+    private void sendMsg(FragmentManager manager) {
+        MessageFragment messageFragment = new MessageFragment();
+
+//        Bundle args = new Bundle();
+//        args.putString(MessageFragment.USER_ID, USER_ID);
+//        messageFragment.setArguments(args);
+
+        messageFragment.show(manager, "enviar_mensagem");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
