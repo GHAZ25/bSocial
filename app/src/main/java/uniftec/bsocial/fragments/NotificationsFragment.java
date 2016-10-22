@@ -11,7 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import uniftec.bsocial.R;
+import uniftec.bsocial.cache.NotificationCache;
+import uniftec.bsocial.entities.Notification;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +34,7 @@ public class NotificationsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private NotificationCache notificationCache;
 
     private OnFragmentInteractionListener mListener;
 
@@ -73,6 +78,10 @@ public class NotificationsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
+        notificationCache = new NotificationCache(getActivity());
+        notificationCache.initialize();
+
+        ArrayList<Notification> notifications = notificationCache.getNotifications();
 //        ArrayList<Notification> notifs = new ArrayList<>();
 //        Notification notif1 = new Notification("1", "Guilherme enviou uma mensagem", "msg");
 //        Notification notif2 = new Notification("2", "Guilherme enviou uma mensagem", "msg");

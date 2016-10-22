@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import uniftec.bsocial.GCMClientManager;
+import uniftec.bsocial.PushNotificationService;
 import uniftec.bsocial.entities.User;
 
 public class UserCache {
@@ -35,6 +37,8 @@ public class UserCache {
     private Profile profile = null;
     private String id = null;
     private String file = null;
+    private GCMClientManager gcmClientManager = null;
+    private PushNotificationService pushNotificationService = null;
     private User user = null;
 
     public UserCache(FragmentActivity activity) {
@@ -45,6 +49,23 @@ public class UserCache {
         profile = Profile.getCurrentProfile();
         file = "settings" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
+
+        if (!sharedpreferences.contains(id)) {
+            pushNotificationService = new PushNotificationService();
+            pushNotificationService.onCreate();
+
+            gcmClientManager = new GCMClientManager(activity);
+            gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+                @Override
+                public void onSuccess(String registrationId, boolean isNewRegistration) {
+                    updateGCM(registrationId);
+                }
+                @Override
+                public void onFailure(String ex) {
+                    super.onFailure(ex);
+                }
+            });
+        }
     }
 
     public UserCache(String id, Context context) {

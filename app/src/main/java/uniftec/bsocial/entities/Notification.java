@@ -6,7 +6,7 @@ public class Notification {
     private String message;
     private String type;
 
-    public Notification(String id, String message, String icon) {
+    public Notification(String id, String message, String type) {
         this.id = id;
         this.message = message;
         this.type = type;

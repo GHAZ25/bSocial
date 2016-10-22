@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +24,6 @@ import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import uniftec.bsocial.GCMClientManager;
-import uniftec.bsocial.PushNotificationService;
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.LikeAdapter;
 import uniftec.bsocial.cache.CategoriesCache;
@@ -49,10 +46,8 @@ public class ProfileFragment extends Fragment {
     private LikesChosenCache likesChosenCache = null;
     private CategoriesCache categoriesCache = null;
     private UserCache userCache = null;
-    private GCMClientManager gcmClientManager = null;
     private Timer timer = null;
     private LikeAdapter likeAdapter = null;
-    private PushNotificationService pushNotificationService = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,9 +72,6 @@ public class ProfileFragment extends Fragment {
         }
 
         requestPermissions(INITIAL_PERMS, 1337);
-
-        pushNotificationService = new PushNotificationService();
-        pushNotificationService.onCreate();
 
         getActivity().setTitle("Perfil");
     }
@@ -116,18 +108,6 @@ public class ProfileFragment extends Fragment {
 
         userCache = new UserCache(getActivity());
         userCache.initialize();
-
-        gcmClientManager = new GCMClientManager(getActivity());
-        gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-                userCache.updateGCM(registrationId);
-            }
-            @Override
-            public void onFailure(String ex) {
-                super.onFailure(ex);
-            }
-        });
 
         getProfilePic();
 
