@@ -10,10 +10,13 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.adapters.NotificationAdapter;
 import uniftec.bsocial.cache.NotificationCache;
 import uniftec.bsocial.entities.Notification;
 
@@ -89,10 +92,20 @@ public class NotificationsFragment extends Fragment {
 //        notifs.add(notif1);
 //        notifs.add(notif2);
 //        notifs.add(notif3);
-//
-//        ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
-//        NotificationAdapter notificationsListViewAdapter = new NotificationAdapter(getContext(), notifs);
-//        notificationsListView.setAdapter(notificationsListViewAdapter);
+
+        ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
+        NotificationAdapter notificationsListViewAdapter = new NotificationAdapter(getContext(), notifications);
+        notificationsListView.setAdapter(notificationsListViewAdapter);
+        notificationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Notification notification = (Notification) adapterView.getAdapter().getItem(i);
+                if (notification.getType().equals("convite"))
+                    respond();
+                else if (notification.getType().equals("mensagem"))
+                    sendMsg(notification);
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -118,12 +131,13 @@ public class NotificationsFragment extends Fragment {
                 .show();
     }
 
-    private void sendMsg(FragmentManager manager) {
+    private void sendMsg(Notification notification) {
+        FragmentManager manager = getFragmentManager();
         Message2Fragment message2Fragment = new Message2Fragment();
 
-        //Bundle args = new Bundle();
-        //args.putString(Message2Fragment.USER_ID, user.getId());
-        //message2Fragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putString(Message2Fragment.USER_ID, notification.getId());
+        message2Fragment.setArguments(args);
 
         message2Fragment.show(manager, "enviar_mensagem");
     }

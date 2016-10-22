@@ -74,11 +74,12 @@ public class Message2Fragment extends DialogFragment {
     private void sendMsg(FragmentManager manager) {
         MessageFragment messageFragment = new MessageFragment();
 
-//        Bundle args = new Bundle();
-//        args.putString(MessageFragment.USER_ID, USER_ID);
-//        messageFragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putString(MessageFragment.USER_ID, USER_ID);
+        messageFragment.setArguments(args);
 
         messageFragment.show(manager, "enviar_mensagem");
+        dismiss();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
