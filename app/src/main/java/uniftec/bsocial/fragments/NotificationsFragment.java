@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.NotificationAdapter;
@@ -38,6 +40,8 @@ public class NotificationsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private NotificationCache notificationCache;
+    private NotificationAdapter notificationsListViewAdapter = null;
+    private Timer timer = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -94,8 +98,9 @@ public class NotificationsFragment extends Fragment {
 //        notifs.add(notif3);
 
         ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
-        NotificationAdapter notificationsListViewAdapter = new NotificationAdapter(getContext(), notifications);
+        notificationsListViewAdapter = new NotificationAdapter(getContext(), notifications);
         notificationsListView.setAdapter(notificationsListViewAdapter);
+
         notificationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -107,8 +112,33 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                testList();
+            }
+        });
+
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void testList() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (notificationCache.getNotifications().size() != 0) {
+                            notificationsListViewAdapter.notifyDataSetChanged();
+                            timer.cancel();
+                        }
+                    }
+                });
+            }
+        }, 0, 2000);
     }
 
     private void respond() {

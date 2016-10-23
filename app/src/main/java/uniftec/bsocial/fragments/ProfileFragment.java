@@ -30,6 +30,7 @@ import uniftec.bsocial.cache.CategoriesCache;
 import uniftec.bsocial.cache.LikesCache;
 import uniftec.bsocial.cache.LikesChosenCache;
 import uniftec.bsocial.cache.UserCache;
+import uniftec.bsocial.entities.Like;
 
 public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -46,6 +47,7 @@ public class ProfileFragment extends Fragment {
     private LikesChosenCache likesChosenCache = null;
     private CategoriesCache categoriesCache = null;
     private UserCache userCache = null;
+    private Like[] likes = null;
     private Timer timer = null;
     private LikeAdapter likeAdapter = null;
 
@@ -123,8 +125,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void createLikeList() {
+        likes = likesCache.listLikes();
+
         ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
-        likeAdapter = new LikeAdapter(getContext(), likesCache.listLikes());
+        likeAdapter = new LikeAdapter(getContext(), likes);
         likesListView.setAdapter(likeAdapter);
     }
 
@@ -136,8 +140,8 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void run() {
                         if (likesCache.listLikes().length != 0) {
-                            timer.cancel();
                             likeAdapter.notifyDataSetChanged();
+                            timer.cancel();
                         }
                     }
                 });
