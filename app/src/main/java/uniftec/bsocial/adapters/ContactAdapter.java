@@ -50,8 +50,9 @@ public class ContactAdapter extends BaseAdapter {
         holder.userPic = (ImageView) rowView.findViewById(R.id.userPic);
         holder.userId.setText(result.get(i).getId());
         holder.userName.setText(result.get(i).getName());
-        holder.userPic.setTag(result.get(i).getPictureUrl());
-        Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.userPic);
+        //holder.userPic.setTag(result.get(i).getPictureUrl());
+        //Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.userPic);
+        Picasso.with(context).load(R.mipmap.ic_profile).into(holder.userPic);
 
         return rowView;
     }

@@ -81,7 +81,9 @@ public class NotificationCache {
 
     private class ListNotification extends AsyncTask<Void, Void, Notification[]> {
         @Override
-        protected void onPreExecute(){ }
+        protected void onPreExecute(){
+            load = ProgressDialog.show(activity, "Aguarde", "Buscando contatos...");
+        }
 
         @Override
         protected Notification[] doInBackground(Void... params) {
@@ -119,6 +121,8 @@ public class NotificationCache {
                     notifications.add(list[i]);
                 }
             }
+
+            load.dismiss();
         }
     }
 

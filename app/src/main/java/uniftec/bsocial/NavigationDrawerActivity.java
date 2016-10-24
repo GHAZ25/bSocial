@@ -100,10 +100,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     userCache.getUser().setLongitude(location.getLongitude());
 
                     userCache.updateLocation();
-                    Toast.makeText(getApplicationContext(), "Mudou o local...", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Ainda no mesmo local...", Toast.LENGTH_LONG).show();
-                }}
+                }
+            }
         };
 
         Timer gpsStart = new Timer();

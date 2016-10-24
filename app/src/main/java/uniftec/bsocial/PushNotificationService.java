@@ -37,6 +37,7 @@ public class PushNotificationService extends GcmListenerService {
         // Set the intent that will fire when the user taps the notification.
         // builder.setContentIntent(pendingIntent);
         builder.setFullScreenIntent(pendingIntent, true);
+        builder.setContentIntent(pendingIntent);
 
         // Large icon appears on the left of the notification
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));

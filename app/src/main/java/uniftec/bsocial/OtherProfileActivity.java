@@ -37,7 +37,6 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
         userCache = new UserCache(this);
         userCache.initialize();
 
-
         sendMsgBtn = (Button) findViewById(R.id.sendMsg);
         sendMsgBtn.setOnClickListener(this);
 

@@ -135,7 +135,7 @@ public class ContactsCache {
                 List<NameValuePair> values = new ArrayList<>(2);
 
                 request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/contact/list");
-                values.add(new BasicNameValuePair("id_facebook", profile.getId()));
+                values.add(new BasicNameValuePair("id", profile.getId()));
                 request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
                 HttpResponse response = httpclient.execute(request);

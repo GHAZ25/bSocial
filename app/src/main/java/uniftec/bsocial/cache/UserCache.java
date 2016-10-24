@@ -51,14 +51,14 @@ public class UserCache {
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
 
         if (!sharedpreferences.contains(id)) {
-            pushNotificationService = new PushNotificationService();
-            pushNotificationService.onCreate();
-
             gcmClientManager = new GCMClientManager(activity);
             gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
                 @Override
                 public void onSuccess(String registrationId, boolean isNewRegistration) {
                     updateGCM(registrationId);
+
+                    pushNotificationService = new PushNotificationService();
+                    pushNotificationService.onCreate();
                 }
                 @Override
                 public void onFailure(String ex) {
