@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -39,6 +40,7 @@ public class NotificationsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ArrayList<Notification> notifications = null;
     private NotificationCache notificationCache;
     private NotificationAdapter notificationsListViewAdapter = null;
     private Timer timer = null;
@@ -78,9 +80,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle("Notificações");
 
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
@@ -88,7 +88,7 @@ public class NotificationsFragment extends Fragment {
         notificationCache = new NotificationCache(getActivity());
         notificationCache.initialize();
 
-        ArrayList<Notification> notifications = notificationCache.getNotifications();
+        notifications = notificationCache.listNotifications();
 //        ArrayList<Notification> notifs = new ArrayList<>();
 //        Notification notif1 = new Notification("1", "Guilherme enviou uma mensagem", "msg");
 //        Notification notif2 = new Notification("2", "Guilherme enviou uma mensagem", "msg");
@@ -131,17 +131,42 @@ public class NotificationsFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (notificationCache.getNotifications().size() != 0) {
+                        if (notificationCache.listNotifications().size() != 0) {
                             notificationsListViewAdapter.notifyDataSetChanged();
                             timer.cancel();
+                            update();
                         }
                     }
                 });
             }
-        }, 0, 2000);
+        }, 1000, 1000);
+    }
+
+    private void update() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            notificationCache.updateNotifications();
+                            notificationsListViewAdapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (Exception e) {
+                    timer.cancel();
+                }
+            }
+        }, 5000, 5000);
     }
 
     private void respond() {
+        /**
+         * Usar a função inviteNotification da classe NotificationCache
+         */
+
         new AlertDialog.Builder(getContext())
                 .setTitle("Solicitação de contato")
                 .setMessage("Deseja registrá-lo como um contato?")
@@ -162,6 +187,10 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void sendMsg(Notification notification) {
+        /**
+         * Usar a função sendNotification da classe NotificationCache
+         */
+
         FragmentManager manager = getFragmentManager();
         Message2Fragment message2Fragment = new Message2Fragment();
 

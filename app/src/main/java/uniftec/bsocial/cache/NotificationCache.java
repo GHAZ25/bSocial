@@ -59,8 +59,24 @@ public class NotificationCache {
         sendNotification.execute(params);
     }
 
-    public ArrayList<Notification> getNotifications() {
+    public void inviteNotification(String texto, String nome, String destino) {
+        String[] params = new String[3];
+
+        params[0] = texto;
+        params[1] = nome;
+        params[2] = destino;
+
+        InviteNotification inviteNotification = new InviteNotification();
+        inviteNotification.execute(params);
+    }
+
+    public ArrayList<Notification> listNotifications() {
         return notifications;
+    }
+
+    public void updateNotifications() {
+        UpdateNotification updateNotification = new UpdateNotification();
+        updateNotification.execute();
     }
 
     private class ListNotification extends AsyncTask<Void, Void, Notification[]> {
@@ -163,6 +179,52 @@ public class NotificationCache {
                 List<NameValuePair> values = new ArrayList<>(2);
 
                 request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/gcm/send");
+
+                values.add(new BasicNameValuePair("texto", params[0]));
+                values.add(new BasicNameValuePair("nome", params[1]));
+                values.add(new BasicNameValuePair("origem", profile.getId()));
+                values.add(new BasicNameValuePair("destino", params[2]));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, HashMap.class);
+
+                content.close();
+
+                return retorno.get("message").toString();
+            } catch (Exception e){
+                return e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+            if (message.equals("true")) {
+                Toast.makeText(activity, "Mensagem enviada com sucesso.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private class InviteNotification extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){ }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap retorno = null;
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
+
+                List<NameValuePair> values = new ArrayList<>(2);
+
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/gcm/invite");
 
                 values.add(new BasicNameValuePair("texto", params[0]));
                 values.add(new BasicNameValuePair("nome", params[1]));

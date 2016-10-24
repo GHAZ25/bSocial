@@ -176,11 +176,14 @@ public class UserCache {
 
                 updateSettings();
             } else {
-                if (id == null) {
+                if (id != null) {
+                    Toast.makeText(activity, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
+                }
+                /*if (id == null) {
                     Toast.makeText(activity, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(context, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
-                }
+                }*/
             }
         }
     }

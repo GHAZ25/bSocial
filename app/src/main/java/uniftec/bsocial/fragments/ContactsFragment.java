@@ -7,8 +7,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uniftec.bsocial.R;
+import uniftec.bsocial.adapters.ContactAdapter;
+import uniftec.bsocial.cache.ContactsCache;
+import uniftec.bsocial.entities.User;
+import uniftec.bsocial.entities.UserSearch;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +36,10 @@ public class ContactsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private ArrayList<UserSearch> contacts = null;
+    private ContactsCache contactsCache = null;
+    private ContactAdapter contactsListViewAdapter = null;
+    private Timer timer = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,9 +79,43 @@ public class ContactsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contacts, container, false);
+        contactsCache = new ContactsCache(getActivity());
+        contactsCache.initialize();
+
+        contacts = contactsCache.listContacts();
+
+        ListView contactsListView = (ListView) view.findViewById(R.id.contacts_listview);
+        contactsListViewAdapter = new ContactAdapter(getContext(), contacts);
+        contactsListView.setAdapter(contactsListViewAdapter);
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                testList();
+            }
+        });
+
+        return view;
+    }
+
+    private void testList() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (contactsCache.listContacts().size() != 0) {
+                            contactsListViewAdapter.notifyDataSetChanged();
+                            timer.cancel();
+                        }
+                    }
+                });
+            }
+        }, 1000, 1000);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

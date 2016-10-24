@@ -5,11 +5,13 @@ public class Notification {
     private String id;
     private String message;
     private String type;
+    private String messageId;
 
-    public Notification(String id, String message, String type) {
+    public Notification(String id, String message, String type, String messageId) {
         this.id = id;
         this.message = message;
         this.type = type;
+        this.messageId = messageId;
     }
 
     public String getId() {
@@ -34,5 +36,13 @@ public class Notification {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 }
