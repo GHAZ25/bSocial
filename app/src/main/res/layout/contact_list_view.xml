@@ -9,12 +9,18 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-        <ImageView
+        <com.facebook.login.widget.ProfilePictureView
             android:id="@+id/userPic"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/image_border_like"
-            android:padding="3dp" />
+            android:padding="3dp"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/userPic"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:background="@drawable/image_border_like"-->
+            <!--android:padding="3dp" />-->
 
         <TextView
             android:id="@+id/userName"
@@ -32,12 +38,6 @@
             android:textAlignment="center"
             android:textColor="#3b5998"
             android:textSize="16sp" />
-
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:background="@mipmap/ic_delete" />
 
         <TextView
             android:id="@+id/userId"

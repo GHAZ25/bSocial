@@ -51,7 +51,10 @@ public class NotificationAdapter extends BaseAdapter {
         holder.notificationIcon = (ImageView) rowView.findViewById(R.id.notification_icon);
         holder.notificationId.setText(result.get(i).getId());
         holder.notificationText.setText(result.get(i).getMessage());
-        Picasso.with(context).load(R.mipmap.ic_contacts).into(holder.notificationIcon);
+        if (result.get(i).getType().equals("convite"))
+            Picasso.with(context).load(R.mipmap.ic_contacts).into(holder.notificationIcon);
+        else
+            Picasso.with(context).load(R.mipmap.ic_notification).into(holder.notificationIcon);
 
         return rowView;
     }

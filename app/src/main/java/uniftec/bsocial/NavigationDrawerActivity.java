@@ -30,6 +30,7 @@ import uniftec.bsocial.cache.UserCache;
 import uniftec.bsocial.fragments.CategoryChooserFragment;
 import uniftec.bsocial.fragments.ContactsFragment;
 import uniftec.bsocial.fragments.LikeChooserFragment;
+import uniftec.bsocial.fragments.Message2Fragment;
 import uniftec.bsocial.fragments.MessageFragment;
 import uniftec.bsocial.fragments.NotificationsFragment;
 import uniftec.bsocial.fragments.ProfileFragment;
@@ -41,7 +42,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     SearchFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener,
         NotificationsFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, MessageFragment.OnFragmentInteractionListener,
-        LikeChooserFragment.OnFragmentInteractionListener, CategoryChooserFragment.OnFragmentInteractionListener {
+        LikeChooserFragment.OnFragmentInteractionListener, CategoryChooserFragment.OnFragmentInteractionListener,
+        Message2Fragment.OnFragmentInteractionListener {
 
     private FragmentManager fragmentManager;
     private ProfileFragment profileFragment;

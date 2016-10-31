@@ -13,7 +13,6 @@
             android:id="@+id/notification_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/image_border_like"
             android:padding="3dp" />
 
         <TextView
@@ -32,13 +31,6 @@
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="16sp" />
-
-        <ImageButton
-            android:id="@+id/notification_delete"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:background="@mipmap/ic_delete" />
 
         <TextView
             android:id="@+id/notification_id"

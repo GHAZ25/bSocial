@@ -93,6 +93,8 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         sendBtn = (Button) view.findViewById(R.id.message_send);
         sendBtn.setOnClickListener(this);
 
+        texto = (EditText) view.findViewById(R.id.message_msg);
+
         inviteBtn = (Button) view.findViewById(R.id.message_invite);
         inviteBtn.setOnClickListener(this);
 
@@ -113,14 +115,15 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     }
 
     private void send() {
-        texto = (EditText) view.findViewById(R.id.message_msg);
         notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
         dismiss();
         Toast.makeText(getContext(), "Mensagem enviada!", Toast.LENGTH_SHORT).show();
     }
 
     private void invite() {
-
+        notificationCache.inviteNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
+        dismiss();
+        Toast.makeText(getContext(), "Solicitação de contato enviada!", Toast.LENGTH_SHORT).show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

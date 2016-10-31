@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -47,12 +48,12 @@ public class ContactAdapter extends BaseAdapter {
         rowView = inflater.inflate(R.layout.contact_list_view, null);
         holder.userId = (TextView) rowView.findViewById(R.id.userId);
         holder.userName = (TextView) rowView.findViewById(R.id.userName);
-        holder.userPic = (ImageView) rowView.findViewById(R.id.userPic);
+        holder.userPic = (ProfilePictureView) rowView.findViewById(R.id.userPic);
         holder.userId.setText(result.get(i).getId());
         holder.userName.setText(result.get(i).getName());
-        //holder.userPic.setTag(result.get(i).getPictureUrl());
-        //Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.userPic);
-        Picasso.with(context).load(R.mipmap.ic_profile).into(holder.userPic);
+        holder.userPic.setTag(result.get(i).getPictureUrl());
+        holder.userPic.setProfileId(result.get(i).getId());
+        //Picasso.with(context).load(R.mipmap.ic_profile).into(holder.userPic);
 
         return rowView;
     }
@@ -63,7 +64,7 @@ public class ContactAdapter extends BaseAdapter {
     }
 
     public class Holder {
-        ImageView userPic;
+        ProfilePictureView userPic;
         TextView userName;
         TextView userId;
     }

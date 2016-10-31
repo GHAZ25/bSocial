@@ -43,7 +43,7 @@ public class PushNotificationService extends GcmListenerService {
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
 
         // Content title, which appears in large type at the top of the notification
-        builder.setContentTitle("Notifications Title");
+        builder.setContentTitle("bSocial");
 
         // Content text, which appears in smaller text below the title
         builder.setContentText(message);

@@ -59,6 +59,23 @@ public class NotificationCache {
         sendNotification.execute(params);
     }
 
+    public void acceptInvite(String origem, String aceite, String mensagemId) {
+        String[] params = new String[3];
+
+        params[0] = origem;      //o ID do usuário que enviou a solicitação
+        params[1] = aceite;      //se for aceito o valor deve ser "true"
+        params[2] = mensagemId;  // ID da mensagem enviada para a solicitação
+
+        for (int i = 0; i < notifications.size(); i++) {
+            if (notifications.get(i).getMessageId().equals(mensagemId)) {
+                notifications.remove(i);
+            }
+        }
+
+        AcceptInvite acceptInvite = new AcceptInvite();
+        acceptInvite.execute(params);
+    }
+
     public void inviteNotification(String texto, String nome, String destino) {
         String[] params = new String[3];
 
@@ -255,6 +272,52 @@ public class NotificationCache {
         protected void onPostExecute(String message) {
             if (message.equals("true")) {
                 Toast.makeText(activity, "Mensagem enviada com sucesso.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private class AcceptInvite extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){ }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap retorno = null;
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
+
+                List<NameValuePair> values = new ArrayList<>(2);
+
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/contact/invitation");
+
+                values.add(new BasicNameValuePair("origem", params[0]));
+                values.add(new BasicNameValuePair("destino", profile.getId()));
+                values.add(new BasicNameValuePair("aceite", params[1]));
+                values.add(new BasicNameValuePair("mensagemId", params[2]));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, HashMap.class);
+
+                content.close();
+
+                return retorno.get("message").toString();
+            } catch (Exception e){
+                return e.getMessage();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+            if (message.equals("true")) {
+                Toast.makeText(activity, "Resposta enviada com sucesso.", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }

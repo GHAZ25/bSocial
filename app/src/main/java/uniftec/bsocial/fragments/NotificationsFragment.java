@@ -97,7 +97,7 @@ public class NotificationsFragment extends Fragment {
 //        notifs.add(notif2);
 //        notifs.add(notif3);
 
-        ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
+        final ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
         notificationsListViewAdapter = new NotificationAdapter(getContext(), notifications);
         notificationsListView.setAdapter(notificationsListViewAdapter);
 
@@ -106,9 +106,10 @@ public class NotificationsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Notification notification = (Notification) adapterView.getAdapter().getItem(i);
                 if (notification.getType().equals("convite"))
-                    respond();
+                    respond(notification);
                 else if (notification.getType().equals("mensagem"))
                     sendMsg(notification);
+                notificationsListViewAdapter.notifyDataSetChanged();
             }
         });
 
@@ -128,16 +129,20 @@ public class NotificationsFragment extends Fragment {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (notificationCache.listNotifications().size() != 0) {
-                            notificationsListViewAdapter.notifyDataSetChanged();
-                            timer.cancel();
-                            update();
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (notificationCache.listNotifications().size() != 0) {
+                                notificationsListViewAdapter.notifyDataSetChanged();
+                                timer.cancel();
+                                update();
+                            }
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    timer.cancel();
+                }
             }
         }, 1000, 1000);
     }
@@ -162,7 +167,7 @@ public class NotificationsFragment extends Fragment {
         }, 5000, 5000);
     }
 
-    private void respond() {
+    private void respond(final Notification notification) {
         /**
          * Usar a função inviteNotification da classe NotificationCache
          */
@@ -173,13 +178,13 @@ public class NotificationsFragment extends Fragment {
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        notificationCache.acceptInvite(notification.getId(), "true", notification.getMessageId());
                     }
                 })
                 .setNegativeButton("Não", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        notificationCache.acceptInvite(notification.getId(), "false", notification.getMessageId());
                     }
                 })
                 .setIcon(R.mipmap.ic_contacts)
@@ -196,6 +201,7 @@ public class NotificationsFragment extends Fragment {
 
         Bundle args = new Bundle();
         args.putString(Message2Fragment.USER_ID, notification.getId());
+        args.putString(Message2Fragment.USER_MSG, notification.getMessage());
         message2Fragment.setArguments(args);
 
         message2Fragment.show(manager, "enviar_mensagem");
@@ -239,4 +245,5 @@ public class NotificationsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import uniftec.bsocial.R;
 
@@ -22,6 +24,10 @@ import uniftec.bsocial.R;
  */
 public class Message2Fragment extends DialogFragment {
     public static final String USER_ID = "USER_ID";
+    public static final String USER_MSG = "USER_MSG";
+
+    private String userId;
+    private String userMsg;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,15 +73,32 @@ public class Message2Fragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_message2, container, false);
+
+        userId = getArguments().getString(USER_ID);
+        userMsg = getArguments().getString(USER_MSG);
+
+        EditText mensagem = (EditText) view.findViewById(R.id.message_msg);
+        mensagem.setText(userMsg);
+
+        Button button = (Button) view.findViewById(R.id.message_respond);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMsg(getFragmentManager());
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message2, container, false);
+        return view;
     }
 
     private void sendMsg(FragmentManager manager) {
         MessageFragment messageFragment = new MessageFragment();
 
         Bundle args = new Bundle();
-        args.putString(MessageFragment.USER_ID, USER_ID);
+        args.putString(MessageFragment.USER_ID, userId);
         messageFragment.setArguments(args);
 
         messageFragment.show(manager, "enviar_mensagem");
@@ -120,4 +143,5 @@ public class Message2Fragment extends DialogFragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

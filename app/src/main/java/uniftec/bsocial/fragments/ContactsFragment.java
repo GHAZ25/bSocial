@@ -1,18 +1,24 @@
 package uniftec.bsocial.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import uniftec.bsocial.OtherProfileActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.ContactAdapter;
 import uniftec.bsocial.cache.ContactsCache;
@@ -86,9 +92,29 @@ public class ContactsFragment extends Fragment {
 
         contacts = contactsCache.listContacts();
 
-        ListView contactsListView = (ListView) view.findViewById(R.id.contacts_listview);
+        final ListView contactsListView = (ListView) view.findViewById(R.id.contacts_listview);
         contactsListViewAdapter = new ContactAdapter(getContext(), contacts);
         contactsListView.setAdapter(contactsListViewAdapter);
+
+        contactsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                UserSearch user = (UserSearch) adapterView.getAdapter().getItem(i);
+                Intent intent = new Intent(getActivity(), OtherProfileActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
+
+        contactsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                UserSearch user = (UserSearch) adapterView.getAdapter().getItem(i);
+                delete(user.getId());
+                contactsListViewAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
 
         view.post(new Runnable() {
             @Override
@@ -100,20 +126,48 @@ public class ContactsFragment extends Fragment {
         return view;
     }
 
+    private void delete(final String user) {
+        /**
+         * Usar a função inviteNotification da classe NotificationCache
+         */
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Exclusão de contato")
+                .setMessage("Deseja excluir este contato?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        contactsCache.deleteContact(user);
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setIcon(R.mipmap.ic_delete)
+                .show();
+    }
+
     private void testList() {
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (contactsCache.listContacts().size() != 0) {
-                            contactsListViewAdapter.notifyDataSetChanged();
-                            timer.cancel();
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (contactsCache.listContacts().size() != 0) {
+                                contactsListViewAdapter.notifyDataSetChanged();
+                                timer.cancel();
+                            }
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    timer.cancel();
+                }
             }
         }, 1000, 1000);
     }
