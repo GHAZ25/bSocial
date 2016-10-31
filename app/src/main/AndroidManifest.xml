@@ -43,8 +43,7 @@
             android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SignUpActivity" />
-
-        <activity android:name=".OtherProfileActivity"></activity>
+        <activity android:name=".OtherProfileActivity" />
 
         <service
             android:name=".PushNotificationService"
@@ -60,9 +59,12 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="uniftec.bsocial" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".FAQActivity"></activity>
     </application>
 
 </manifest>
