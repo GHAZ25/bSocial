@@ -8,13 +8,23 @@
     android:clipToPadding="false"
     tools:context=".OtherProfileActivity">
 
+    <ImageButton
+        android:id="@+id/otherprofile_location_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/com_facebook_button_background_color_selected"
+        android:padding="5dp"
+        app:srcCompat="@mipmap/ic_location" />
+
     <com.dd.ShadowLayout
         android:id="@+id/profile_pic_sl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="top|center"
         app:sl_dx="3dp"
         app:sl_dy="3dp"
         app:sl_shadowColor="#AA000000"

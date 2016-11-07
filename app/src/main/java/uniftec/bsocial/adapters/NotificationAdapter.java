@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.entities.Notification;
-import uniftec.bsocial.entities.UserSearch;
 
 /**
  * Created by mauri on 26/08/2016.
@@ -53,6 +52,8 @@ public class NotificationAdapter extends BaseAdapter {
         holder.notificationText.setText(result.get(i).getMessage());
         if (result.get(i).getType().equals("convite"))
             Picasso.with(context).load(R.mipmap.ic_contacts).into(holder.notificationIcon);
+        else if (result.get(i).getType().equals("mensagem"))
+            Picasso.with(context).load(R.mipmap.ic_message).into(holder.notificationIcon);
         else
             Picasso.with(context).load(R.mipmap.ic_notification).into(holder.notificationIcon);
 
