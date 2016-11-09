@@ -32,6 +32,7 @@ import uniftec.bsocial.fragments.ContactsFragment;
 import uniftec.bsocial.fragments.LikeChooserFragment;
 import uniftec.bsocial.fragments.Message2Fragment;
 import uniftec.bsocial.fragments.MessageFragment;
+import uniftec.bsocial.fragments.MessagesFragment;
 import uniftec.bsocial.fragments.NotificationsFragment;
 import uniftec.bsocial.fragments.ProfileFragment;
 import uniftec.bsocial.fragments.SearchFragment;
@@ -43,12 +44,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         NotificationsFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener, MessageFragment.OnFragmentInteractionListener,
         LikeChooserFragment.OnFragmentInteractionListener, CategoryChooserFragment.OnFragmentInteractionListener,
-        Message2Fragment.OnFragmentInteractionListener {
+        Message2Fragment.OnFragmentInteractionListener, MessagesFragment.OnFragmentInteractionListener {
 
     private FragmentManager fragmentManager;
     private ProfileFragment profileFragment;
     private SearchFragment searchFragment;
     private ContactsFragment contactsFragment;
+    private MessagesFragment messagesFragment;
     private NotificationsFragment notificationsFragment;
     private SettingsFragment settingsFragment;
     private DecimalFormat decimalFormat = null;
@@ -204,9 +206,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, searchFragment,
                     searchFragment.getTag()).commit();
         } else if (id == R.id.nav_contacts) {
-            contactsFragment= new ContactsFragment();
+            contactsFragment = new ContactsFragment();
             fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, contactsFragment,
                     contactsFragment.getTag()).commit();
+        } else if (id == R.id.nav_messages) {
+            messagesFragment = new MessagesFragment();
+            fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, messagesFragment,
+                    messagesFragment.getTag()).commit();
         } else if (id == R.id.nav_notifications) {
             notificationsFragment = new NotificationsFragment();
             fragmentManager.beginTransaction().replace(R.id.content_navigation_drawer, notificationsFragment,

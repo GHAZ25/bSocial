@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -81,7 +80,7 @@ public class NotificationsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Notificações");
+        getActivity().setTitle("Convites");
 
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
@@ -89,13 +88,6 @@ public class NotificationsFragment extends Fragment {
         notificationCache.initialize();
 
         notifications = notificationCache.listNotifications();
-//        ArrayList<Notification> notifs = new ArrayList<>();
-//        Notification notif1 = new Notification("1", "Guilherme enviou uma mensagem", "msg");
-//        Notification notif2 = new Notification("2", "Guilherme enviou uma mensagem", "msg");
-//        Notification notif3 = new Notification("3", "Guilherme enviou uma mensagem", "msg");
-//        notifs.add(notif1);
-//        notifs.add(notif2);
-//        notifs.add(notif3);
 
         final ListView notificationsListView = (ListView) view.findViewById(R.id.notifications_listview);
         notificationsListViewAdapter = new NotificationAdapter(getContext(), notifications);
@@ -105,10 +97,7 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Notification notification = (Notification) adapterView.getAdapter().getItem(i);
-                if (notification.getType().equals("convite"))
-                    respond(notification);
-                else if (notification.getType().equals("mensagem"))
-                    sendMsg(notification);
+                respond(notification);
                 notificationsListViewAdapter.notifyDataSetChanged();
             }
         });

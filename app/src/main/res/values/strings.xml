@@ -12,7 +12,8 @@
 
     <string name="copyright">Copyright © 2016 bSocial. Todos os direitos reservados.</string>
 
-    <string name="nav_menu_notifications">Notificações</string>
+    <string name="nav_menu_invites">Convites</string>
+    <string name="nav_menu_messages">Mensagens</string>
     <string name="nav_menu_profile">Perfil</string>]
     <string name="nav_menu_search">Busca</string>
     <string name="nav_menu_contacts">Contatos</string>
@@ -31,4 +32,5 @@
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_send">Enviar</string>
     <string name="btn_respond">Responder</string>
+    <string name="title_activity_other_user_message">OtherUserMessageActivity</string>
 </resources>

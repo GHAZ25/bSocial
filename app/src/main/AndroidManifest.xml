@@ -64,7 +64,11 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".FAQActivity"></activity>
+        <activity android:name=".FAQActivity" />
+        <activity
+            android:name=".OtherUserMessageActivity"
+            android:label="@string/title_activity_other_user_message"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

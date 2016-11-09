@@ -15,9 +15,13 @@
             android:icon="@mipmap/ic_contacts"
             android:title="@string/nav_menu_contacts" />
         <item
+            android:id="@+id/nav_messages"
+            android:icon="@mipmap/ic_message"
+            android:title="@string/nav_menu_messages" />
+        <item
             android:id="@+id/nav_notifications"
             android:icon="@mipmap/ic_notification"
-            android:title="@string/nav_menu_notifications" />
+            android:title="@string/nav_menu_invites" />
     </group>
 
     <group android:checkableBehavior="single">
