@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import uniftec.bsocial.OtherUserMessageActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.cache.NotificationCache;
 import uniftec.bsocial.cache.UserCache;
@@ -26,6 +27,7 @@ import uniftec.bsocial.cache.UserCache;
  */
 public class MessageFragment extends DialogFragment implements View.OnClickListener {
     public static final String USER_ID = "USER_ID";
+    public static final String TYPE = "TYPE";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,6 +38,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private String mParam1;
     private String mParam2;
     private String userId;
+    private String type;
     private Button sendBtn;
     private Button inviteBtn;
     private EditText texto = null;
@@ -81,6 +84,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         getDialog().setTitle("Enviar Mensagem");
 
         userId = getArguments().getString(USER_ID);
+        type = getArguments().getString(TYPE);
 
         notificationCache = new NotificationCache(getActivity());
         notificationCache.initialize();
@@ -118,6 +122,10 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
         dismiss();
         Toast.makeText(getContext(), "Mensagem enviada!", Toast.LENGTH_SHORT).show();
+        if (type.equals("messagelistview")) {
+            OtherUserMessageActivity otherUserMessageActivity = (OtherUserMessageActivity) getActivity();
+            otherUserMessageActivity.updateMessages("Você: " + texto.getText().toString());
+        }
     }
 
     private void invite() {
@@ -151,6 +159,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         mListener = null;
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -161,6 +170,8 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

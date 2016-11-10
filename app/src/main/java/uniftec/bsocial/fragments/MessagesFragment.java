@@ -13,11 +13,10 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import uniftec.bsocial.OtherProfileActivity;
+import uniftec.bsocial.OtherUserMessageActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.MessageAdapter;
 import uniftec.bsocial.entities.Message;
-import uniftec.bsocial.entities.UserSearch;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,9 +92,12 @@ public class MessagesFragment extends Fragment {
         messagesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                UserSearch user = (UserSearch) adapterView.getAdapter().getItem(i);
-                Intent intent = new Intent(getActivity(), OtherProfileActivity.class);
-                intent.putExtra("user", user);
+                Message message = (Message) adapterView.getAdapter().getItem(i);
+                String userId = message.getSentUserId();
+                String userName = message.getSentUserName();
+                Intent intent = new Intent(getActivity(), OtherUserMessageActivity.class);
+                intent.putExtra("userId", userId);
+                intent.putExtra("userName", userName);
                 startActivity(intent);
             }
         });

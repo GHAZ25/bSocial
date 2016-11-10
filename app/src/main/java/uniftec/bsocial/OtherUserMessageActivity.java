@@ -1,39 +1,49 @@
 package uniftec.bsocial;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
-import uniftec.bsocial.entities.UserSearch;
+import java.util.ArrayList;
+
 import uniftec.bsocial.fragments.MessageFragment;
 
-public class OtherUserMessageActivity extends AppCompatActivity implements View.OnClickListener {
+public class OtherUserMessageActivity extends AppCompatActivity implements View.OnClickListener, MessageFragment.OnFragmentInteractionListener {
 
-    private UserSearch user;
+    private String userId;
+    private String userName;
+    private Button sendMsg;
+    private ListView messagesListView;
+    private ArrayAdapter<String> adapter;
+    private ArrayList<String> messages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_user_message);
 
-        user = (UserSearch) getIntent().getSerializableExtra("user");
+        userName = (String) getIntent().getSerializableExtra("userName");
+        setTitle("Mensagens de " + userName);
 
-        ListView messagesListView = (ListView) findViewById(R.id.other_user_messages_listview);
-        String[] messages = new String[]{"Android List View",
-                "Adapter implementation",
-                "Simple List View In Android",
-                "Create List View Android",
-                "Android Example",
-                "List View Source Code",
-                "List View Array Adapter",
-                "Android Example List View"
-        };
+        sendMsg = (Button) findViewById(R.id.send_message);
+        sendMsg.setOnClickListener(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+        userId = (String) getIntent().getSerializableExtra("userId");
+
+        messagesListView = (ListView) findViewById(R.id.other_user_messages_listview);
+        messages = new ArrayList<>();
+        messages.add("Maurício Manfro: Olá tudo bem?");
+        messages.add("Maurício Manfro: Curte Rock?");
+        messages.add("Você: Opaa tudo e contigo?");
+        messages.add("Você: Curto sim!");
+
+        adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, messages);
 
         messagesListView.setAdapter(adapter);
@@ -48,7 +58,7 @@ public class OtherUserMessageActivity extends AppCompatActivity implements View.
         }
 
         switch (view.getId()) {
-            case R.id.sendMsg:
+            case R.id.send_message:
                 sendMsg(manager);
                 break;
         }
@@ -58,14 +68,25 @@ public class OtherUserMessageActivity extends AppCompatActivity implements View.
         MessageFragment messageFragment = new MessageFragment();
 
         Bundle args = new Bundle();
-        args.putString(MessageFragment.USER_ID, user.getId());
+        args.putString(MessageFragment.USER_ID, userId);
+        args.putString(MessageFragment.TYPE, "messagelistview");
         messageFragment.setArguments(args);
 
         messageFragment.show(manager, "enviar_mensagem");
     }
 
+    public void updateMessages(String message) {
+        messages.add(message);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
