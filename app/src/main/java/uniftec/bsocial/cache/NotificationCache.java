@@ -48,6 +48,11 @@ public class NotificationCache {
         listNotification.execute();
     }
 
+    public void initializeMessages(String contato) {
+        ListMessages listMessages = new ListMessages();
+        listMessages.execute(contato);
+    }
+
     public void sendNotification(String texto, String nome, String destino) {
         String[] params = new String[3];
 
@@ -99,7 +104,7 @@ public class NotificationCache {
     private class ListNotification extends AsyncTask<Void, Void, Notification[]> {
         @Override
         protected void onPreExecute(){
-            load = ProgressDialog.show(activity, "Aguarde", "Buscando contatos...");
+            load = ProgressDialog.show(activity, "Aguarde", "Buscando convites...");
         }
 
         @Override
@@ -183,6 +188,54 @@ public class NotificationCache {
                     notifications.add(list[i]);
                 }
             }
+        }
+    }
+
+    private class ListMessages extends AsyncTask<String, Void, Notification[]> {
+        @Override
+        protected void onPreExecute(){
+            load = ProgressDialog.show(activity, "Aguarde", "Buscando mensagens...");
+        }
+
+        @Override
+        protected Notification[] doInBackground(String... params) {
+            Notification[] retorno = null;
+            try {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
+
+                List<NameValuePair> values = new ArrayList<>(2);
+
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/gcm/listMessage");
+
+                values.add(new BasicNameValuePair("id", profile.getId()));
+                values.add(new BasicNameValuePair("contato", params[0]));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
+
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, Notification[].class);
+
+                content.close();
+
+                return retorno;
+            } catch (Exception e){
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Notification[] list) {
+            if (list != null) {
+                for (int i = 0; i < list.length; i++) {
+                    notifications.add(list[i]);
+                }
+            }
+
+            load.dismiss();
         }
     }
 

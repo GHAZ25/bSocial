@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import uniftec.bsocial.OtherUserMessageActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.MessageAdapter;
+import uniftec.bsocial.cache.MessageCache;
 import uniftec.bsocial.entities.Message;
 
 /**
@@ -36,6 +37,7 @@ public class MessagesFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private ArrayList<Message> messages = null;
+    private MessageCache messageCache;
     private MessageAdapter messagesListViewAdapter;
 
     private OnFragmentInteractionListener mListener;
@@ -79,11 +81,10 @@ public class MessagesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        Message message = new Message("1199931206726270", "1199931206726270", "Maurício Manfro",
-                "https://scontent.fpoa1-1.fna.fbcdn.net/v/t1.0-9/13226785_1153780234674701_1648460713389277068_n.jpg?oh=380b7715e884ccd7a326069cd960b4eb&oe=5895466D",
-                "Maurício Manfro: Teste de mensagem.");
-        messages = new ArrayList<>();
-        messages.add(message);
+        messageCache = new MessageCache(getActivity());
+        messageCache.initialize();
+
+        messages = messageCache.listMessages();
 
         ListView messagesListView = (ListView) view.findViewById(R.id.messages_listview);
         messagesListViewAdapter = new MessageAdapter(getContext(), messages);
