@@ -89,7 +89,7 @@ public class MessagesFragment extends Fragment {
         ListView messagesListView = (ListView) view.findViewById(R.id.messages_listview);
         messagesListViewAdapter = new MessageAdapter(getContext(), messages);
         messagesListView.setAdapter(messagesListViewAdapter);
-
+//comitar de novo
         messagesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
