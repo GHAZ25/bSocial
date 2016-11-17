@@ -6,18 +6,8 @@
     android:orientation="vertical"
     tools:context="uniftec.bsocial.fragments.LikeChooserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <ListView
-        android:id="@+id/likesListView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/layout_border"
-        android:padding="1dp">
-    </ListView>
-
-    <ListView
-        android:id="@+id/likesChosenListView"
+        android:id="@+id/preferred_likes_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

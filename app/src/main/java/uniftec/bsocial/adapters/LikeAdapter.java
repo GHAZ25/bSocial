@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,17 +15,15 @@ import java.util.ArrayList;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.entities.Like;
-import uniftec.bsocial.fragments.LikeChooserFragment;
-import uniftec.bsocial.fragments.ProfileFragment;
 
 /**
  * Created by mauri on 26/08/2016.
  */
 
 public class LikeAdapter extends BaseAdapter {
+    private static LayoutInflater inflater;
     ArrayList<Like> result;
     Context context;
-    private static LayoutInflater inflater;
 
     public LikeAdapter(Context context, Like[] likes) {
         result = new ArrayList<Like>();
@@ -54,12 +53,6 @@ public class LikeAdapter extends BaseAdapter {
         return i;
     }
 
-    public class Holder {
-        ImageView likePic;
-        TextView likeName;
-        TextView likeId;
-    }
-
     @Override
     public View getView(final int i, View view, final ViewGroup viewGroup) {
         Holder holder = new Holder();
@@ -68,9 +61,11 @@ public class LikeAdapter extends BaseAdapter {
             holder.likeId = (TextView) rowView.findViewById(R.id.likeId);
             holder.likeName = (TextView) rowView.findViewById(R.id.likeName);
             holder.likePic = (ImageView) rowView.findViewById(R.id.likePic);
+        holder.likeCheckBox = (CheckBox) rowView.findViewById(R.id.preferred_like_checkbox);
             holder.likeId.setText(result.get(i).getId());
             holder.likeName.setText(result.get(i).getName());
             holder.likePic.setTag(result.get(i).getPictureUrl());
+        holder.likeCheckBox.setChecked(result.get(i).isSelecionada());
             Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.likePic);
 
         return rowView;
@@ -79,5 +74,12 @@ public class LikeAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return result.size();
+    }
+
+    public class Holder {
+        ImageView likePic;
+        TextView likeName;
+        CheckBox likeCheckBox;
+        TextView likeId;
     }
 }

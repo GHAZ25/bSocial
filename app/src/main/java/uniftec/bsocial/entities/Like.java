@@ -11,6 +11,7 @@ public class Like implements Serializable {
     private String name;
     private String pictureUrl;
     private String category;
+    private boolean selecionada;
 
     public Like(String id, String name, String pictureUrl, String category) {
         super();
@@ -30,28 +31,28 @@ public class Like implements Serializable {
         category = like.getCategory();
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPictureUrl() {
         return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public String getCategory() {
@@ -61,4 +62,13 @@ public class Like implements Serializable {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public boolean isSelecionada() {
+        return selecionada;
+    }
+
+    public void setSelecionada(boolean selecionada) {
+        this.selecionada = selecionada;
+    }
+
 }

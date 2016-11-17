@@ -9,17 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.LikeAdapter;
-import uniftec.bsocial.cache.LikesChosenCache;
 import uniftec.bsocial.cache.LikesCache;
+import uniftec.bsocial.cache.LikesChosenCache;
 import uniftec.bsocial.entities.Like;
 
 public class LikeChooserFragment extends DialogFragment {
@@ -71,26 +70,6 @@ public class LikeChooserFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_like_chooser, container, false);
 
-        /*GraphRequest request = GraphRequest.newMeRequest(
-                AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        createLikeList(object);
-
-                        //GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
-                        //if(nextRequest != null){
-                            //nextRequest.setCallback(nextRequest.getCallback());
-                            //nextRequest.executeAndWait();
-                        //}
-                    }
-                });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "likeEntities.fields(id,name,picture.type(large))");
-        request.setParameters(parameters);
-        request.executeAsync();*/
-
         view.post(new Runnable() {
             @Override
             public void run() {
@@ -109,12 +88,11 @@ public class LikeChooserFragment extends DialogFragment {
         Boolean found = null;
         boolean update = false;
 
-        ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
-        ListView likesChosenListView = (ListView) getView().findViewById(R.id.likesChosenListView);
+        ListView preferredLikesListView = (ListView) getView().findViewById(R.id.preferred_likes_listview);
 
-        likesListView.setAdapter(new LikeAdapter(getContext(), likeEntities));
-        final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(getContext(), chosenLikeEntities);
-        likesChosenListView.setAdapter(likesChosenListViewAdapter);
+        preferredLikesListView.setAdapter(new LikeAdapter(getContext(), likeEntities));
+        final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(getContext(), likeEntities);
+        preferredLikesListView.setAdapter(likesChosenListViewAdapter);
 
         while (preferencesTemp.size() > 0) {
             cont = 0;
@@ -157,55 +135,13 @@ public class LikeChooserFragment extends DialogFragment {
 
         likesChosenListViewAdapter.notifyDataSetChanged();
 
-        likesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        preferredLikesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (chosenLikeEntities.size() < 9) {
-                    ImageView likePic = (ImageView) view.findViewById(R.id.likePic);
-                    TextView likeName = (TextView) view.findViewById(R.id.likeName);
-                    TextView likeId = (TextView) view.findViewById(R.id.likeId);
-
-                    Like like = new Like(likeId.getText().toString(), likeName.getText().toString(), likePic.getTag().toString(), null);
-
-                    boolean add = true;
-                    for (Like chosenLike : chosenLikeEntities) {
-                        if (chosenLike.getId().equals(like.getId()))
-                            add = false;
-                    }
-
-                    if (add) {
-                        chosenLikeEntities.add(like);
-                        likesChosenCache.listPreferences().add(like.getId());
-                    } else {
-                        Toast.makeText(getContext(), "Item já adicionado!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    likesChosenListViewAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getContext(), "Você pode escolher no máximo 9 preferências.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        likesChosenListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int cont = 0;
-
-                while (cont < chosenLikeEntities.size()) {
-                    TextView likeId = (TextView) view.findViewById(R.id.likeId);
-
-                    if (chosenLikeEntities.get(cont).getId().toString().equals(likeId.getText().toString())) {
-                        chosenLikeEntities.remove(cont);
-                        likesChosenCache.listPreferences().remove(cont);
-
-                        cont = chosenLikeEntities.size();
-                    } else {
-                        cont++;
-                    }
-                }
-
-                likesChosenListViewAdapter.notifyDataSetChanged();
+                CheckBox checkBox = (CheckBox) view.findViewById(R.id.preferred_like_checkbox);
+                checkBox.callOnClick();
+                TextView likeId = (TextView) view.findViewById(R.id.likeId);
+                likesChosenCache.listPreferences().add(likeId.getText().toString());
             }
         });
 
