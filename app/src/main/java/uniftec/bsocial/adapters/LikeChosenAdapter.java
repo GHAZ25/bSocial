@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,16 +25,17 @@ public class LikeChosenAdapter extends BaseAdapter {
     ArrayList<Like> result;
     Context context;
 
-    public LikeChosenAdapter(Context context, Like[] likes) {
-        result = new ArrayList<Like>();
+    /*public LikeChosenAdapter(Context context, Like[] likes) {
+        this.context = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        result = new ArrayList<>();
 
         for (int i = 0; i < likes.length; i++) {
             result.add(new Like(likes[i]));
         }
 
-        this.context = context;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
+    }*/
 
     public LikeChosenAdapter(Context context, ArrayList<Like> likes) {
         result = likes;
@@ -57,10 +58,10 @@ public class LikeChosenAdapter extends BaseAdapter {
     public View getView(final int i, View view, final ViewGroup viewGroup) {
         Holder holder = new Holder();
         View rowView;
-            rowView = inflater.inflate(R.layout.likes_chosen_list_view, null);
-            holder.likeId = (TextView) rowView.findViewById(R.id.likeChosenId);
-            holder.likePic = (ImageView) rowView.findViewById(R.id.likeChosenPic);
-            holder.likeCheckBox = (CheckBox) rowView.findViewById(R.id.preferred_like_checkbox);
+        rowView = inflater.inflate(R.layout.preferred_likes_list_view, null);
+        holder.likeId = (TextView) rowView.findViewById(R.id.likeId);
+        holder.likePic = (ImageView) rowView.findViewById(R.id.likePic);
+        holder.likeCheckBox = (CheckedTextView) rowView.findViewById(R.id.preferred_like_checkbox);
             holder.likeId.setText(result.get(i).getId());
             holder.likePic.setTag(result.get(i).getPictureUrl());
             holder.likeCheckBox.setChecked(result.get(i).isSelecionada());
@@ -77,7 +78,7 @@ public class LikeChosenAdapter extends BaseAdapter {
 
     public class Holder {
         ImageView likePic;
-        CheckBox likeCheckBox;
+        CheckedTextView likeCheckBox;
         TextView likeId;
     }
 }

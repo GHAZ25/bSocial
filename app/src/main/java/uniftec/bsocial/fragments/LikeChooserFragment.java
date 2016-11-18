@@ -4,13 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -60,6 +62,7 @@ public class LikeChooserFragment extends DialogFragment {
         likesChosenCache = new LikesChosenCache(getActivity());
         likesChosenCache.initialize();
 
+        likeEntities = likesCache.listLikes();
         //chosenLikeEntities = new ArrayList<Like>();
     }
 
@@ -69,28 +72,71 @@ public class LikeChooserFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_like_chooser, container, false);
 
-        view.post(new Runnable() {
+        ListView preferredLikesListView = (ListView) view.findViewById(R.id.preferred_likes_listview);
+        final LikeChosenAdapter likesListViewAdapter = new LikeChosenAdapter(getContext(), likeEntities);
+        preferredLikesListView.setAdapter(likesListViewAdapter);
+
+        preferredLikesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void run() {
-                createLikeList();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView likeId = (TextView) view.findViewById(R.id.likeId);
+                likesChosenCache.listPreferences().add(likeId.getText().toString());
+                if (likesCache.listLikes().get(i).isSelecionada()) {
+                    likesCache.listLikes().get(i).setSelecionada(false);
+                    likesChosenCache.remove(likesCache.listLikes().get(i).getId());
+                    Toast.makeText(getContext(), "Desmarcou", Toast.LENGTH_SHORT).show();
+                } else {
+                    likesCache.listLikes().get(i).setSelecionada(true);
+                    likesChosenCache.listPreferences().add(likesCache.listLikes().get(i).getId());
+                    Toast.makeText(getContext(), "Marcou", Toast.LENGTH_SHORT).show();
+                }
+
+                likesListViewAdapter.notifyDataSetChanged();
+            }
+        });
+
+        Button btnSave = (Button) view.findViewById(R.id.btnSaveLikes);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                likesChosenCache.update();
             }
         });
 
         return view;
     }
 
-    private void createLikeList() {
-        likeEntities = likesCache.listLikes();
+    private void createLikeList(View view) {
         //preferencesTemp = new ArrayList<String>(likesChosenCache.listPreferences());
 
         //Integer cont = null;
         //Boolean found = null;
         //boolean update = false;
 
-        ListView preferredLikesListView = (ListView) getView().findViewById(R.id.preferred_likes_listview);
-
+        ListView preferredLikesListView = (ListView) view.findViewById(R.id.preferred_likes_listview);
         final LikeChosenAdapter likesListViewAdapter = new LikeChosenAdapter(getContext(), likeEntities);
         preferredLikesListView.setAdapter(likesListViewAdapter);
+
+        preferredLikesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CheckBox checkBox = (CheckBox) view.findViewById(R.id.preferred_like_checkbox);
+                checkBox.setChecked(!checkBox.isChecked());
+                TextView likeId = (TextView) view.findViewById(R.id.likeId);
+                likesChosenCache.listPreferences().add(likeId.getText().toString());
+                if (likesCache.listLikes().get(i).isSelecionada()) {
+                    likesCache.listLikes().get(i).setSelecionada(false);
+                    likesChosenCache.remove(likesCache.listLikes().get(i).getId());
+                    Toast.makeText(getContext(), "Marcou", Toast.LENGTH_SHORT).show();
+                } else {
+                    likesCache.listLikes().get(i).setSelecionada(true);
+                    likesChosenCache.listPreferences().add(likesCache.listLikes().get(i).getId());
+                    Toast.makeText(getContext(), "Desmarcou", Toast.LENGTH_SHORT).show();
+                }
+
+                likesListViewAdapter.notifyDataSetChanged();
+            }
+        });
 
         /* final LikeAdapter likesChosenListViewAdapter = new LikeAdapter(getContext(), likeEntities);
         preferredLikesListView.setAdapter(likesChosenListViewAdapter);
@@ -135,39 +181,6 @@ public class LikeChooserFragment extends DialogFragment {
         }
 
         likesChosenListViewAdapter.notifyDataSetChanged(); */
-
-        preferredLikesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /*CheckBox checkBox = (CheckBox) view.findViewById(R.id.preferred_like_checkbox);
-                checkBox.callOnClick();
-                TextView likeId = (TextView) view.findViewById(R.id.likeId);
-                likesChosenCache.listPreferences().add(likeId.getText().toString());*/
-                if (likesCache.listLikes().get(i).isSelecionada()) {
-                    likesCache.listLikes().get(i).setSelecionada(false);
-                    likesChosenCache.remove(likesCache.listLikes().get(i).getId());
-                    Log.i("Marcou:", Integer.toString(likesChosenCache.listPreferences().size()));
-                } else {
-                    likesCache.listLikes().get(i).setSelecionada(true);
-                    likesChosenCache.listPreferences().add(likesCache.listLikes().get(i).getId());
-                    Log.i("Desmarcou:", Integer.toString(likesChosenCache.listPreferences().size()));
-                }
-
-                likesListViewAdapter.notifyDataSetChanged();
-            }
-        });
-
-        save();
-    }
-
-    private void save() {
-        Button btnSave = (Button) getView().findViewById(R.id.btnSaveLikes);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                likesChosenCache.update();
-            }
-        });
     }
 
     public void onButtonPressed(Uri uri) {
