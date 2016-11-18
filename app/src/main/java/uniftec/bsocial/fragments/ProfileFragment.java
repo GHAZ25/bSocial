@@ -19,6 +19,7 @@ import com.facebook.login.widget.ProfilePictureView;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Timer;
@@ -47,7 +48,7 @@ public class ProfileFragment extends Fragment {
     private LikesChosenCache likesChosenCache = null;
     private CategoriesCache categoriesCache = null;
     private UserCache userCache = null;
-    private Like[] likes = null;
+    private ArrayList<Like> likes = null;
     private Timer timer = null;
     private LikeAdapter likeAdapter = null;
 
@@ -113,10 +114,15 @@ public class ProfileFragment extends Fragment {
 
         getProfilePic();
 
+        likes = likesCache.listLikes();
+
+        ListView likesListView = (ListView) view.findViewById(R.id.likesListView);
+        likeAdapter = new LikeAdapter(getContext(), likes);
+        likesListView.setAdapter(likeAdapter);
+
         view.post(new Runnable() {
             @Override
             public void run() {
-                createLikeList();
                 testList();
             }
         });
@@ -124,29 +130,25 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void createLikeList() {
-        likes = likesCache.listLikes();
-
-        ListView likesListView = (ListView) getView().findViewById(R.id.likesListView);
-        likeAdapter = new LikeAdapter(getContext(), likes);
-        likesListView.setAdapter(likeAdapter);
-    }
-
     private void testList() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (likesCache.listLikes().length != 0) {
-                            likeAdapter.notifyDataSetChanged();
-                            timer.cancel();
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (likesCache.listLikes().size() != 0) {
+                                likeAdapter.notifyDataSetChanged();
+                                timer.cancel();
+                            }
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    timer.cancel();
+                }
             }
-        }, 0, 4000);
+        }, 1000, 4000);
     }
 
     private void setNameAgeLocation() {

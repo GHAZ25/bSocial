@@ -20,12 +20,12 @@ import uniftec.bsocial.entities.Like;
  * Created by mauri on 26/08/2016.
  */
 
-public class LikeAdapter extends BaseAdapter {
+public class LikeChosenAdapter extends BaseAdapter {
     private static LayoutInflater inflater;
     ArrayList<Like> result;
     Context context;
 
-    public LikeAdapter(Context context, Like[] likes) {
+    public LikeChosenAdapter(Context context, Like[] likes) {
         result = new ArrayList<Like>();
 
         for (int i = 0; i < likes.length; i++) {
@@ -36,7 +36,7 @@ public class LikeAdapter extends BaseAdapter {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public LikeAdapter(Context context, ArrayList<Like> likes) {
+    public LikeChosenAdapter(Context context, ArrayList<Like> likes) {
         result = likes;
 
         this.context = context;
@@ -57,13 +57,14 @@ public class LikeAdapter extends BaseAdapter {
     public View getView(final int i, View view, final ViewGroup viewGroup) {
         Holder holder = new Holder();
         View rowView;
-            rowView = inflater.inflate(R.layout.likes_list_view, null);
-            holder.likeId = (TextView) rowView.findViewById(R.id.likeId);
-            holder.likeName = (TextView) rowView.findViewById(R.id.likeName);
-            holder.likePic = (ImageView) rowView.findViewById(R.id.likePic);
+            rowView = inflater.inflate(R.layout.likes_chosen_list_view, null);
+            holder.likeId = (TextView) rowView.findViewById(R.id.likeChosenId);
+            holder.likePic = (ImageView) rowView.findViewById(R.id.likeChosenPic);
+            holder.likeCheckBox = (CheckBox) rowView.findViewById(R.id.preferred_like_checkbox);
             holder.likeId.setText(result.get(i).getId());
-            holder.likeName.setText(result.get(i).getName());
             holder.likePic.setTag(result.get(i).getPictureUrl());
+            holder.likeCheckBox.setChecked(result.get(i).isSelecionada());
+            holder.likeCheckBox.setText(result.get(i).getName());
             Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.likePic);
 
         return rowView;
@@ -76,7 +77,7 @@ public class LikeAdapter extends BaseAdapter {
 
     public class Holder {
         ImageView likePic;
-        TextView likeName;
+        CheckBox likeCheckBox;
         TextView likeId;
     }
 }

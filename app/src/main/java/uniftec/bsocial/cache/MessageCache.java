@@ -52,7 +52,7 @@ public class MessageCache {
     private class ListNotification extends AsyncTask<Void, Void, Message[]> {
         @Override
         protected void onPreExecute(){
-            load = ProgressDialog.show(activity, "Aguarde", "Buscando convites...");
+            load = ProgressDialog.show(activity, "Aguarde", "Buscando conversas...");
         }
 
         @Override

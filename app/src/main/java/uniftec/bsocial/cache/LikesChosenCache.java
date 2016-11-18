@@ -24,6 +24,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LikesChosenCache {
     private FragmentActivity activity = null;
@@ -48,6 +49,16 @@ public class LikesChosenCache {
         return preferences;
     }
 
+    public Map<String, Boolean> mapPreferences() {
+        Map<String, Boolean> map = new HashMap<String, Boolean>();
+
+        for (String key : preferences) {
+            map.put(key, true);
+        }
+
+        return map;
+    }
+
     public void initialize() {
         if (sharedpreferences.getAll().size() == 0) {
             ListPreferences listPreferences = new ListPreferences();
@@ -61,6 +72,31 @@ public class LikesChosenCache {
     public void update() {
         UpdatePreferences updatePreferences = new UpdatePreferences();
         updatePreferences.execute();
+    }
+
+    public void remove(String id) {
+        int cont = 0;
+
+        while (cont < preferences.size()) {
+            if (id.equals(preferences.get(cont))) {
+                preferences.remove(cont);
+                cont = preferences.size();
+            } else {
+                cont++;
+            }
+        }
+    }
+
+    private void recreate() {
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.clear();
+
+        for (int i = 0; i < preferences.size(); i++) {
+            editor.putString("preference" + i, preferences.get(i));
+        }
+
+        editor.putInt("size", preferences.size());
+        editor.commit();
     }
 
     private class UpdatePreferences extends AsyncTask<Void, Void, String> {
@@ -117,17 +153,8 @@ public class LikesChosenCache {
             if (message != null) {
                 switch (message) {
                     case "true":
+                        recreate();
                         Toast.makeText(activity, "Preferências alteradas com sucesso.", Toast.LENGTH_LONG).show();
-
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.clear();
-
-                        for (int i = 0; i < preferences.size(); i++) {
-                            editor.putString("preference" + i, preferences.get(i));
-                        }
-
-                        editor.putInt("size", preferences.size());
-                        editor.commit();
                     break;
                     default:
                         Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
@@ -172,23 +199,13 @@ public class LikesChosenCache {
         @Override
         protected void onPostExecute(HashMap[] retorno) {
             if (retorno != null) {
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.clear();
-
-                int cont = 0;
-
                 for (int i = 0; i < retorno.length; i++) {
-                    editor.putString("preference" + i, retorno[i].get("id").toString());
                     preferences.add(retorno[i].get("id").toString());
-
-                    cont++;
                 }
 
-                editor.putInt("size", cont);
+                recreate();
 
                 Toast.makeText(activity, "Gostos atualizados com sucesso.", Toast.LENGTH_LONG).show();
-
-                editor.commit();
             } else {
                 Toast.makeText(activity, "Ocorreu um erro ao listar suas preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }

@@ -13,13 +13,14 @@ public class Like implements Serializable {
     private String category;
     private boolean selecionada;
 
-    public Like(String id, String name, String pictureUrl, String category) {
+    public Like(String id, String name, String pictureUrl, String category, boolean selecionada) {
         super();
 
         this.id = id;
         this.name = name;
         this.pictureUrl = pictureUrl;
         this.category = category;
+        this.selecionada = selecionada;
     }
 
     public Like(Like like) {

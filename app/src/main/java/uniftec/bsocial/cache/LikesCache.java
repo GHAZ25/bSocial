@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uniftec.bsocial.entities.Like;
 
@@ -47,7 +48,7 @@ public class LikesCache {
     private String file = null;
     private Date today = null;
     private JSONObject obj = null;
-    private Like[] likes = null;
+    private ArrayList<Like> likes = null;
 
     public LikesCache(FragmentActivity activity) {
         super();
@@ -61,22 +62,22 @@ public class LikesCache {
     }
 
     public void initialize() {
-        likes = new Like[sharedpreferences.getInt("size", 0)];
+        likes = new ArrayList<>();
 
         if (sharedpreferences.getAll().size() == 0) {
             LoadPreference loadPreference = new LoadPreference();
             loadPreference.execute();
         } else {
             for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-                Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
+                Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null, false);
 
-                likes[i] = like;
+                likes.add(like);
             }
         }
     }
 
     public void verify() {
-        likes = new Like[0];
+        likes = new ArrayList<>();
         LoadPreference loadPreference = new LoadPreference();
 
         if (sharedpreferences.getAll().size() == 0) {
@@ -88,12 +89,10 @@ public class LikesCache {
                 if (!dateFormat.format(today).toString().equals(dateFormat.format(update).toString())) {
                     loadPreference.execute();
                 } else {
-                    likes = new Like[sharedpreferences.getInt("size", 0)];
-
                     for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-                        Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null);
+                        Like like = new Like(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("picture" + i, ""), null, false);
 
-                        likes[i] = like;
+                        likes.add(like);
                     }
                 }
             } catch (ParseException e) {
@@ -124,7 +123,20 @@ public class LikesCache {
         request.executeAsync();
     }
 
-    public Like[] listLikes() { return likes; }
+    public ArrayList<Like> listLikes(){
+        LikesChosenCache chosen = new LikesChosenCache(activity);
+        chosen.initialize();
+
+        Map<String, Boolean> map = chosen.mapPreferences();
+
+        for (int i = 0; i < likes.size(); i++) {
+            if (map.containsKey(likes.get(i).getId())) {
+                likes.get(i).setSelecionada(true);
+            }
+        }
+
+        return likes;
+    }
 
     private class LoadPreference extends AsyncTask<Void, Void, String> {
         @Override
@@ -200,9 +212,6 @@ public class LikesCache {
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.clear();
 
-                int cont = 0;
-                likes = new Like[jsonArray.length()];
-
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.optJSONObject(i);
                     String id = jsonObject.optString("id");
@@ -213,19 +222,17 @@ public class LikesCache {
                     jsonObject = jsonObject.optJSONObject("data");
                     String pictureUrl = jsonObject.optString("url");
 
-                    Like like = new Like(id, name, pictureUrl, category);
-                    likes[cont] = like;
+                    Like like = new Like(id, name, pictureUrl, category, false);
+                    likes.add(like);
 
                     editor.putString("id" + i, id);
                     editor.putString("name" + i, name);
                     editor.putString("picture" + i, pictureUrl);
                     editor.putString("category" + i, category);
-
-                    cont++;
                 }
 
                 editor.putString("update", dateFormat.format(today).toString());
-                editor.putInt("size", cont);
+                editor.putInt("size", likes.size());
                 editor.commit();
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
