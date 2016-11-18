@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/likePic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/image_border_like"
+            android:padding="3dp" />
+
+        <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/preferred_like_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/likePic"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center"
+            android:shadowColor="#fff"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="3"
+            android:text="bSocial"
+            android:textAlignment="center"
+            android:textColor="#3b5998"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/likeId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</LinearLayout>
