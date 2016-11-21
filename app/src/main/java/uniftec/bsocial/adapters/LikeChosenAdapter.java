@@ -62,11 +62,11 @@ public class LikeChosenAdapter extends BaseAdapter {
         holder.likeId = (TextView) rowView.findViewById(R.id.likeId);
         holder.likePic = (ImageView) rowView.findViewById(R.id.likePic);
         holder.likeCheckBox = (CheckedTextView) rowView.findViewById(R.id.preferred_like_checkbox);
-            holder.likeId.setText(result.get(i).getId());
-            holder.likePic.setTag(result.get(i).getPictureUrl());
-            holder.likeCheckBox.setChecked(result.get(i).isSelecionada());
-            holder.likeCheckBox.setText(result.get(i).getName());
-            Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.likePic);
+        holder.likeId.setText(result.get(i).getId());
+        holder.likePic.setTag(result.get(i).getPictureUrl());
+        holder.likeCheckBox.setChecked(result.get(i).isSelecionada());
+        holder.likeCheckBox.setText(result.get(i).getName());
+        Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.likePic);
 
         return rowView;
     }

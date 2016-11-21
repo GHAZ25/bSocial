@@ -11,7 +11,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import uniftec.bsocial.cache.NotificationCache;
+import uniftec.bsocial.entities.Notification;
 import uniftec.bsocial.fragments.MessageFragment;
 
 public class OtherUserMessageActivity extends AppCompatActivity implements View.OnClickListener, MessageFragment.OnFragmentInteractionListener {
@@ -22,6 +26,8 @@ public class OtherUserMessageActivity extends AppCompatActivity implements View.
     private ListView messagesListView;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> messages;
+    private NotificationCache messageCache;
+    private Timer timer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,23 +42,44 @@ public class OtherUserMessageActivity extends AppCompatActivity implements View.
 
         userId = (String) getIntent().getSerializableExtra("userId");
 
-        messagesListView = (ListView) findViewById(R.id.other_user_messages_listview);
-        messages = new ArrayList<>();
-        messages.add("Maurício Manfro: Olá tudo bem?");
-        messages.add("Maurício Manfro: Curte Rock?");
-        messages.add("Você: Opaa tudo e contigo?");
-        messages.add("Você: Curto sim!");
+        messageCache = new NotificationCache(this);
+        messageCache.initializeMessages(userId);
 
-        adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, messages);
+        messages = new ArrayList<>();
+
+        messagesListView = (ListView) findViewById(R.id.other_user_messages_listview);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, messages);
 
         messagesListView.setAdapter(adapter);
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (messageCache.listNotifications().size() != 0) {
+                                for (Notification message : messageCache.listNotifications()) {
+                                    updateMessages(message.getMessage());
+                                }
+                                timer.cancel();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    timer.cancel();
+                }
+            }
+        }, 1000, 4000);
     }
 
     @Override
     public void onClick(View view) {
         FragmentManager manager = getSupportFragmentManager();
         Fragment frag = manager.findFragmentByTag("enviar_mensagem");
+
         if (frag != null) {
             manager.beginTransaction().remove(frag).commit();
         }
@@ -60,7 +87,7 @@ public class OtherUserMessageActivity extends AppCompatActivity implements View.
         switch (view.getId()) {
             case R.id.send_message:
                 sendMsg(manager);
-                break;
+            break;
         }
     }
 

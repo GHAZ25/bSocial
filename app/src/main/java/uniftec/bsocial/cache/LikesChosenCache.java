@@ -69,10 +69,6 @@ public class LikesChosenCache {
             }
         }
     }
-    public void update() {
-        UpdatePreferences updatePreferences = new UpdatePreferences();
-        updatePreferences.execute();
-    }
 
     public void remove(String id) {
         int cont = 0;
@@ -99,48 +95,60 @@ public class LikesChosenCache {
         editor.commit();
     }
 
-    private class UpdatePreferences extends AsyncTask<Void, Void, String> {
+    public void update() {
+        String json = "{ \"preferences\": [";
+        int cont = 0;
+
+        for (int i = 0; i < preferences.size(); i++) {
+            if (cont > 0) {
+                json += ",";
+            }
+            json += "{\"preference\":\"" + preferences.get(i) + "\"}";
+
+            cont++;
+        }
+
+        json += "] }";
+
+        UpdatePreferences updatePreferences = new UpdatePreferences();
+        updatePreferences.execute(json);
+    }
+
+    private class UpdatePreferences extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(activity, "Aguarde", "Alterando preferências...");
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
             HashMap retorno = null;
             String mensagem = "true";
 
             try {
-                for (int i = 0; i < 9; i++) {
-                    HttpClient httpclient = new DefaultHttpClient();
-                    HttpPost request = null;
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost request = null;
 
-                    List<NameValuePair> values = new ArrayList<>(2);
+                List<NameValuePair> values = new ArrayList<>(2);
 
-                    if (i > (preferences.size() - 1)) {
-                        request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/remove");
-                    } else {
-                        request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/update");
-                        values.add(new BasicNameValuePair("id_gosto", preferences.get(i)));
-                    }
+                request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/preference/update");
 
-                    values.add(new BasicNameValuePair("ordem", Integer.toString(i)));
-                    values.add(new BasicNameValuePair("id_facebook", profile.getId()));
-                    request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
+                values.add(new BasicNameValuePair("id_facebook", profile.getId()));
+                values.add(new BasicNameValuePair("json", params[0]));
+                request.setEntity(new UrlEncodedFormEntity(values, "UTF-8"));
 
-                    HttpResponse response = httpclient.execute(request);
-                    InputStream content = response.getEntity().getContent();
-                    Reader reader = new InputStreamReader(content);
+                HttpResponse response = httpclient.execute(request);
+                InputStream content = response.getEntity().getContent();
+                Reader reader = new InputStreamReader(content);
 
-                    Gson gson = new Gson();
-                    retorno = gson.fromJson(reader, HashMap.class);
+                Gson gson = new Gson();
+                retorno = gson.fromJson(reader, HashMap.class);
 
-                    if (!retorno.get("message").toString().equals("true")) {
-                        mensagem = retorno.get("message").toString();
-                    }
-
-                    content.close();
+                if (!retorno.get("message").toString().equals("true")) {
+                    mensagem = retorno.get("message").toString();
                 }
+
+                content.close();
 
                 return mensagem;
             } catch (Exception e){

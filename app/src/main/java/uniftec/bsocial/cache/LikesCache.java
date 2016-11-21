@@ -74,6 +74,17 @@ public class LikesCache {
                 likes.add(like);
             }
         }
+
+        LikesChosenCache chosen = new LikesChosenCache(activity);
+        chosen.initialize();
+
+        Map<String, Boolean> map = chosen.mapPreferences();
+
+        for (int i = 0; i < likes.size(); i++) {
+            if (map.containsKey(likes.get(i).getId())) {
+                likes.get(i).setSelecionada(true);
+            }
+        }
     }
 
     public void verify() {
@@ -124,17 +135,6 @@ public class LikesCache {
     }
 
     public ArrayList<Like> listLikes(){
-        LikesChosenCache chosen = new LikesChosenCache(activity);
-        chosen.initialize();
-
-        Map<String, Boolean> map = chosen.mapPreferences();
-
-        for (int i = 0; i < likes.size(); i++) {
-            if (map.containsKey(likes.get(i).getId())) {
-                likes.get(i).setSelecionada(true);
-            }
-        }
-
         return likes;
     }
 

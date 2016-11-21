@@ -4,37 +4,25 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import uniftec.bsocial.OtherUserMessageActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.cache.NotificationCache;
 import uniftec.bsocial.cache.UserCache;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MessageFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MessageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MessageFragment extends DialogFragment implements View.OnClickListener {
     public static final String USER_ID = "USER_ID";
     public static final String TYPE = "TYPE";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     public View view;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private String userId;
@@ -51,15 +39,6 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MessageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MessageFragment newInstance(String param1, String param2) {
         MessageFragment fragment = new MessageFragment();
         Bundle args = new Bundle();
@@ -102,7 +81,6 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         inviteBtn = (Button) view.findViewById(R.id.message_invite);
         inviteBtn.setOnClickListener(this);
 
-        // Inflate the layout for this fragment
         return view;
     }
 
@@ -111,17 +89,17 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         switch (view.getId()) {
             case R.id.message_send:
                 send();
-                break;
+            break;
             case R.id.message_invite:
                 invite();
-                break;
+            break;
         }
     }
 
     private void send() {
         notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
         dismiss();
-        Toast.makeText(getContext(), "Mensagem enviada!", Toast.LENGTH_SHORT).show();
+
         if (type.equals("messagelistview")) {
             OtherUserMessageActivity otherUserMessageActivity = (OtherUserMessageActivity) getActivity();
             otherUserMessageActivity.updateMessages("Você: " + texto.getText().toString());
@@ -131,10 +109,8 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private void invite() {
         notificationCache.inviteNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
         dismiss();
-        Toast.makeText(getContext(), "Solicitação de contato enviada!", Toast.LENGTH_SHORT).show();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -147,8 +123,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
 
     }
@@ -159,21 +134,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         mListener = null;
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-
-
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

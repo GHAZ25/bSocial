@@ -12,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uniftec.bsocial.OtherUserMessageActivity;
 import uniftec.bsocial.R;
@@ -38,6 +40,7 @@ public class MessagesFragment extends Fragment {
     private String mParam2;
     private ArrayList<Message> messages = null;
     private MessageCache messageCache;
+    private Timer timer = null;
     private MessageAdapter messagesListViewAdapter;
 
     private OnFragmentInteractionListener mListener;
@@ -81,6 +84,8 @@ public class MessagesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
+        timer = new Timer();
+
         messageCache = new MessageCache(getActivity());
         messageCache.initialize();
 
@@ -103,8 +108,35 @@ public class MessagesFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                testList();
+            }
+        });
+
         return view;
+    }
+
+    private void testList() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (messageCache.listMessages().size() != 0) {
+                                messagesListViewAdapter.notifyDataSetChanged();
+                                timer.cancel();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    timer.cancel();
+                }
+            }
+        }, 1000, 4000);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
