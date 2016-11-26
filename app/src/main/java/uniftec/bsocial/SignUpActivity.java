@@ -1,13 +1,18 @@
 package uniftec.bsocial;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -51,9 +56,16 @@ public class SignUpActivity extends AppCompatActivity {
     private Location location;
     private UserCache userCache;
 
+    private static final String[] INITIAL_PERMS = {
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        ActivityCompat.requestPermissions(SignUpActivity.this, INITIAL_PERMS, 1337);
 
         setTitle("bSocial");
         GraphRequest request = GraphRequest.newMeRequest(
@@ -126,22 +138,23 @@ public class SignUpActivity extends AppCompatActivity {
                 register.execute();*/
 
                 LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                LocationListener listener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) { }
+
+                    @Override
+                    public void onStatusChanged(String s, int i, Bundle bundle) { }
+
+                    @Override
+                    public void onProviderEnabled(String s) { }
+
+                    @Override
+                    public void onProviderDisabled(String s) { }
+                };
 
                 try {
-                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
-
-                        @Override
-                        public void onStatusChanged(String arg0, int arg1, Bundle arg2) { }
-
-                        @Override
-                        public void onProviderEnabled(String arg0) { }
-
-                        @Override
-                        public void onProviderDisabled(String arg0) { }
-
-                        @Override
-                        public void onLocationChanged(Location location) { }
-                    }, null);
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , listener, null);
+                    //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , 0 , 0, listener, null );
 
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
@@ -280,6 +293,25 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
             load.dismiss();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1337: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Permissão de localização negada!", Toast.LENGTH_SHORT).show();
+                    LoginManager.getInstance().logOut();
+                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                    finish();
+                }
+                return;
+            }
+
         }
     }
 }
