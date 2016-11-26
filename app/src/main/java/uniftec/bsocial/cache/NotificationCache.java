@@ -1,8 +1,6 @@
 package uniftec.bsocial.cache;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
@@ -25,14 +23,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import uniftec.bsocial.OtherUserMessageActivity;
 import uniftec.bsocial.entities.Notification;
-import uniftec.bsocial.entities.User;
 
 public class NotificationCache {
     private FragmentActivity activity = null;
     private ProgressDialog load = null;
     private Profile profile = null;
     private ArrayList<Notification> notifications = null;
+    private String texto = null;
 
     public NotificationCache(FragmentActivity activity) {
         super();
@@ -252,6 +251,7 @@ public class NotificationCache {
 
                 List<NameValuePair> values = new ArrayList<>(2);
 
+                texto = params[0];
                 request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/gcm/send");
 
                 values.add(new BasicNameValuePair("texto", params[0]));
@@ -278,6 +278,10 @@ public class NotificationCache {
         @Override
         protected void onPostExecute(String message) {
             if (message.equals("true")) {
+                if (activity.equals(OtherUserMessageActivity.class)) {
+                    OtherUserMessageActivity otherUserMessageActivity = (OtherUserMessageActivity) activity;
+                    otherUserMessageActivity.updateMessages("Você: " + texto);
+                }
                 Toast.makeText(activity, "Mensagem enviada com sucesso.", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();

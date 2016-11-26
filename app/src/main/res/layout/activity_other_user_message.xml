@@ -1,21 +1,19 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="false"
-    android:clipChildren="false"
-    android:clipToPadding="false"
+    android:orientation="vertical"
     tools:context=".OtherUserMessageActivity">
 
     <ListView
         android:id="@+id/other_user_messages_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_above="@id/sendMsg"
         android:layout_alignParentTop="true"
-        android:layout_alignTop="@+id/send_message"
+        android:layout_weight="1"
         android:background="@drawable/layout_border"
-        android:padding="3dp" />
+        android:padding="1dp" />
 
     <Button
         android:id="@+id/send_message"
@@ -28,4 +26,4 @@
         android:text="Enviar Mensagem"
         android:textColor="#fff" />
 
-</RelativeLayout>
+</LinearLayout>

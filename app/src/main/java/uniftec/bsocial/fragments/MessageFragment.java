@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import uniftec.bsocial.OtherUserMessageActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.cache.NotificationCache;
 import uniftec.bsocial.cache.UserCache;
@@ -26,10 +25,9 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private String mParam1;
     private String mParam2;
     private String userId;
-    private String type;
     private Button sendBtn;
     private Button inviteBtn;
-    private EditText texto = null;
+    private EditText texto;
 
     private NotificationCache notificationCache = null;
     private UserCache userCache = null;
@@ -63,7 +61,6 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         getDialog().setTitle("Enviar Mensagem");
 
         userId = getArguments().getString(USER_ID);
-        type = getArguments().getString(TYPE);
 
         notificationCache = new NotificationCache(getActivity());
         notificationCache.initialize();
@@ -99,11 +96,6 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private void send() {
         notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
         dismiss();
-
-        if (type.equals("messagelistview")) {
-            OtherUserMessageActivity otherUserMessageActivity = (OtherUserMessageActivity) getActivity();
-            otherUserMessageActivity.updateMessages("Você: " + texto.getText().toString());
-        }
     }
 
     private void invite() {
