@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_pic_sl"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="2dp"
         android:textAlignment="center"
         android:textSize="24sp" />
 
@@ -49,12 +49,27 @@
         android:textAlignment="center"
         android:textSize="16sp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locationText"
+        android:id="@+id/perfil_seus_gostos"
+        android:shadowColor="#fff"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="3"
+        android:textSize="14sp"
+        android:textColor="#3b5998"
+        android:text="@string/your_likes"
+        android:layout_marginBottom="-8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="12dp"/>
+
     <com.dd.ShadowLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/locationText"
-        android:layout_marginBottom="5dp"
+        android:layout_below="@+id/perfil_seus_gostos"
         app:sl_dx="4dp"
         app:sl_dy="4dp"
         app:sl_shadowColor="#AA000000"

@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorHighPct">#14CD96</color>
     <color name="colorMediumPct">#FC4E03</color>
+    <color name="colorNormalPct">#68879B</color>
     <color name="colorLowPct">#EA0000</color>
     <color name="colorWhite">#FFFFFF</color>
 </resources>

@@ -69,6 +69,7 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+
     private void sendMsg(FragmentManager manager) {
         MessageFragment messageFragment = new MessageFragment();
 
@@ -90,6 +91,8 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
         TextView pctText = (TextView) findViewById(R.id.pctText);
         if (user.getCompatibilidade() >= 90)
             pctText.setTextColor(getResources().getColor(R.color.colorHighPct));
+        else if (user.getCompatibilidade() >= 60)
+            pctText.setTextColor(getResources().getColor(R.color.colorNormalPct));
         else if (user.getCompatibilidade() >= 30)
             pctText.setTextColor(getResources().getColor(R.color.colorMediumPct));
         else pctText.setTextColor(getResources().getColor(R.color.colorLowPct));

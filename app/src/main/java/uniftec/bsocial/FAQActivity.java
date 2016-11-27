@@ -9,6 +9,9 @@ public class FAQActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle("Ajuda");
+
         setContentView(R.layout.activity_faq);
 
         WebView faq = (WebView) findViewById(R.id.webview_faq);

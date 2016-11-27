@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import uniftec.bsocial.R;
 import uniftec.bsocial.cache.NotificationCache;
@@ -94,13 +95,21 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     }
 
     private void send() {
-        notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
-        dismiss();
+        if(texto.getText().toString().trim().isEmpty())
+            Toast.makeText(getContext(), "Texto não pode ficar em branco!", Toast.LENGTH_SHORT).show();
+        else {
+            notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
+            dismiss();
+        }
     }
 
     private void invite() {
-        notificationCache.inviteNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
-        dismiss();
+        if(texto.getText().toString().trim().isEmpty())
+            Toast.makeText(getContext(), "Texto não pode ficar em branco!", Toast.LENGTH_SHORT).show();
+        else {
+            notificationCache.inviteNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
+            dismiss();
+        }
     }
 
     public void onButtonPressed(Uri uri) {

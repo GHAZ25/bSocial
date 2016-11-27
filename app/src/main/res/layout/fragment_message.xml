@@ -5,20 +5,11 @@
     android:padding="5dp"
     tools:context="uniftec.bsocial.fragments.MessageFragment">
 
-    <Button
-        android:id="@+id/message_invite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorAccent"
-        android:text="@string/message_invite"
-        android:textColor="@color/colorWhite" />
-
     <EditText
         android:id="@+id/message_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/message_invite"
+        android:layout_alignParentTop="true"
         android:gravity="top"
         android:hint="@string/message_msg_hint" />
 
@@ -29,6 +20,15 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:text="@string/btn_send"
+        android:textColor="@color/colorWhite" />
+
+    <Button
+        android:id="@+id/message_invite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:layout_above="@id/message_send"
+        android:text="@string/message_invite"
         android:textColor="@color/colorWhite" />
 
 </RelativeLayout>
