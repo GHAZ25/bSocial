@@ -2,16 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
     tools:context="uniftec.bsocial.fragments.MessageFragment">
 
     <EditText
         android:id="@+id/message_msg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/message_invite"
         android:layout_alignParentTop="true"
         android:gravity="top"
-        android:hint="@string/message_msg_hint" />
+        android:hint="@string/message_msg_hint"
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/message_send"

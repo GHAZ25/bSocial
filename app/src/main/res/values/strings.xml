@@ -28,6 +28,7 @@
     <string name="message_msg_hint">Digite sua mensagem</string>
     <string name="message_invite">Adicionar contato</string>
     <string name="your_likes">Seus gostos</string>
+    <string name="his_likes">Gostos dele</string>
 
     <string name="btn_save">Salvar</string>
     <string name="btn_cancel">Cancelar</string>

@@ -1,6 +1,5 @@
 package uniftec.bsocial;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -40,7 +38,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email,gender,age_range.fields(min)");
+        parameters.putString("fields", "id,name,email,gender,birthday");
         request.setParameters(parameters);
         request.executeAsync();
     }
@@ -113,9 +114,44 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void setAge(JSONObject object) {
         TextView ageText = (TextView) findViewById(R.id.ageText);
-        JSONObject object1 = object.optJSONObject("age_range");
-        String age = object1.optString("min");
+        String age = object.optString("birthday");
+
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        int d = 4, m = 10, y = 1994;
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(format.parse(age));
+            d = calendar.get(Calendar.DAY_OF_MONTH);
+            m = calendar.get(Calendar.MONTH);
+            y = calendar.get(Calendar.YEAR);
+        } catch (Exception e) {
+
+        }
+
+        age = String.valueOf(getAge(y, m, d));
+
         ageText.setText("Idade: " + age + " anos");
+    }
+
+    public Integer getAge(int _year, int _month, int _day) {
+
+        GregorianCalendar cal = new GregorianCalendar();
+        int y, m, d;
+        Integer a;
+
+        y = cal.get(Calendar.YEAR);
+        m = cal.get(Calendar.MONTH);
+        d = cal.get(Calendar.DAY_OF_MONTH);
+        cal.set(_year, _month, _day);
+        a = y - cal.get(Calendar.YEAR);
+        if ((m < cal.get(Calendar.MONTH))
+                || ((m == cal.get(Calendar.MONTH)) && (d < cal
+                .get(Calendar.DAY_OF_MONTH)))) {
+            --a;
+        }
+        if (a < 0)
+            throw new IllegalArgumentException("Age < 0");
+        return a;
     }
 
     private void setGender(JSONObject object) {
