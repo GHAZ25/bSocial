@@ -196,7 +196,7 @@ public class SearchFragment extends Fragment {
                 }
 
             } else {
-                Toast.makeText(getActivity(), R.string.activity_contacts_error, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.fragment_contacts_error, Toast.LENGTH_LONG).show();
             }
 
             load.dismiss();

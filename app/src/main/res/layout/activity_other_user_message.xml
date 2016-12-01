@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center"
-        android:background="@color/btnBG"
+        android:background="@color/colorDefault"
         android:text="@string/btn_send_msg"
         android:textColor="#fff" />
 
