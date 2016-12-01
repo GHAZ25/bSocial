@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
 
         requestPermissions(INITIAL_PERMS, 1337);
 
-        getActivity().setTitle("Perfil");
+        getActivity().setTitle(R.string.fragment_profile);
     }
 
     @Override

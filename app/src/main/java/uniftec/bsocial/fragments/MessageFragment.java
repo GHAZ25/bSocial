@@ -59,7 +59,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getDialog().setTitle("Enviar Mensagem");
+        getDialog().setTitle(R.string.fragment_message);
 
         userId = getArguments().getString(USER_ID);
 
@@ -96,7 +96,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
 
     private void send() {
         if(texto.getText().toString().trim().isEmpty())
-            Toast.makeText(getContext(), "Texto não pode ficar em branco!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.blank_text, Toast.LENGTH_SHORT).show();
         else {
             notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
             dismiss();
@@ -105,7 +105,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
 
     private void invite() {
         if(texto.getText().toString().trim().isEmpty())
-            Toast.makeText(getContext(), "Texto não pode ficar em branco!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.blank_text, Toast.LENGTH_SHORT).show();
         else {
             notificationCache.inviteNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
             dismiss();

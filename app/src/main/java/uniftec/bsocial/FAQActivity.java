@@ -10,7 +10,7 @@ public class FAQActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle("Ajuda");
+        setTitle(R.string.activity_help);
 
         setContentView(R.layout.activity_faq);
 

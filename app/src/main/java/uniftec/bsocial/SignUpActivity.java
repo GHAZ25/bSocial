@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(SignUpActivity.this, INITIAL_PERMS, 1337);
 
-        setTitle("bSocial");
+        setTitle(R.string.app_name);
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -87,7 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void registerView(JSONObject object) {
         setContentView(R.layout.activity_sign_up);
-        setTitle("Cadastro");
+        setTitle(R.string.activity_signup);
         setProfilePic(object);
         nameText = (TextView) findViewById(R.id.nameText);
         setName(object);
@@ -130,7 +130,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         age = String.valueOf(getAge(y, m, d));
 
-        ageText.setText("Idade: " + age + " anos");
+        ageText.setText(R.string.age + ": " + age + " " + R.string.age_count);
     }
 
     public Integer getAge(int _year, int _month, int _day) {
@@ -325,7 +325,7 @@ public class SignUpActivity extends AppCompatActivity {
                         finish();
                     break;
                     default:
-                        Toast.makeText(getApplicationContext(), "Ocorreu um erro ao efetuar o cadastro. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.activity_signup_error, Toast.LENGTH_LONG).show();
                 }
             }
             load.dismiss();
@@ -338,9 +338,9 @@ public class SignUpActivity extends AppCompatActivity {
             case 1337: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                    //Nada aqui por enquanto
                 } else {
-                    Toast.makeText(SignUpActivity.this, "Permissão de localização negada!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, R.string.permission_location_declined, Toast.LENGTH_SHORT).show();
                     LoginManager.getInstance().logOut();
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                     finish();

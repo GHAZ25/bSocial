@@ -64,12 +64,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/pctText"
         android:id="@+id/outroperfil_seus_gostos"
-        android:shadowColor="#fff"
+        android:shadowColor="@color/colorWhite"
         android:shadowDx="1"
         android:shadowDy="1"
         android:shadowRadius="3"
         android:textSize="14sp"
-        android:textColor="#3b5998"
+        android:textColor="@color/colorDefault"
         android:text="@string/his_likes"
         android:layout_marginBottom="-8dp"
         android:layout_marginTop="4dp"
@@ -83,7 +83,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center"
-        android:background="#3b5998"
+        android:background="@color/colorDefault"
         android:text="Enviar Mensagem"
         android:textColor="#fff" />
 

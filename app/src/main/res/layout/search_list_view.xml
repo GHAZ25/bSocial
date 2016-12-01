@@ -24,13 +24,13 @@
             android:layout_marginLeft="5dp"
             android:layout_toEndOf="@+id/userPic"
             android:layout_toRightOf="@+id/userPic"
-            android:shadowColor="#fff"
+            android:shadowColor="@color/colorWhite"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="3"
             android:text="bSocial"
             android:textAlignment="center"
-            android:textColor="#3b5998"
+            android:textColor="@color/colorDefault"
             android:textSize="16sp" />
 
         <TextView

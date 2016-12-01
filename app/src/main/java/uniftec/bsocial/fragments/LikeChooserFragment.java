@@ -64,7 +64,7 @@ public class LikeChooserFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getDialog().setTitle("Gostos Principais");
+        getDialog().setTitle(R.string.fragment_preferred_likes);
 
         View view = inflater.inflate(R.layout.fragment_like_chooser, container, false);
 

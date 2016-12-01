@@ -18,7 +18,7 @@
         android:layout_below="@id/categoryChooserListView"
         android:background="@android:color/holo_green_light"
         android:enabled="true"
-        android:text="Salvar"
+        android:text="@string/btn_save"
         android:textColor="@android:color/white" />
 
 

@@ -35,7 +35,7 @@ public class OtherUserMessageActivity extends AppCompatActivity implements View.
         setContentView(R.layout.activity_other_user_message);
 
         userName = (String) getIntent().getSerializableExtra("userName");
-        setTitle("Mensagens de " + userName);
+        setTitle(R.string.messages_from + userName);
 
         sendMsg = (Button) findViewById(R.id.send_message);
         sendMsg.setOnClickListener(this);

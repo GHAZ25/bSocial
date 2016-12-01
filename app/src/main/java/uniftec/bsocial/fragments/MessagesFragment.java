@@ -75,7 +75,7 @@ public class MessagesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        getActivity().setTitle("Mensagens");
+        getActivity().setTitle(R.string.fragment_messages);
     }
 
     @Override

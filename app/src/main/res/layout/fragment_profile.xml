@@ -59,7 +59,7 @@
         android:shadowDy="1"
         android:shadowRadius="3"
         android:textSize="14sp"
-        android:textColor="#3b5998"
+        android:textColor="@color/colorDefault"
         android:text="@string/your_likes"
         android:layout_marginBottom="-8dp"
         android:layout_marginTop="4dp"

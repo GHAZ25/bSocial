@@ -51,7 +51,7 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        getActivity().setTitle("Configurações");
+        getActivity().setTitle(R.string.fragment_configs);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
                                     chkNotifica.setChecked(true);
                                 }
                             } else {
-                                Toast.makeText(getActivity(), "É necessario estar conectado a internet para atualizar suas preferênias. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), R.string.fragment_configs_error, Toast.LENGTH_LONG).show();
                             }
 
                             timer.cancel();

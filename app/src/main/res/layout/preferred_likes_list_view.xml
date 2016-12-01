@@ -25,13 +25,13 @@
             android:layout_toRightOf="@+id/likePic"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
             android:gravity="center"
-            android:shadowColor="#fff"
+            android:shadowColor="@color/colorWhite"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="3"
             android:text="bSocial"
             android:textAlignment="center"
-            android:textColor="#3b5998"
+            android:textColor="@color/colorDefault"
             android:textSize="16sp" />
 
         <TextView

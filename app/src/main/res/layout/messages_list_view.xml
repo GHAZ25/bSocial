@@ -30,7 +30,7 @@
             android:shadowRadius="3"
             android:text="bSocial"
             android:textAlignment="center"
-            android:textColor="#3b5998"
+            android:textColor="@color/colorDefault"
             android:textSize="16sp" />
 
         <TextView
@@ -44,13 +44,13 @@
             android:layout_toEndOf="@+id/userPic"
             android:layout_toRightOf="@+id/userPic"
             android:gravity="start"
-            android:shadowColor="#fff"
+            android:shadowColor="@color/colorWhite"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="3"
             android:text="Mensagem"
             android:textAlignment="textStart"
-            android:textColor="#7e7e7e"
+            android:textColor="@color/colorTextDefault"
             android:textSize="16sp" />
 
         <TextView

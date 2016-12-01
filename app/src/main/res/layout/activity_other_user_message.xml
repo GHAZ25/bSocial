@@ -22,8 +22,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center"
-        android:background="#3b5998"
-        android:text="Enviar Mensagem"
+        android:background="@color/btnBG"
+        android:text="@string/btn_send_msg"
         android:textColor="#fff" />
 
 </LinearLayout>

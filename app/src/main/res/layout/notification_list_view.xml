@@ -23,7 +23,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toEndOf="@+id/notification_icon"
             android:layout_toRightOf="@+id/notification_icon"
-            android:shadowColor="#3b5998"
+            android:shadowColor="@color/colorDefault"
             android:shadowDx="1"
             android:shadowDy="1"
             android:shadowRadius="3"
