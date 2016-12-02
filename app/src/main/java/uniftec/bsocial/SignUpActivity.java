@@ -130,7 +130,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         age = String.valueOf(getAge(y, m, d));
 
-        ageText.setText("Idade: " + age + " anos");
+        ageText.setText(R.string.age + ": " + age + " " + R.string.age_count);
     }
 
     public Integer getAge(int _year, int _month, int _day) {
