@@ -225,10 +225,14 @@ public class SignUpActivity extends AppCompatActivity {
                     }, null);
 
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    user.setLatitude(location.getLatitude());
-                    user.setLongitude(location.getLongitude());
 
-                    if (user.getLatitude() == null) {
+                    try {
+                        user.setLatitude(location.getLatitude());
+                        user.setLongitude(location.getLongitude());
+                        userCache.saveUser(user);
+
+                        register.execute();
+                    } catch (Exception e) {
                         load = ProgressDialog.show(SignUpActivity.this, "Aguarde", "Buscando sua localização...");
                         locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
                             @Override
@@ -253,10 +257,6 @@ public class SignUpActivity extends AppCompatActivity {
                                 load.dismiss();
                             }
                         }, null);
-                    } else {
-                        userCache.saveUser(user);
-
-                        register.execute();
                     }
                 } catch (SecurityException e) {
                     Toast.makeText(getApplicationContext(), "É necessário dar permissão de acesso a sua localização para prosseguir.", Toast.LENGTH_LONG).show();
