@@ -32,6 +32,7 @@ import java.util.List;
 import uniftec.bsocial.entities.Category;
 import uniftec.bsocial.entities.User;
 import uniftec.bsocial.entities.UserSearch;
+import uniftec.bsocial.entities.messages.MessageUserSearch;
 
 public class ContactsCache {
     //private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -114,15 +115,15 @@ public class ContactsCache {
 
     public ArrayList<UserSearch> listContacts() { return contacts; }
 
-    private class LoadContacts extends AsyncTask<Void, Void, UserSearch[]> {
+    private class LoadContacts extends AsyncTask<Void, Void, MessageUserSearch> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(activity, "Aguarde", "Buscando contatos...");
         }
 
         @Override
-        protected UserSearch[] doInBackground(Void... params) {
-            UserSearch[] retorno = null;
+        protected MessageUserSearch doInBackground(Void... params) {
+            MessageUserSearch retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost request = null;
@@ -138,7 +139,7 @@ public class ContactsCache {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, UserSearch[].class);
+                retorno = gson.fromJson(reader, MessageUserSearch.class);
 
                 content.close();
             } catch (Exception e) { }
@@ -147,7 +148,7 @@ public class ContactsCache {
         }
 
         @Override
-        protected void onPostExecute(UserSearch[] retorno) {
+        protected void onPostExecute(MessageUserSearch retorno) {
             if (retorno != null) {
                 /*SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.clear();
@@ -170,11 +171,15 @@ public class ContactsCache {
 
                 editor.commit(); */
 
-                for (int i = 0; i < retorno.length; i++) {
-                    contacts.add(retorno[i]);
+                if (retorno.getMessage().equals("true")) {
+                    for (int i = 0; i < retorno.getUsers().size(); i++) {
+                        contacts.add(retorno.getUsers().get(i));
+                    }
+                } else {
+                    Toast.makeText(activity, retorno.getMessage(), Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(activity, "Ocorreu um erro ao listar os contatos. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Não foi possível listar seus contatos. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
 
             load.dismiss();

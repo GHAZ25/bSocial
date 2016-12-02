@@ -61,10 +61,10 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
         switch (view.getId()) {
             case R.id.sendMsg:
                 sendMsg(manager);
-                break;
+            break;
             case R.id.otherprofile_location_button:
                 openMap();
-                break;
+            break;
 
         }
     }
@@ -116,9 +116,7 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
             Toast.makeText(getApplicationContext(), "Vocês estão super próximos!", Toast.LENGTH_SHORT).show();
         else {
             try {
-                final Intent intent = new
-                        Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?" +
-                        "saddr=" + userGeo + "&daddr=" + userCacheGeo));
+                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr=" + userGeo + "&daddr=" + userCacheGeo));
                 intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                 startActivity(intent);
             } catch (Exception e) {

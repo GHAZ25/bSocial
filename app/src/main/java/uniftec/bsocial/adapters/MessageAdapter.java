@@ -48,9 +48,10 @@ public class MessageAdapter extends BaseAdapter {
         holder.userName = (TextView) rowView.findViewById(R.id.userName);
         holder.userPic = (ProfilePictureView) rowView.findViewById(R.id.userPic);
         holder.userMessage = (TextView) rowView.findViewById(R.id.user_message);
+
         holder.userId.setText(result.get(i).getSentUserId());
         holder.userName.setText(result.get(i).getSentUserName());
-        holder.userPic.setTag(result.get(i).getSentUserPicUrl());
+        //holder.userPic.setTag(result.get(i).getSentUserPicUrl());
         holder.userPic.setProfileId(result.get(i).getSentUserId());
 
         String msg = result.get(i).getMessage();

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-        <ImageView
+        <com.facebook.login.widget.ProfilePictureView
             android:id="@+id/userPic"
             android:layout_width="50dp"
             android:layout_height="50dp"

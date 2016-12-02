@@ -107,7 +107,7 @@ public class LikesCache {
                     }
                 }
             } catch (ParseException e) {
-                Toast.makeText(activity, "Ocorreu um erro ao verificar a ultima atualização.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(activity, "Ocorreu um erro ao verificar a ultima atualização.", Toast.LENGTH_LONG).show();
                 loadPreference.execute();
             }
         }
@@ -160,9 +160,9 @@ public class LikesCache {
             load.dismiss();
             if (!message.equals("true")) {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
-            } else {
+            } /* else {
                 Toast.makeText(activity, "Preferências atualizadas com sucesso.", Toast.LENGTH_LONG).show();
-            }
+            } */
         }
     }
 
