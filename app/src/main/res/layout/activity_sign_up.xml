@@ -23,7 +23,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/nameText"
-        android:hint="Nome"
+        android:hint="@string/name"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
@@ -37,7 +37,7 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/emailText"
-        android:hint="E-mail"
+        android:hint="@string/email"
         android:layout_below="@+id/nameText"
         android:layout_alignLeft="@+id/nameText"
         android:layout_alignStart="@+id/nameText"
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Sexo"
+        android:text="@string/gender"
         android:ems="10"
         android:layout_marginTop="21dp"
         android:id="@+id/genderText"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Idade: "
+        android:text="@string/age"
         android:ems="10"
         android:id="@+id/ageText"
         android:layout_below="@+id/emailText"
@@ -71,7 +71,7 @@
         android:enabled="false" />
 
     <Button
-        android:text="Salvar"
+        android:text="@string/btn_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnSave"
@@ -81,7 +81,7 @@
         android:enabled="true" />
 
     <Button
-        android:text="Cancelar"
+        android:text="@string/btn_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnCancel"

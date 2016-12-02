@@ -8,4 +8,6 @@
     <color name="colorNormalPct">#68879B</color>
     <color name="colorLowPct">#EA0000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorDefault">#3B5998</color>
+    <color name="colorTextDefault">#7E7E7E</color>
 </resources>

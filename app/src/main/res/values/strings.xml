@@ -2,6 +2,7 @@
     <string name="app_name">bSocial</string>
     <string name="facebook_app_id">1067170140029748</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="welcome">Bem vindo!</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -20,6 +21,24 @@
     <string name="nav_menu_settings">Configurações</string>
     <string name="nav_menu_exit">Sair</string>
 
+    <string name="activity_help">Ajuda</string>
+    <string name="activity_signup">Cadastro</string>
+
+    <string name="fragment_ignore_categories">Ignorar Categorias</string>
+    <string name="fragment_contacts">Contatos</string>
+    <string name="fragment_preferred_likes">Gostos Principais</string>
+    <string name="fragment_message">Enviar Mensagem</string>
+    <string name="fragment_messages">Mensagens</string>
+    <string name="fragment_invites">Convites</string>
+    <string name="fragment_profile">Perfil</string>
+    <string name="fragment_search">Busca</string>
+    <string name="fragment_configs">Configurações</string>
+
+    <string name="delete_contact">Exclusão de contato</string>
+    <string name="delete_contact_msg">Deseja excluir este contato?</string>
+    <string name="invite_contact">Solicitação de contato</string>
+    <string name="invite_contact_msg">Deseja registrá-lo como um contato?</string>
+
     <string name="settings_check_hide">Oculto para outros usuários</string>
     <string name="settings_check_notifications">Notificar ao encontrar contatos próximos</string>
     <string name="settings_btn_edit_likes">Editar gostos principais</string>
@@ -28,10 +47,36 @@
     <string name="message_msg_hint">Digite sua mensagem</string>
     <string name="message_invite">Adicionar contato</string>
     <string name="your_likes">Seus gostos</string>
+    <string name="his_likes">Gostos dele</string>
 
     <string name="btn_save">Salvar</string>
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_send">Enviar</string>
+    <string name="btn_send_msg">Enviar mensagem</string>
     <string name="btn_respond">Responder</string>
     <string name="title_activity_other_user_message">OtherUserMessageActivity</string>
+
+    <string name="login_expired">Seu login expirou. Faça login novamente.</string>
+    <string name="action_canceled">Ação cancelada</string>
+    <string name="login_error">Erro ao logar. Tente novamente mais tarde.</string>
+    <string name="users_location_close">Vocês estão super próximos!</string>
+    <string name="download_maps">Você deve baixar o Google Maps para utilizar este recurso!</string>
+    <string name="activity_signup_error">Ocorreu um erro ao efetuar o cadastro. Tente novamente mais tarde.</string>
+    <string name="permission_location_declined">Permissão de localização negada!</string>
+    <string name="blank_text">Texto não pode ficar em branco!</string>
+    <string name="fragment_contacts_error">Ocorreu um erro ao listar os usuários. Tente novamente mais tarde.</string>
+    <string name="fragment_configs_error">É necessario estar conectado a internet para atualizar suas preferênias. Tente novamente mais tarde.</string>
+
+    <string name="compatibility">Compatibilidade</string>
+    <string name="messages_from">Mensagens de</string>
+    <string name="age">Idade</string>
+    <string name="age_count">anos</string>
+    <string name="male">Masculino</string>
+    <string name="female">Feminino</string>
+    <string name="name">Nome</string>
+    <string name="gender">Sexo</string>
+    <string name="email">E-mail</string>
+
+    <string name="wait">Aguarde</string>
+    <string name="validating_user">Validando usuário</string>
 </resources>

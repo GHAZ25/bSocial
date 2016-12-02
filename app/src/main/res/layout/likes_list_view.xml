@@ -26,7 +26,7 @@
             android:textSize="16sp"
             android:text="bSocial"
             android:textAlignment="center"
-            android:textColor="#3b5998"
+            android:textColor="@color/colorDefault"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/likePic"
             android:layout_toEndOf="@+id/likePic"

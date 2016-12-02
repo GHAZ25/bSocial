@@ -14,7 +14,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:checked="false"
-        android:text="Oculto para outros usuários" />
+        android:text="@string/settings_check_hide" />
 
     <CheckBox
         android:id="@+id/notify"
@@ -24,7 +24,7 @@
         android:layout_alignStart="@+id/visibility"
         android:layout_below="@+id/visibility"
         android:checked="false"
-        android:text="Notificar ao encontrar contatos próximos" />
+        android:text="@string/settings_check_notifications" />
 
     <Button
         android:id="@+id/savePreference"
@@ -33,7 +33,7 @@
         android:layout_above="@+id/cancelPreference"
         android:background="@android:color/holo_green_light"
         android:enabled="true"
-        android:text="Salvar"
+        android:text="@string/btn_save"
         android:textColor="@android:color/white" />
 
     <Button
@@ -43,7 +43,7 @@
         android:layout_alignParentBottom="true"
         android:background="@android:color/holo_red_light"
         android:enabled="true"
-        android:text="Cancelar"
+        android:text="@string/btn_cancel"
         android:textColor="@android:color/white" />
 
     <Button
@@ -54,7 +54,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:background="@color/com_facebook_blue"
-        android:text="Editar gostos principais"
+        android:text="@string/settings_btn_edit_likes"
         android:textColor="#fff" />
 
     <Button
@@ -64,7 +64,7 @@
         android:layout_below="@id/editPreferredLikes"
         android:layout_marginTop="15dp"
         android:background="@color/com_facebook_blue"
-        android:text="Ignorar categorias"
+        android:text="@string/settings_btn_edit_categories"
         android:textColor="#fff" />
 
 </RelativeLayout>

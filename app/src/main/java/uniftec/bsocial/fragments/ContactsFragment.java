@@ -55,7 +55,7 @@ public class ContactsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        getActivity().setTitle("Contatos");
+        getActivity().setTitle(R.string.fragment_contacts);
     }
 
     @Override
@@ -104,8 +104,8 @@ public class ContactsFragment extends Fragment {
 
     private void delete(final String user) {
         new AlertDialog.Builder(getContext())
-                .setTitle("Exclusão de contato")
-                .setMessage("Deseja excluir este contato?")
+                .setTitle(R.string.delete_contact)
+                .setMessage(R.string.delete_contact_msg)
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

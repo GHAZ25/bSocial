@@ -25,7 +25,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,9 +41,10 @@
         <activity
             android:name=".NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".OtherProfileActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity android:name=".SignUpActivity" android:screenOrientation="portrait" />
+        <activity android:name=".OtherProfileActivity" android:screenOrientation="portrait" />
 
         <service
             android:name=".PushNotificationService"
@@ -64,8 +65,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".FAQActivity" />
-        <activity android:name=".OtherUserMessageActivity" />
+        <activity android:name=".FAQActivity" android:screenOrientation="portrait" />
+        <activity android:name=".OtherUserMessageActivity" android:screenOrientation="portrait" />
     </application>
 
 </manifest>

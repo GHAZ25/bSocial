@@ -58,7 +58,7 @@ public class NotificationsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Convites");
+        getActivity().setTitle(R.string.fragment_invites);
 
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
@@ -135,8 +135,8 @@ public class NotificationsFragment extends Fragment {
 
     private void respond(final Notification notification) {
         new AlertDialog.Builder(getContext())
-                .setTitle("Solicitação de contato")
-                .setMessage("Deseja registrá-lo como um contato?")
+                .setTitle(R.string.invite_contact)
+                .setMessage(R.string.invite_contact_msg)
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

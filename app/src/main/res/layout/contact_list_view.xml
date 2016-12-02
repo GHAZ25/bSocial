@@ -15,12 +15,6 @@
             android:layout_height="50dp"
             android:background="@drawable/image_border_like"
             android:padding="3dp"/>
-        <!--<ImageView-->
-            <!--android:id="@+id/userPic"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:background="@drawable/image_border_like"-->
-            <!--android:padding="3dp" />-->
 
         <TextView
             android:id="@+id/userName"

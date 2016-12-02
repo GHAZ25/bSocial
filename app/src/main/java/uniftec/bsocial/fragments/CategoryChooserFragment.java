@@ -52,7 +52,7 @@ public class CategoryChooserFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getDialog().setTitle("Ignorar Categorias");
+        getDialog().setTitle(R.string.fragment_ignore_categories);
 
         View view = inflater.inflate(R.layout.fragment_category_chooser, container, false);
 
