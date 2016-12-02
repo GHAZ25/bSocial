@@ -99,7 +99,7 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
 
         String pct = String.valueOf(Math.round(user.getCompatibilidade()));
 
-        pctText.setText(R.string.compatibility + ": " + pct + "%");
+        pctText.setText("Compatibilidade: " + pct + "%");
     }
 
     private void createLikeList() {
