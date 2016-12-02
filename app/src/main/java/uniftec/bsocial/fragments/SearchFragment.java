@@ -78,7 +78,7 @@ public class SearchFragment extends Fragment {
         ListUsers listUsers = new ListUsers();
         listUsers.execute();
 
-        getActivity().setTitle("Busca");
+        getActivity().setTitle(R.string.fragment_search);
     }
 
     @Override
