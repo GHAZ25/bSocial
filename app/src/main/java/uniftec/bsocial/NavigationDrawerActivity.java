@@ -96,15 +96,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
             @Override
             public void onLocationChanged(Location location) {
-                latitude = Double.parseDouble(decimalFormat.format(location.getLatitude() - userCache.getUser().getLatitude()));
-                longitude = Double.parseDouble(decimalFormat.format(location.getLongitude() - userCache.getUser().getLongitude()));
+                try {
+                    latitude = Double.parseDouble(decimalFormat.format(location.getLatitude() - userCache.getUser().getLatitude()));
+                    longitude = Double.parseDouble(decimalFormat.format(location.getLongitude() - userCache.getUser().getLongitude()));
 
-                if ((latitude > 0.00000000) || (latitude < -0.00000000) || (longitude > 0.00000000) || (longitude < -0.00000000)) {
-                    userCache.getUser().setLatitude(location.getLatitude());
-                    userCache.getUser().setLongitude(location.getLongitude());
+                    if ((latitude > 0.00000000) || (latitude < -0.00000000) || (longitude > 0.00000000) || (longitude < -0.00000000)) {
+                        userCache.getUser().setLatitude(location.getLatitude());
+                        userCache.getUser().setLongitude(location.getLongitude());
 
-                    userCache.updateLocation();
-                }
+                        userCache.updateLocation();
+                    }
+                } catch (Exception e) { }
             }
         };
 

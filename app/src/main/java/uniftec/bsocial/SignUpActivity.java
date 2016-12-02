@@ -201,6 +201,8 @@ public class SignUpActivity extends AppCompatActivity {
                     register.execute();
                 } catch (SecurityException e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
