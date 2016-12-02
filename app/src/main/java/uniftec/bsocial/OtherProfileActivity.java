@@ -75,6 +75,7 @@ public class OtherProfileActivity extends AppCompatActivity implements View.OnCl
 
         Bundle args = new Bundle();
         args.putString(MessageFragment.USER_ID, user.getId());
+        args.putString(MessageFragment.USER_NAME, user.getName());
         args.putString(MessageFragment.TYPE, "randommsg");
         messageFragment.setArguments(args);
 

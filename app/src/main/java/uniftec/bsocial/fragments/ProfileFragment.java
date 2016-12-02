@@ -152,23 +152,27 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setNameAgeLocation() {
-        String name = jsonObject.optString("name");
+        String name = userCache.getUser().getNome();
 
-        String age = jsonObject.optString("birthday");
+        String age = "-";
 
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        int d = 4, m = 10, y = 1994;
-        try {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(format.parse(age));
-            d = calendar.get(Calendar.DAY_OF_MONTH);
-            m = calendar.get(Calendar.MONTH);
-            y = calendar.get(Calendar.YEAR);
-        } catch (Exception e) {
+        if (jsonObject.optString("birthday") != null) {
+            age = jsonObject.optString("birthday");
 
+            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+            int d = 4, m = 10, y = 1994;
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(format.parse(age));
+                d = calendar.get(Calendar.DAY_OF_MONTH);
+                m = calendar.get(Calendar.MONTH);
+                y = calendar.get(Calendar.YEAR);
+            } catch (Exception e) {
+
+            }
+
+            age = String.valueOf(getAge(y, m, d));
         }
-
-        age = String.valueOf(getAge(y, m, d));
 
         String nameAge = name + ", " + age;
 

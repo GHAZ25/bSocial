@@ -2,12 +2,14 @@ package uniftec.bsocial.entities;
 
 public class Message {
     private String receivedUserId;
+    private String receivedUserName;
     private String sentUserId;
     private String sentUserName;
     private String message;
 
-    public Message(String receivedUserId, String sentUserId, String sentUserName, String message) {
+    public Message(String receivedUserId, String receivedUserName, String sentUserId, String sentUserName, String message) {
         this.receivedUserId = receivedUserId;
+        this.receivedUserName = receivedUserName;
         this.sentUserId = sentUserId;
         this.sentUserName = sentUserName;
         this.message = message;
@@ -19,6 +21,14 @@ public class Message {
 
     public void setReceivedUserId(String receivedUserId) {
         this.receivedUserId = receivedUserId;
+    }
+
+    public String getReceivedUserName() {
+        return receivedUserName;
+    }
+
+    public void setReceivedUserName(String receivedUserName) {
+        this.receivedUserName = receivedUserName;
     }
 
     public String getSentUserId() {

@@ -43,6 +43,7 @@ public class NotificationCache {
     private ArrayList<Notification> notifications = null;
     private String texto = null;
     private String nome = null;
+    private String nomeContato = null;
 
     public NotificationCache(FragmentActivity activity, String type, String contato) {
         super();
@@ -94,12 +95,13 @@ public class NotificationCache {
         }
     }
 
-    public void sendNotification(String texto, String nome, String destino) {
-        String[] params = new String[3];
+    public void sendNotification(String texto, String nome, String destino, String nomeContato) {
+        String[] params = new String[4];
 
         params[0] = texto;
         params[1] = nome;
         params[2] = destino;
+        params[3] = nomeContato;
 
         SendNotification sendNotification = new SendNotification();
         sendNotification.execute(params);
@@ -346,6 +348,7 @@ public class NotificationCache {
 
                 texto = params[0];
                 nome = params[1];
+                nomeContato = params[3];
                 request = new HttpPost("http://ec2-54-218-233-242.us-west-2.compute.amazonaws.com:8080/ws/rest/gcm/send");
 
                 values.add(new BasicNameValuePair("texto", params[0]));
@@ -378,7 +381,7 @@ public class NotificationCache {
                 }
 
                 sendConfirm(profile.getId(), "Você: " + texto);
-                messageCache.messageConfirm(contato, texto, nome);
+                messageCache.messageConfirm(contato, texto, nomeContato);
                 Toast.makeText(activity, "Mensagem enviada com sucesso.", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();

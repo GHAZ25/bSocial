@@ -17,6 +17,7 @@ import uniftec.bsocial.cache.UserCache;
 
 public class MessageFragment extends DialogFragment implements View.OnClickListener {
     public static final String USER_ID = "USER_ID";
+    public static final String USER_NAME = "USER_NAME";
     public static final String TYPE = "TYPE";
 
     private static final String ARG_PARAM1 = "param1";
@@ -26,6 +27,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private String mParam1;
     private String mParam2;
     private String userId;
+    private String userName;
     private Button sendBtn;
     private Button inviteBtn;
     private EditText texto;
@@ -60,6 +62,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         getDialog().setTitle(R.string.fragment_message);
 
         userId = getArguments().getString(USER_ID);
+        userName = getArguments().getString(USER_NAME);
 
         notificationCache = new NotificationCache(getActivity(), "mensagem", userId);
         notificationCache.initialize();
@@ -96,7 +99,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
         if(texto.getText().toString().trim().isEmpty())
             Toast.makeText(getContext(), R.string.blank_text, Toast.LENGTH_SHORT).show();
         else {
-            notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId);
+            notificationCache.sendNotification(texto.getText().toString(), userCache.getUser().getNome(), userId, userName);
             dismiss();
         }
     }
