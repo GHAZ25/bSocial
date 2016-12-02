@@ -1,60 +1,79 @@
 package uniftec.bsocial;
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.gson.Gson;
 
-import uniftec.bsocial.fragments.ProfileFragment;
+import uniftec.bsocial.cache.MessageCache;
+import uniftec.bsocial.cache.NotificationCache;
+import uniftec.bsocial.entities.PushReturn;
 
 public class PushNotificationService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
-        //createNotification(mTitle, push_msg);
-        //Log.i("Mensagem: ", message);
+        Profile profile = Profile.getCurrentProfile();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        if (profile != null) {
+            Gson gson = new Gson();
+            String message = data.getString("message");
 
-        //icon appears in device notification bar and right hand corner of notification
-        builder.setSmallIcon(R.mipmap.ic_profile);
+            PushReturn push = gson.fromJson(message, PushReturn.class);
 
-        // This intent is fired when notification is clicked
-        //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://stacktips.com/"));
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
-        Intent intent = new Intent(getApplicationContext(), NavigationDrawerActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            switch (push.getType()) {
+                case "mensagem":
+                    NotificationCache notificationCache = new NotificationCache(push.getNot().getType(), push.getNot().getId(), getApplicationContext());
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+                    switch (push.getNot().getType()) {
+                        case "mensagem":
+                            notificationCache.sendConfirm(push.getNot().getId(), push.getNot().getMessage());
 
-        // Set the intent that will fire when the user taps the notification.
-        // builder.setContentIntent(pendingIntent);
-        builder.setFullScreenIntent(pendingIntent, true);
-        builder.setContentIntent(pendingIntent);
+                            MessageCache messageCache = new MessageCache(getApplicationContext());
+                            messageCache.messageConfirm(push.getMes().getSentUserId(), push.getMes().getMessage(), push.getMes().getSentUserName());
+                        break;
+                        case "convite":
+                            notificationCache.newInvite(push.getNot().getId(), push.getNot().getMessage(), push.getNot().getMessageId());
+                        break;
+                    }
+                    break;
+            }
 
-        // Large icon appears on the left of the notification
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
-        // Content title, which appears in large type at the top of the notification
-        builder.setContentTitle("bSocial");
+            builder.setSmallIcon(R.mipmap.ic_profile);
 
-        // Content text, which appears in smaller text below the title
-        builder.setContentText(message);
+            Intent intent = new Intent(getApplicationContext(), NavigationDrawerActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        // The subtext, which appears under the text on newer devices.
-        // This will show-up in the devices with Android 4.2 and above only
-        builder.setSubText("Clique aqui para mais informações.");
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            builder.setFullScreenIntent(pendingIntent, true);
+            builder.setContentIntent(pendingIntent);
 
-        // Will display the notification in the notification bar
-        notificationManager.notify(null, 1, builder.build());
+            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+
+            builder.setContentTitle("bSocial");
+
+            builder.setContentText(push.getMessage());
+
+            builder.setSubText("Clique aqui para mais informações.");
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            notificationManager.notify(null, 1, builder.build());
+        }
     }
 }

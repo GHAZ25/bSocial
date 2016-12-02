@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -28,6 +29,7 @@ import java.util.List;
 import uniftec.bsocial.GCMClientManager;
 import uniftec.bsocial.PushNotificationService;
 import uniftec.bsocial.entities.User;
+import uniftec.bsocial.entities.messages.MessageUser;
 
 public class UserCache {
     private FragmentActivity activity = null;
@@ -50,22 +52,24 @@ public class UserCache {
         file = "settings" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
 
-        if (!sharedpreferences.contains(id)) {
+        //if (!sharedpreferences.contains("id")) {
             gcmClientManager = new GCMClientManager(activity);
             gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
                 @Override
                 public void onSuccess(String registrationId, boolean isNewRegistration) {
                     updateGCM(registrationId);
 
-                    pushNotificationService = new PushNotificationService();
-                    pushNotificationService.onCreate();
+                    if (isNewRegistration) {
+                        pushNotificationService = new PushNotificationService();
+                        pushNotificationService.onCreate();
+                    }
                 }
                 @Override
                 public void onFailure(String ex) {
                     super.onFailure(ex);
                 }
             });
-        }
+        //}
     }
 
     public UserCache(String id, Context context) {
@@ -133,13 +137,13 @@ public class UserCache {
         editor.commit();
     }
 
-    private class ListPreferences extends AsyncTask<Void, Void, User> {
+    private class ListPreferences extends AsyncTask<Void, Void, MessageUser> {
         @Override
         protected void onPreExecute(){ }
 
         @Override
-        protected User doInBackground(Void... params) {
-            User retorno = null;
+        protected MessageUser doInBackground(Void... params) {
+            MessageUser retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost request = null;
@@ -159,25 +163,27 @@ public class UserCache {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, User.class);
+                retorno = gson.fromJson(reader, MessageUser.class);
 
                 content.close();
+            }catch (Exception e) { }
 
-                return retorno;
-            }catch (Exception e){
-                return null;
-            }
+            return retorno;
         }
 
         @Override
-        protected void onPostExecute(User result) {
+        protected void onPostExecute(MessageUser result) {
             if (result != null) {
-                user = result;
+                if (result.getMessage().equals("true")) {
+                    user = result.getUser();
 
-                updateSettings();
+                    updateSettings();
+                } else {
+                    //Toast.makeText(activity, result.getMessage(), Toast.LENGTH_LONG).show();
+                }
             } else {
                 if (id != null) {
-                    Toast.makeText(activity, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Não foi possível carregar suas preferências. Tente novamente mais tarde", Toast.LENGTH_LONG).show();
                 }
                 /*if (id == null) {
                     Toast.makeText(activity, "Ocorreu um erro ao carregar as preferências.", Toast.LENGTH_LONG).show();
@@ -246,7 +252,7 @@ public class UserCache {
                         updateSettings();
                     break;
                     default:
-                        Toast.makeText(activity, "Ocorreu um erro ao alterar as preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Não foi possível alterar suas preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
                 }
             }
             load.dismiss();

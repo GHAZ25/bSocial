@@ -1,6 +1,7 @@
 package uniftec.bsocial.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,14 +46,15 @@ public class SearchAdapter extends BaseAdapter {
     public View getView(final int i, View view, final ViewGroup viewGroup) {
         Holder holder = new Holder();
         View rowView;
-            rowView = inflater.inflate(R.layout.search_list_view, null);
-            holder.userId = (TextView) rowView.findViewById(R.id.userId);
-            holder.userName = (TextView) rowView.findViewById(R.id.userName);
-            holder.userPic = (ImageView) rowView.findViewById(R.id.userPic);
-            holder.userId.setText(result.get(i).getId());
-            holder.userName.setText(result.get(i).getName());
-            holder.userPic.setTag(result.get(i).getPictureUrl());
-            Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.userPic);
+        rowView = inflater.inflate(R.layout.search_list_view, null);
+        holder.userId = (TextView) rowView.findViewById(R.id.userId);
+        holder.userName = (TextView) rowView.findViewById(R.id.userName);
+        holder.userPic = (ProfilePictureView) rowView.findViewById(R.id.userPic);
+        holder.userId.setText(result.get(i).getId());
+        holder.userName.setText(result.get(i).getName());
+        holder.userPic.setProfileId(result.get(i).getId());
+        //holder.userPic.setTag(result.get(i).getPictureUrl());
+        //Picasso.with(context).load(result.get(i).getPictureUrl()).into(holder.userPic);
 
         return rowView;
     }
@@ -62,7 +65,7 @@ public class SearchAdapter extends BaseAdapter {
     }
 
     public class Holder {
-        ImageView userPic;
+        ProfilePictureView userPic;
         TextView userName;
         TextView userId;
     }

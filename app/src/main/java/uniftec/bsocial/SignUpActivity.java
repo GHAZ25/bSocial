@@ -105,7 +105,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setName(JSONObject object) {
-       nameText.setText(object.optString("name"));
+        nameText.setText(object.optString("name"));
     }
 
     private void setEmail(JSONObject object) {
@@ -173,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
                 UserRegister register = new UserRegister();
                 register.execute();*/
 
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                /* LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 LocationListener listener = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) { }
@@ -201,6 +201,40 @@ public class SignUpActivity extends AppCompatActivity {
                     register.execute();
                 } catch (SecurityException e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                } */
+                load = ProgressDialog.show(SignUpActivity.this, "Aguarde", "Buscando sua localização...");
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                try {
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            User user = new User(nameText.getText().toString(), emailText.getText().toString(), jsonObject.optString("id"), false, false, location.getLatitude(), location.getLongitude());
+                            userCache.saveUser(user);
+
+                            load.dismiss();
+
+                            UserRegister register = new UserRegister();
+                            register.execute();
+                        }
+
+                        @Override
+                        public void onStatusChanged(String s, int i, Bundle bundle) { }
+
+                        @Override
+                        public void onProviderEnabled(String s) { }
+
+                        @Override
+                        public void onProviderDisabled(String s) {
+                            Toast.makeText(getApplicationContext(), "É necessário deixar seu GPS ativo para continuar com o cadastro.", Toast.LENGTH_LONG).show();
+                            load.dismiss();
+                        }
+                    }, null);
+                } catch (SecurityException e) {
+                    Toast.makeText(getApplicationContext(), "É necessário dar permissão de acesso a sua localização para prosseguir.", Toast.LENGTH_LONG).show();
+                    load.dismiss();
                 }
             }
         });
@@ -262,12 +296,12 @@ public class SignUpActivity extends AppCompatActivity {
                     case "true":
                         startActivity(new Intent(SignUpActivity.this, NavigationDrawerActivity.class));
                         finish();
-                    break;
+                        break;
                     case "false":
                         registerView(jsonObject);
 
                         userCache = new UserCache(jsonObject.optString("id"), getApplicationContext());
-                    break;
+                        break;
                     default:
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                         LoginManager.getInstance().logOut();
@@ -323,7 +357,7 @@ public class SignUpActivity extends AppCompatActivity {
                     case "true":
                         startActivity(new Intent(SignUpActivity.this, NavigationDrawerActivity.class));
                         finish();
-                    break;
+                        break;
                     default:
                         Toast.makeText(getApplicationContext(), R.string.activity_signup_error, Toast.LENGTH_LONG).show();
                 }
