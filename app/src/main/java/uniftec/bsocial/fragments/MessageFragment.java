@@ -34,7 +34,9 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
     private UserCache userCache = null;
     private OnFragmentInteractionListener mListener;
 
-    public MessageFragment() { }
+    public MessageFragment() {
+        // Required empty public constructor
+    }
 
     public static MessageFragment newInstance(String param1, String param2) {
         MessageFragment fragment = new MessageFragment();
@@ -61,7 +63,7 @@ public class MessageFragment extends DialogFragment implements View.OnClickListe
 
         userId = getArguments().getString(USER_ID);
 
-        notificationCache = new NotificationCache(getActivity(), "mensagem", userId);
+        notificationCache = new NotificationCache(getActivity());
         notificationCache.initialize();
 
         userCache = new UserCache(getActivity());

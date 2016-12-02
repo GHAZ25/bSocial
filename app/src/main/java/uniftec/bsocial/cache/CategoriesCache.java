@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -30,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import uniftec.bsocial.entities.Category;
-import uniftec.bsocial.entities.messages.MessageCategories;
 
 public class CategoriesCache {
     private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -74,7 +74,7 @@ public class CategoriesCache {
                     }
                 }
             } catch (ParseException e) {
-                //Toast.makeText(activity, "Ocorreu um erro ao verificar a ultima atualização.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Ocorreu um erro ao verificar a ultima atualização.", Toast.LENGTH_LONG).show();
                 loadPreference.execute();
             }
         }
@@ -116,15 +116,15 @@ public class CategoriesCache {
 
     public ArrayList<Category> listCategories() { return categories; }
 
-    private class LoadCategories extends AsyncTask<Void, Void, MessageCategories> {
+    private class LoadCategories extends AsyncTask<Void, Void, Category[]> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(activity, "Aguarde", "Buscando categorias...");
         }
 
         @Override
-        protected MessageCategories doInBackground(Void... params) {
-            MessageCategories retorno = null;
+        protected Category[] doInBackground(Void... params) {
+            Category[] retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost request = null;
@@ -140,7 +140,7 @@ public class CategoriesCache {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, MessageCategories.class);
+                retorno = gson.fromJson(reader, Category[].class);
 
                 content.close();
             } catch (Exception e) { }
@@ -149,29 +149,29 @@ public class CategoriesCache {
         }
 
         @Override
-        protected void onPostExecute(MessageCategories retorno) {
+        protected void onPostExecute(Category[] retorno) {
             if (retorno != null) {
-                if (retorno.getMessage().equals("true")) {
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.clear();
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.clear();
 
-                    for (int i = 0; i < retorno.getLikes().size(); i++) {
-                        editor.putString("name" + i, retorno.getLikes().get(i).getNome());
-                        editor.putBoolean("select" + i, retorno.getLikes().get(i).isSelecionada());
-                        categories.add(retorno.getLikes().get(i));
-                    }
+                int cont = 0;
 
-                    editor.putString("update", dateFormat.format(today).toString());
-                    editor.putInt("size", categories.size());
+                for (int i = 0; i < retorno.length; i++) {
+                    editor.putString("name" + i, retorno[i].getNome());
+                    editor.putBoolean("select" + i, retorno[i].isSelecionada());
+                    categories.add(retorno[i]);
 
-                    Toast.makeText(activity, "Categorias atualizadas com sucesso.", Toast.LENGTH_LONG).show();
-
-                    editor.commit();
-                } else {
-                    Toast.makeText(activity, retorno.getMessage(), Toast.LENGTH_LONG).show();
+                    cont++;
                 }
+
+                editor.putString("update", dateFormat.format(today).toString());
+                editor.putInt("size", cont);
+
+                Toast.makeText(activity, "Categorias atualizadas com sucesso.", Toast.LENGTH_LONG).show();
+
+                editor.commit();
             } else {
-                Toast.makeText(activity, "Não foi possível listar as categorias. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Ocorreu um erro ao listar as categorias. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
 
             load.dismiss();
@@ -228,7 +228,7 @@ public class CategoriesCache {
                 editor.putInt("size", categories.size());
                 editor.commit();
             } else {
-                Toast.makeText(activity, "Não foi possível atualizar as categorias. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Ocorreu um erro ao atualizar as categorias. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
         }
     }

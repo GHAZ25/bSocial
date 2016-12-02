@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
-import com.facebook.Profile;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -23,7 +20,6 @@ import uniftec.bsocial.fragments.MessageFragment;
 
 public class OtherUserMessageActivity extends AppCompatActivity implements View.OnClickListener, MessageFragment.OnFragmentInteractionListener {
 
-    private Profile profile;
     private String userId;
     private String userName;
     private Button sendMsg;
@@ -44,11 +40,10 @@ public class OtherUserMessageActivity extends AppCompatActivity implements View.
         sendMsg = (Button) findViewById(R.id.send_message);
         sendMsg.setOnClickListener(this);
 
-        profile = Profile.getCurrentProfile();
         userId = (String) getIntent().getSerializableExtra("userId");
 
-        messageCache = new NotificationCache(this, "mensagem", userId);
-        messageCache.initializeMessages();
+        messageCache = new NotificationCache(this);
+        messageCache.initializeMessages(userId);
 
         messages = new ArrayList<>();
 

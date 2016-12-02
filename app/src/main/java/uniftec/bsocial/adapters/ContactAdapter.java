@@ -51,7 +51,7 @@ public class ContactAdapter extends BaseAdapter {
         holder.userPic = (ProfilePictureView) rowView.findViewById(R.id.userPic);
         holder.userId.setText(result.get(i).getId());
         holder.userName.setText(result.get(i).getName());
-        //holder.userPic.setTag(result.get(i).getPictureUrl());
+        holder.userPic.setTag(result.get(i).getPictureUrl());
         holder.userPic.setProfileId(result.get(i).getId());
         //Picasso.with(context).load(R.mipmap.ic_profile).into(holder.userPic);
 

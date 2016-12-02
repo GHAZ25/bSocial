@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import uniftec.bsocial.entities.messages.MessagePreferences;
-
 public class LikesChosenCache {
     private FragmentActivity activity = null;
     private ProgressDialog load = null;
@@ -174,15 +172,15 @@ public class LikesChosenCache {
         }
     }
 
-    private class ListPreferences extends AsyncTask<Void, Void, MessagePreferences> {
+    private class ListPreferences extends AsyncTask<Void, Void, HashMap[]> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(activity, "Aguarde", "Buscando preferências...");
         }
 
         @Override
-        protected MessagePreferences doInBackground(Void... params) {
-            MessagePreferences retorno = null;
+        protected HashMap[] doInBackground(Void... params) {
+            HashMap[] retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost request = null;
@@ -198,7 +196,7 @@ public class LikesChosenCache {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, MessagePreferences.class);
+                retorno = gson.fromJson(reader, HashMap[].class);
 
                 content.close();
             } catch (Exception e) { }
@@ -207,21 +205,17 @@ public class LikesChosenCache {
         }
 
         @Override
-        protected void onPostExecute(MessagePreferences retorno) {
+        protected void onPostExecute(HashMap[] retorno) {
             if (retorno != null) {
-                if (retorno.getMessage().equals("true")) {
-                    for (int i = 0; i < retorno.getPreferences().size(); i++) {
-                        preferences.add(retorno.getPreferences().get(i).toString());
-                    }
-
-                    recreate();
-
-                    Toast.makeText(activity, "Gostos atualizados com sucesso.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(activity, retorno.getMessage(), Toast.LENGTH_LONG).show();
+                for (int i = 0; i < retorno.length; i++) {
+                    preferences.add(retorno[i].get("id").toString());
                 }
+
+                recreate();
+
+                Toast.makeText(activity, "Gostos atualizados com sucesso.", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(activity, "Não foi possível listar suas preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Ocorreu um erro ao listar suas preferências. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
             }
 
             load.dismiss();

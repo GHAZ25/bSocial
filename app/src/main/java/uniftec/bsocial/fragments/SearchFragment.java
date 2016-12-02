@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,8 @@ import java.util.List;
 import uniftec.bsocial.OtherProfileActivity;
 import uniftec.bsocial.R;
 import uniftec.bsocial.adapters.SearchAdapter;
+import uniftec.bsocial.entities.User;
 import uniftec.bsocial.entities.UserSearch;
-import uniftec.bsocial.entities.messages.MessageUserSearch;
 
 public class SearchFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -128,15 +129,15 @@ public class SearchFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class ListUsers extends AsyncTask<Void, Void, MessageUserSearch> {
+    private class ListUsers extends AsyncTask<Void, Void, UserSearch[]> {
         @Override
         protected void onPreExecute(){
             load = ProgressDialog.show(getActivity(), "Aguarde", "Buscando usuários...");
         }
 
         @Override
-        protected MessageUserSearch doInBackground(Void... params) {
-            MessageUserSearch retorno = null;
+        protected UserSearch[] doInBackground(Void... params) {
+            UserSearch[] retorno = null;
             try {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPost request = null;
@@ -152,7 +153,7 @@ public class SearchFragment extends Fragment {
                 Reader reader = new InputStreamReader(content);
 
                 Gson gson = new Gson();
-                retorno = gson.fromJson(reader, MessageUserSearch.class);
+                retorno = gson.fromJson(reader, UserSearch[].class);
 
                 content.close();
             } catch (Exception e) { }
@@ -161,20 +162,41 @@ public class SearchFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(MessageUserSearch retorno) {
+        protected void onPostExecute(UserSearch[] retorno) {
             if (retorno != null) {
-                if (retorno.getMessage().equals("true")) {
-                    for (int i = 0; i < retorno.getUsers().size(); i++) {
-                        final UserSearch user = new UserSearch(retorno.getUsers().get(i));
+                for (int i = 0; i < retorno.length; i++) {
+                    final UserSearch user = new UserSearch(retorno[i]);
+                    /*user.setId(retorno[i].getIdFacebook());
+                    user.setName(retorno[i].getNome());
+                    user.setLatitude(retorno[i].getLatitude());
+                    user.setLongitude(retorno[i].getLongitude()); */
 
-                        users.add(user);
-                    }
-                    usersListViewAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getActivity(), retorno.getMessage(), Toast.LENGTH_LONG).show();
+                    GraphRequest request1 = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(),
+                            retorno[i].getId() + "?fields=id,name,picture", new GraphRequest.Callback() {
+                        @Override
+                        public void onCompleted(GraphResponse response) {
+                            JSONObject object = response.getJSONObject();
+
+                            //UserSearch user = new UserSearch();
+                            //user.setId(object.optString("id"));
+                            //user.setName(object.optString("name"));
+
+                            object = object.optJSONObject("picture");
+                            object = object.optJSONObject("data");
+
+                            user.setPictureUrl(object.optString("url"));
+
+                            users.add(user);
+
+                            usersListViewAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    request1.executeAsync();
                 }
+
             } else {
-                Toast.makeText(getActivity(), "Não foi possível concluir a busca de usuários. Tente novamente mais tarde.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), R.string.fragment_contacts_error, Toast.LENGTH_LONG).show();
             }
 
             load.dismiss();

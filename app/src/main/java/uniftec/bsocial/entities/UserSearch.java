@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class UserSearch implements Serializable {
     private String id;
     private String name;
-    //private String pictureUrl;
+    private String pictureUrl;
     private String age;
     private String hometown;
     private Like[] likes;
@@ -23,7 +23,7 @@ public class UserSearch implements Serializable {
         super();
         id = userSearch.getId();
         name = userSearch.getName();
-        //pictureUrl = userSearch.getPictureUrl();
+        pictureUrl = userSearch.getPictureUrl();
         age = userSearch.getAge();
         hometown = userSearch.getHometown();
         likes = userSearch.getLikes();
@@ -48,13 +48,13 @@ public class UserSearch implements Serializable {
         this.name = name;
     }
 
-    /*public String getPictureUrl() {
+    public String getPictureUrl() {
         return pictureUrl;
     }
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
-    }*/
+    }
 
     public String getAge() {
         return age;
