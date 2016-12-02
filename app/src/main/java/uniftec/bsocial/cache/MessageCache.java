@@ -62,7 +62,7 @@ public class MessageCache {
             listNotification.execute();
         } else {
             for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-                Message message = new Message(profile.getId(), sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("message" + i, ""));
+                Message message = new Message(profile.getId(), "", sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("name" + i, ""), sharedpreferences.getString("message" + i, ""));
                 messages.add(message);
             }
         }

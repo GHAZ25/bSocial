@@ -31,8 +31,6 @@ public class PushNotificationService extends GcmListenerService {
 
             PushReturn push = gson.fromJson(message, PushReturn.class);
 
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
             switch (push.getType()) {
                 case "mensagem":
                     NotificationCache notificationCache = new NotificationCache(push.getNot().getType(), push.getNot().getId(), getApplicationContext());
