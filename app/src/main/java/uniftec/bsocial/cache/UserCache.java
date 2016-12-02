@@ -52,22 +52,24 @@ public class UserCache {
         file = "settings" + profile.getId();
         sharedpreferences = activity.getSharedPreferences(file, Context.MODE_PRIVATE);
 
-        if (!sharedpreferences.contains("id")) {
+        //if (!sharedpreferences.contains(id)) {
             gcmClientManager = new GCMClientManager(activity);
             gcmClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
                 @Override
                 public void onSuccess(String registrationId, boolean isNewRegistration) {
                     updateGCM(registrationId);
 
-                    pushNotificationService = new PushNotificationService();
-                    pushNotificationService.onCreate();
+                    if (isNewRegistration) {
+                        pushNotificationService = new PushNotificationService();
+                        pushNotificationService.onCreate();
+                    }
                 }
                 @Override
                 public void onFailure(String ex) {
                     super.onFailure(ex);
                 }
             });
-        }
+        //}
     }
 
     public UserCache(String id, Context context) {
@@ -178,6 +180,11 @@ public class UserCache {
                     updateSettings();
                 } else {
                     //Toast.makeText(activity, result.getMessage(), Toast.LENGTH_LONG).show();
+                    if (activity == null) {
+                        Log.i("Retorno", "É nulo");
+                    } else {
+                        Log.i("Retorno", result.getMessage());
+                    }
                 }
             } else {
                 if (id != null) {

@@ -23,17 +23,15 @@ import uniftec.bsocial.entities.PushReturn;
 public class PushNotificationService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        //Profile profile = Profile.getCurrentProfile();
+        Profile profile = Profile.getCurrentProfile();
 
-      //  if (profile != null) {
-            ///Gson gson = new Gson();
+        if (profile != null) {
+            Gson gson = new Gson();
             String message = data.getString("message");
 
-            //PushReturn push = gson.fromJson(message, PushReturn.class);
+            PushReturn push = gson.fromJson(message, PushReturn.class);
 
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-            /*switch (push.getType()) {
+            switch (push.getType()) {
                 case "mensagem":
                     NotificationCache notificationCache = new NotificationCache(push.getNot().getType(), push.getNot().getId(), getApplicationContext());
 
@@ -73,7 +71,7 @@ public class PushNotificationService extends GcmListenerService {
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-            notificationManager.notify(null, 1, builder.build()); */
+            notificationManager.notify(null, 1, builder.build());
         }
-   // }
+    }
 }
