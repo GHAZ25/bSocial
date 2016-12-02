@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -209,9 +210,25 @@ public class SignUpActivity extends AppCompatActivity {
 
                 try {
                     final User user = new User(nameText.getText().toString(), emailText.getText().toString(), jsonObject.optString("id"), false, false, 0.0, 0.0);
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) { }
 
-                    if (location == null) {
+                        @Override
+                        public void onStatusChanged(String s, int i, Bundle bundle) { }
+
+                        @Override
+                        public void onProviderEnabled(String s) { }
+
+                        @Override
+                        public void onProviderDisabled(String s) { }
+                    }, null);
+
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    user.setLatitude(location.getLatitude());
+                    user.setLongitude(location.getLongitude());
+
+                    if (user.getLatitude() == null) {
                         load = ProgressDialog.show(SignUpActivity.this, "Aguarde", "Buscando sua localização...");
                         locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
                             @Override
@@ -237,8 +254,6 @@ public class SignUpActivity extends AppCompatActivity {
                             }
                         }, null);
                     } else {
-                        user.setLatitude(location.getLatitude());
-                        user.setLongitude(location.getLongitude());
                         userCache.saveUser(user);
 
                         register.execute();
