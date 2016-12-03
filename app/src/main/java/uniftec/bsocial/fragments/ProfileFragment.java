@@ -83,21 +83,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-            new GraphRequest.GraphJSONObjectCallback() {
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                    jsonObject = object;
-                    setNameAgeLocation();
-                }
-            });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,birthday,hometown");
-        parameters.putString("locale", "pt_BR");
-        request.setParameters(parameters);
-        request.executeAsync();
-
         timer = new Timer();
 
         likesCache = new LikesCache(getActivity());
@@ -111,6 +96,21 @@ public class ProfileFragment extends Fragment {
 
         userCache = new UserCache(getActivity());
         userCache.initialize();
+
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        jsonObject = object;
+                        setNameAgeLocation();
+                    }
+                });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,birthday,hometown");
+        parameters.putString("locale", "pt_BR");
+        request.setParameters(parameters);
+        request.executeAsync();
 
         getProfilePic();
 
