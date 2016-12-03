@@ -152,7 +152,12 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setNameAgeLocation() {
-        String name = userCache.getUser().getNome();
+        String name = "";
+        if (userCache.getUser() != null)
+            name = userCache.getUser().getNome();
+        else {
+            name = jsonObject.optString("name");
+        }
 
         String age = "-";
 

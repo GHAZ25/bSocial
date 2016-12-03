@@ -55,7 +55,7 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         userCache = new UserCache(getActivity());
@@ -105,22 +105,31 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
             }
         });
 
-        Button cancelPreference = (Button) view.findViewById(R.id.cancelPreference);
+        final Button cancelPreference = (Button) view.findViewById(R.id.cancelPreference);
         cancelPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                updateConfigs();
+                Toast.makeText(getContext(), "Configurações restauradas", Toast.LENGTH_SHORT).show();
             }
         });
 
-        if (userCache.getUser() != null) {
-            if (userCache.getUser().isOculto()) {
-                chkOculto.setChecked(true);
-            }
+        updateConfigs();
 
-            if (userCache.getUser().isNotifica()) {
+        return view;
+    }
+
+    private void updateConfigs() {
+        if (userCache.getUser() != null) {
+            if (userCache.getUser().isOculto())
+                chkOculto.setChecked(true);
+            else
+                chkOculto.setChecked(false);
+
+            if (userCache.getUser().isNotifica())
                 chkNotifica.setChecked(true);
-            }
+            else
+                chkNotifica.setChecked(false);
         } else {
             final Timer timer = new Timer();
             timer.schedule(new TimerTask(){
@@ -130,13 +139,15 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
                         @Override
                         public void run(){
                             if (userCache.getUser() != null) {
-                                if (userCache.getUser().isOculto()) {
+                                if (userCache.getUser().isOculto())
                                     chkOculto.setChecked(true);
-                                }
+                                else
+                                    chkOculto.setChecked(false);
 
-                                if (userCache.getUser().isNotifica()) {
+                                if (userCache.getUser().isNotifica())
                                     chkNotifica.setChecked(true);
-                                }
+                                else
+                                    chkNotifica.setChecked(false);
                             } else {
                                 Toast.makeText(getActivity(), R.string.fragment_configs_error, Toast.LENGTH_LONG).show();
                             }
@@ -148,8 +159,6 @@ public class SettingsFragment extends Fragment implements LikeChooserFragment.On
                 }
             }, 2000, 1000);
         }
-
-        return view;
     }
 
     public void onButtonPressed(Uri uri) {
