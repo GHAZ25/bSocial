@@ -72,15 +72,15 @@ public class NotificationCache {
     }
 
     public void initialize() {
-        if (sharedpreferences.getAll().size() == 0) {
+//        if (sharedpreferences.getAll().size() == 0) {
             ListNotification listNotification = new ListNotification();
             listNotification.execute();
-        } else {
-            for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
-                Notification notification = new Notification(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("message" + i, ""), type, sharedpreferences.getString("messageId" + i, ""));
-                notifications.add(notification);
-            }
-        }
+//        } else {
+//            for (int i = 0; i < sharedpreferences.getInt("size", 0); i++) {
+//                Notification notification = new Notification(sharedpreferences.getString("id" + i, ""), sharedpreferences.getString("message" + i, ""), type, sharedpreferences.getString("messageId" + i, ""));
+//               notifications.add(notification);
+//          }
+//      }
     }
 
     public void initializeMessages() {
@@ -204,19 +204,19 @@ public class NotificationCache {
         protected void onPostExecute(MessageNotifications retorno) {
             if (retorno != null) {
                 if (retorno.getMessage().equals("true")) {
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.clear();
+                    //SharedPreferences.Editor editor = sharedpreferences.edit();
+                    //editor.clear();
 
                     for (int i = 0; i < retorno.getNotifications().size(); i++) {
-                        editor.putString("id" + i, retorno.getNotifications().get(i).getId());
-                        editor.putString("message" + i, retorno.getNotifications().get(i).getMessage());
-                        editor.putString("messageId" + i, retorno.getNotifications().get(i).getMessageId());
+                        //editor.putString("id" + i, retorno.getNotifications().get(i).getId());
+                        //editor.putString("message" + i, retorno.getNotifications().get(i).getMessage());
+                        //editor.putString("messageId" + i, retorno.getNotifications().get(i).getMessageId());
 
                         notifications.add(retorno.getNotifications().get(i));
                     }
-                    editor.putInt("size", notifications.size());
+                    //editor.putInt("size", notifications.size());
 
-                    editor.commit();
+                    //editor.commit();
                 } else {
                     Toast.makeText(activity, retorno.getMessage(), Toast.LENGTH_LONG).show();
                 }

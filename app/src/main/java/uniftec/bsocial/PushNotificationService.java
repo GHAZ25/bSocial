@@ -42,9 +42,9 @@ public class PushNotificationService extends GcmListenerService {
                             MessageCache messageCache = new MessageCache(getApplicationContext());
                             messageCache.messageConfirm(push.getMes().getSentUserId(), push.getMes().getMessage(), push.getMes().getSentUserName());
                         break;
-                        case "convite":
-                            notificationCache.newInvite(push.getNot().getId(), push.getNot().getMessage(), push.getNot().getMessageId());
-                        break;
+                        //case "convite":
+                        //    notificationCache.newInvite(push.getNot().getId(), push.getNot().getMessage(), push.getNot().getMessageId());
+                        //break;
                     }
                     break;
             }
